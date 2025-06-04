@@ -47,8 +47,8 @@ public final class Slider extends Component {
         super.render(drawContext, n, n2, n3);
         final MatrixStack matrices = drawContext.getMatrices();
         this.updateAnimations(n, n2, n3);
-        this.offsetMinX = (this.setting.i() - this.setting.g()) / (this.setting.h() - this.setting.g()) * (this.parentWidth() - 10) + 5.0;
-        this.offsetMaxX = (this.setting.j() - this.setting.g()) / (this.setting.h() - this.setting.g()) * (this.parentWidth() - 10) + 5.0;
+        this.offsetMinX = (this.setting.getCurrentMin() - this.setting.getMinValue()) / (this.setting.getMaxValue() - this.setting.getMinValue()) * (this.parentWidth() - 10) + 5.0;
+        this.offsetMaxX = (this.setting.getCurrentMax() - this.setting.getMinValue()) / (this.setting.getMaxValue() - this.setting.getMinValue()) * (this.parentWidth() - 10) + 5.0;
         this.lerpedOffsetMinX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetMinX, this.offsetMinX);
         this.lerpedOffsetMaxX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetMaxX, this.offsetMaxX);
         if (!this.parent.parent.dragging) {
@@ -79,14 +79,14 @@ public final class Slider extends Component {
     }
 
     private String getDisplayText() {
-        if (this.setting.i() == this.setting.j()) {
-            return this.formatValue(this.setting.i());
+        if (this.setting.getCurrentMin() == this.setting.getCurrentMax()) {
+            return this.formatValue(this.setting.getCurrentMin());
         }
-        return this.formatValue(this.setting.i()) + " - " + this.formatValue(this.setting.j());
+        return this.formatValue(this.setting.getCurrentMin()) + " - " + this.formatValue(this.setting.getCurrentMax());
     }
 
     private String formatValue(final double d) {
-        final double m = this.setting.m();
+        final double m = this.setting.getStep();
         if (m == 0.1) {
             return String.format("%.1f", d);
         }
@@ -131,8 +131,8 @@ public final class Slider extends Component {
     @Override
     public void keyPressed(final int n, final int n2, final int n3) {
         if (this.mouseOver && n == 259) {
-            this.setting.b(this.setting.l());
-            this.setting.a(this.setting.k());
+            this.setting.setCurrentMax(this.setting.getDefaultMax());
+            this.setting.setCurrentMin(this.setting.getDefaultMin());
         }
         super.keyPressed(n, n2, n3);
     }
@@ -174,11 +174,11 @@ public final class Slider extends Component {
     }
 
     private void slideMin(final double n) {
-        this.setting.a(Math.min(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.h() - this.setting.g()) + this.setting.g(), this.setting.m()), this.setting.j()));
+        this.setting.setCurrentMin(Math.min(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMax()));
     }
 
     private void slideMax(final double n) {
-        this.setting.b(Math.max(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.h() - this.setting.g()) + this.setting.g(), this.setting.m()), this.setting.i()));
+        this.setting.setCurrentMax(Math.max(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMin()));
     }
 
     @Override

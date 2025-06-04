@@ -19,17 +19,16 @@ import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager {
-    private final Map<Class<? extends Listener>, List<Listener>> EVENTS;
+    private final Map<Class<?>, List<Listener>> EVENTS;
 
     public EventManager() {
-        this.EVENTS = new HashMap<Class<? extends Listener>, List<Listener>>();
+        this.EVENTS = new HashMap<>();
     }
 
     public void register(final Object o) {
         final Method[] declaredMethods = o.getClass().getDeclaredMethods();
-        for (int i = 0; i < declaredMethods.length; ++i) {
-            final Method method = declaredMethods[i];
-            if (method.isAnnotationPresent(EventListener.class) && method.getParameterCount() == 1 && Listener.class.isAssignableFrom(method.getParameterTypes()[0])) {
+        for (final Method method : declaredMethods) {
+            if (method.isAnnotationPresent(EventListener.class) && method.getParameterCount() == 1 && Event.class.isAssignableFrom(method.getParameterTypes()[0])) {
                 this.addListener(o, method, method.getAnnotation(EventListener.class));
             }
         }
@@ -38,7 +37,7 @@ public final class EventManager {
     private void addListener(final Object o, final Method method, final EventListener eventListener) {
         final Class<?> key = method.getParameterTypes()[0];
         method.setAccessible(true);
-        this.EVENTS.computeIfAbsent((Class<? extends Listener>) key, p0 -> new CopyOnWriteArrayList()).add(new Listener(o, method, eventListener.priority()));
+        this.EVENTS.computeIfAbsent(key, p0 -> new CopyOnWriteArrayList<>()).add(new Listener(o, method, eventListener.priority()));
         this.EVENTS.get(key).sort(Comparator.comparingInt(listener -> listener.getPriority().getValue()));
     }
 
@@ -74,8 +73,8 @@ public final class EventManager {
         }
     }
 
-    public static void b(final Event listener) {
+    public static void b(final Event evt) {
         if (Krypton.INSTANCE == null || Krypton.INSTANCE.c() == null) return;
-        Krypton.INSTANCE.c().a(listener);
+        Krypton.INSTANCE.c().a(evt);
     }
 }

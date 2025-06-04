@@ -13,7 +13,7 @@ import skid.krypton.manager.EventManager;
 @Mixin({InGameHud.class})
 public class InGameHudMixin {
     @Inject(method = {"render"}, at = {@At("HEAD")})
-    private void onRenderHud(final DrawContext drawContext, final RenderTickCounter renderTickCounter, final CallbackInfo callbackInfo) {
-        EventManager.b(new Render2DEvent(drawContext, renderTickCounter.getTickDelta(true)));
+    private void onRenderHud(final DrawContext ctx, final RenderTickCounter rtc, final CallbackInfo ci) {
+        EventManager.b(new Render2DEvent(ctx, rtc.getTickDelta(true)));
     }
 }

@@ -19,15 +19,11 @@ import skid.krypton.module.modules.Freecam;
 
 @Mixin({GameRenderer.class})
 public abstract class GameRendererMixin {
-    @Shadow
-    @Final
-    private Camera camera;
+    @Shadow protected abstract double getFov(Camera camera, float tickDelta, boolean changingFov);
 
-    @Shadow
-    public abstract Matrix4f getBasicProjectionMatrix(final double p0);
+    @Shadow public abstract Matrix4f getBasicProjectionMatrix(double fov);
 
-    @Shadow
-    protected abstract double getFov(final Camera p0, final float p1, final boolean p2);
+    @Shadow @Final private Camera camera;
 
     @Inject(method = {"renderWorld"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;swap(Ljava/lang/String;)V", ordinal = 1)})
     private void onWorldRender(final RenderTickCounter rtc, final CallbackInfo ci) {

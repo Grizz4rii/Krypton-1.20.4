@@ -14,16 +14,14 @@ import skid.krypton.manager.EventManager;
 @Mixin({ClientPlayNetworkHandler.class})
 public abstract class ClientPlayNetworkHandlerMixin {
     @Inject(method = {"onChunkData"}, at = {@At("TAIL")})
-    private void onChunkData(final ChunkDataS2CPacket chunkDataS2CPacket, final CallbackInfo callbackInfo) {
-        EventManager.b(new ChunkDataEvent(chunkDataS2CPacket));
+    private void onChunkData(final ChunkDataS2CPacket packet, final CallbackInfo ci) {
+        EventManager.b(new ChunkDataEvent(packet));
     }
 
     @Inject(method = {"onEntitySpawn"}, at = {@At("HEAD")}, cancellable = true)
-    private void onEntitySpawn(final EntitySpawnS2CPacket entitySpawnS2CPacket, final CallbackInfo callbackInfo) {
-        final EntitySpawnEvent entitySpawnEvent = new EntitySpawnEvent(entitySpawnS2CPacket);
-        EventManager.b(entitySpawnEvent);
-        if (entitySpawnEvent.isCancelled()) {
-            callbackInfo.cancel();
-        }
+    private void onEntitySpawn(final EntitySpawnS2CPacket packet, final CallbackInfo ci) {
+        final EntitySpawnEvent event = new EntitySpawnEvent(packet);
+        EventManager.b(event);
+        if (event.isCancelled()) ci.cancel();
     }
 }

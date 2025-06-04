@@ -20,9 +20,9 @@ public class WorldChunkMixin {
     World world;
 
     @Inject(method = {"setBlockState"}, at = {@At("TAIL")})
-    private void onSetBlockState(final BlockPos blockPos, final BlockState blockState, final boolean b, final CallbackInfoReturnable callbackInfoReturnable) {
+    private void onSetBlockState(final BlockPos pos, final BlockState state, final boolean moved, final CallbackInfoReturnable<BlockState> cir) {
         if (this.world.isClient) {
-            EventManager.b(new SetBlockStateEvent(blockPos, (BlockState) callbackInfoReturnable.getReturnValue(), blockState));
+            EventManager.b(new SetBlockStateEvent(pos, cir.getReturnValue(), state));
         }
     }
 }

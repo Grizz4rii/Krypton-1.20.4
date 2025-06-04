@@ -13,7 +13,7 @@ import skid.krypton.manager.EventManager;
 @Mixin({ClientPlayerInteractionManager.class})
 public class ClientPlayerInteractionManagerMixin {
     @Inject(method = {"attackBlock"}, at = {@At("HEAD")})
-    private void onAttackBlock(final BlockPos blockPos, final Direction direction, final CallbackInfoReturnable callbackInfoReturnable) {
-        EventManager.b(new AttackBlockEvent(blockPos, direction));
+    private void onAttackBlock(final BlockPos pos, final Direction dir, final CallbackInfoReturnable<Boolean> cir) {
+        EventManager.b(new AttackBlockEvent(pos, dir));
     }
 }

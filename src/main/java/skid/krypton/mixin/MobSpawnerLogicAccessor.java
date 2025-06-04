@@ -11,5 +11,5 @@ import org.spongepowered.asm.mixin.gen.Invoker;
 @Mixin({MobSpawnerLogic.class})
 public interface MobSpawnerLogicAccessor {
     @Invoker("getSpawnEntry")
-    MobSpawnerEntry getSpawnEntry(final World p0, final Random p1, final BlockPos p2);
+    MobSpawnerEntry getSpawnEntry(final World world, final Random random, final BlockPos pos);
 }

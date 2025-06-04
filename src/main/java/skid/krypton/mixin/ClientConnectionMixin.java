@@ -14,20 +14,16 @@ import skid.krypton.manager.EventManager;
 @Mixin({ClientConnection.class})
 public class ClientConnectionMixin {
     @Inject(method = {"handlePacket"}, at = {@At("HEAD")}, cancellable = true)
-    private static void onPacketReceive(final Packet packet, final PacketListener packetListener, final CallbackInfo callbackInfo) {
-        final PacketReceiveEvent packetReceiveEvent = new PacketReceiveEvent(packet);
-        EventManager.b(packetReceiveEvent);
-        if (packetReceiveEvent.isCancelled()) {
-            callbackInfo.cancel();
-        }
+    private static void onPacketReceive(final Packet<?> packet, final PacketListener listener, final CallbackInfo ci) {
+        final PacketReceiveEvent event = new PacketReceiveEvent(packet);
+        EventManager.b(event);
+        if (event.isCancelled()) ci.cancel();
     }
 
     @Inject(method = {"send(Lnet/minecraft/network/packet/Packet;)V"}, at = {@At("HEAD")}, cancellable = true)
-    private void onPacketSend(final Packet packet, final CallbackInfo callbackInfo) {
-        final PacketEvent packetEvent = new PacketEvent(packet);
-        EventManager.b(packetEvent);
-        if (packetEvent.isCancelled()) {
-            callbackInfo.cancel();
-        }
+    private void onPacketSend(final Packet<?> packet, final CallbackInfo ci) {
+        final PacketEvent event = new PacketEvent(packet);
+        EventManager.b(event);
+        if (event.isCancelled()) ci.cancel();
     }
 }

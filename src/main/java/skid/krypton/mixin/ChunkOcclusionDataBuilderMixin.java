@@ -12,11 +12,9 @@ import skid.krypton.manager.EventManager;
 @Mixin({ChunkOcclusionDataBuilder.class})
 public abstract class ChunkOcclusionDataBuilderMixin {
     @Inject(method = {"markClosed"}, at = {@At("HEAD")}, cancellable = true)
-    private void onMarkClosed(final BlockPos blockPos, final CallbackInfo callbackInfo) {
-        final ChunkMarkClosedEvent chunkMarkClosedEvent = new ChunkMarkClosedEvent();
-        EventManager.b(chunkMarkClosedEvent);
-        if (chunkMarkClosedEvent.isCancelled()) {
-            callbackInfo.cancel();
-        }
+    private void onMarkClosed(final BlockPos pos, final CallbackInfo ci) {
+        final ChunkMarkClosedEvent event = new ChunkMarkClosedEvent();
+        EventManager.b(event);
+        if (event.isCancelled()) ci.cancel();
     }
 }

@@ -21,17 +21,17 @@ public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
     @Final
     protected MinecraftClient client;
 
-    public ClientPlayerEntityMixin(final ClientWorld clientWorld, final GameProfile gameProfile) {
-        super(clientWorld, gameProfile);
+    public ClientPlayerEntityMixin(final ClientWorld world, final GameProfile profile) {
+        super(world, profile);
     }
 
     @Inject(method = {"sendMovementPackets"}, at = {@At("HEAD")})
-    private void onSendMovementPackets(final CallbackInfo callbackInfo) {
+    private void onSendMovementPackets(final CallbackInfo ci) {
         EventManager.b(new SendMovementPacketsEvent());
     }
 
     @Inject(method = {"tick"}, at = {@At("HEAD")})
-    private void onPlayerTick(final CallbackInfo callbackInfo) {
+    private void onPlayerTick(final CallbackInfo ci) {
         EventManager.b(new TickEvent());
     }
 }

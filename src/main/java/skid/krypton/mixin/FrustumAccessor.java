@@ -10,17 +10,17 @@ public interface FrustumAccessor {
     double getX();
 
     @Accessor("x")
-    void setX(final double p0);
+    void setX(final double x);
 
     @Accessor("y")
     double getY();
 
     @Accessor("y")
-    void setY(final double p0);
+    void setY(final double y);
 
     @Accessor("z")
     double getZ();
 
     @Accessor("z")
-    void setZ(final double p0);
+    void setZ(final double z);
 }

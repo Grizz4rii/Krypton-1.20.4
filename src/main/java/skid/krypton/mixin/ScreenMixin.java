@@ -3,7 +3,7 @@ package skid.krypton.mixin;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -14,13 +14,13 @@ import skid.krypton.gui.ClickGUI;
 @Mixin({Screen.class})
 public class ScreenMixin {
     @Shadow
-    @Nullable
+    @NotNull
     protected MinecraftClient client;
 
     @Inject(method = {"renderBackground"}, at = {@At("HEAD")}, cancellable = true)
-    private void dontRenderBackground(final DrawContext drawContext, final int n, final int n2, final float n3, final CallbackInfo callbackInfo) {
+    private void dontRenderBackground(final DrawContext context, final int mouseX, final int mouseY, final float delta, final CallbackInfo ci) {
         if (this.client.currentScreen instanceof ClickGUI) {
-            callbackInfo.cancel();
+            ci.cancel();
         }
     }
 }

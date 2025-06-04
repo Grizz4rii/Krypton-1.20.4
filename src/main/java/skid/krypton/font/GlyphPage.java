@@ -18,159 +18,150 @@ import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public final class GlyphPage {
-    private int a;
-    private int b;
-    private final Font c;
-    private final boolean d;
-    private final boolean e;
-    private final HashMap<Character, Glyph> f;
-    private BufferedImage g;
-    private AbstractTexture h;
+    private int imageSize;
+    private int maxHeight;
+    private final Font font;
+    private final boolean antiAlias;
+    private final boolean fractionalMetrics;
+    private final HashMap<Character, Glyph> glyphs;
+    private BufferedImage img;
+    private AbstractTexture texture;
 
-    public GlyphPage(final Font c, final boolean d, final boolean e) {
-        this.b = -1;
-        this.f = new HashMap<>();
-        this.c = c;
-        this.d = d;
-        this.e = e;
+    public GlyphPage(final Font font, final boolean antiAlias, final boolean fractionalMetrics) {
+        this.maxHeight = -1;
+        this.glyphs = new HashMap<>();
+        this.font = font;
+        this.antiAlias = antiAlias;
+        this.fractionalMetrics = fractionalMetrics;
     }
 
-    public void a(final char[] array) {
+    public void generate(final char[] chars) {
         double width = -1.0;
         double height = -1.0;
-        final FontRenderContext frc = new FontRenderContext(new AffineTransform(), this.d, this.e);
-        for (int i = 0; i < array.length; ++i) {
-            final Rectangle2D stringBounds = this.c.getStringBounds(Character.toString(array[i]), frc);
-            if (width < stringBounds.getWidth()) {
-                width = stringBounds.getWidth();
-            }
-            if (height < stringBounds.getHeight()) {
-                height = stringBounds.getHeight();
-            }
+
+        final FontRenderContext frc = new FontRenderContext(new AffineTransform(), this.antiAlias, this.fractionalMetrics);
+
+        for (char item : chars) {
+            final Rectangle2D bounds = this.font.getStringBounds(Character.toString(item), frc);
+            if (width < bounds.getWidth()) width = bounds.getWidth();
+            if (height < bounds.getHeight()) height = bounds.getHeight();
         }
-        final double a = width + 2.0;
-        final double b = height + 2.0;
-        this.a = (int) Math.ceil(Math.max(Math.ceil(Math.sqrt(a * a * array.length) / a), Math.ceil(Math.sqrt(b * b * array.length) / b)) * Math.max(a, b)) + 1;
-        this.g = new BufferedImage(this.a, this.a, 2);
-        final Graphics2D graphics = this.g.createGraphics();
-        graphics.setFont(this.c);
+
+        final double maxWidth = width + 2.0;
+        final double maxHeight = height + 2.0;
+        this.imageSize = (int) Math.ceil(Math.max(Math.ceil(Math.sqrt(maxWidth * maxWidth * chars.length) / maxWidth), Math.ceil(Math.sqrt(maxHeight * maxHeight * chars.length) / maxHeight)) * Math.max(maxWidth, maxHeight)) + 1;
+        this.img = new BufferedImage(this.imageSize, this.imageSize, 2);
+        final Graphics2D graphics = this.img.createGraphics();
+        graphics.setFont(this.font);
         graphics.setColor(new Color(255, 255, 255, 0));
-        graphics.fillRect(0, 0, this.a, this.a);
+        graphics.fillRect(0, 0, this.imageSize, this.imageSize);
         graphics.setColor(Color.white);
-        final RenderingHints.Key key_FRACTIONALMETRICS = RenderingHints.KEY_FRACTIONALMETRICS;
-        Object o;
-        if (this.e) {
-            o = RenderingHints.VALUE_FRACTIONALMETRICS_ON;
-        } else {
-            o = RenderingHints.VALUE_FRACTIONALMETRICS_OFF;
-        }
-        graphics.setRenderingHint(key_FRACTIONALMETRICS, o);
-        final RenderingHints.Key key_ANTIALIASING = RenderingHints.KEY_ANTIALIASING;
-        Object o2;
-        if (this.d) {
-            o2 = RenderingHints.VALUE_ANTIALIAS_ON;
-        } else {
-            o2 = RenderingHints.VALUE_ANTIALIAS_OFF;
-        }
-        graphics.setRenderingHint(key_ANTIALIASING, o2);
-        final RenderingHints.Key key_TEXT_ANTIALIASING = RenderingHints.KEY_TEXT_ANTIALIASING;
-        Object o3;
-        if (this.d) {
-            o3 = RenderingHints.VALUE_TEXT_ANTIALIAS_ON;
-        } else {
-            o3 = RenderingHints.VALUE_TEXT_ANTIALIAS_OFF;
-        }
-        graphics.setRenderingHint(key_TEXT_ANTIALIASING, o3);
-        final FontMetrics fontMetrics = graphics.getFontMetrics();
-        int height2 = 0;
-        int x = 0;
-        int y = 1;
-        for (final char c : array) {
-            final Glyph value = new Glyph();
-            final Rectangle2D stringBounds2 = fontMetrics.getStringBounds(Character.toString(c), graphics);
-            value.width = stringBounds2.getBounds().width + 8;
-            value.height = stringBounds2.getBounds().height;
-            if (x + value.width >= this.a) {
-                x = 0;
-                y += height2;
-                height2 = 0;
+        graphics.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, fractionalMetrics ? RenderingHints.VALUE_FRACTIONALMETRICS_ON : RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, antiAlias ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        graphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, antiAlias ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+
+        final FontMetrics metrics = graphics.getFontMetrics();
+
+        int currentHeight = 0;
+        int posX = 0;
+        int posY = 1;
+
+        for (final char c : chars) {
+            final Glyph glyph = new Glyph();
+            final Rectangle2D bounds = metrics.getStringBounds(Character.toString(c), graphics);
+
+            glyph.width = bounds.getBounds().width + 8;
+            glyph.height = bounds.getBounds().height;
+
+            if (posX + glyph.width >= this.imageSize) {
+                posX = 0;
+                posY += currentHeight;
+                currentHeight = 0;
             }
-            value.x = x;
-            value.y = y;
-            if (value.height > this.b) {
-                this.b = value.height;
-            }
-            if (value.height > height2) {
-                height2 = value.height;
-            }
-            graphics.drawString(Character.toString(c), x + 2, y + fontMetrics.getAscent());
-            x += value.width;
-            this.f.put(c, value);
+
+            glyph.x = posX;
+            glyph.y = posY;
+
+            if (glyph.height > this.maxHeight) this.maxHeight = glyph.height;
+            if (glyph.height > currentHeight) currentHeight = glyph.height;
+
+            graphics.drawString(Character.toString(c), posX + 2, posY + metrics.getAscent());
+            posX += glyph.width;
+            this.glyphs.put(c, glyph);
         }
     }
 
-    public void a() {
+    public void setup() {
         try {
             final ByteArrayOutputStream output = new ByteArrayOutputStream();
-            ImageIO.write(this.g, "png", output);
+            ImageIO.write(this.img, "png", output);
             final byte[] byteArray = output.toByteArray();
-            final ByteBuffer put = BufferUtils.createByteBuffer(byteArray.length).put(byteArray);
-            put.flip();
-            this.h = new NativeImageBackedTexture(NativeImage.read(put));
-        } catch (final Exception ex) {
-            ex.printStackTrace();
+            final ByteBuffer data = BufferUtils.createByteBuffer(byteArray.length).put(byteArray);
+            data.flip();
+            this.texture = new NativeImageBackedTexture(NativeImage.read(data));
+        } catch (Throwable _t) {
+            _t.printStackTrace(System.err);
         }
     }
 
-    public void b() {
-        RenderSystem.setShaderTexture(0, this.h.getGlId());
+    public void bind() {
+        RenderSystem.setShaderTexture(0, this.texture.getGlId());
     }
 
-    public void c() {
+    public void unbind() {
         RenderSystem.setShaderTexture(0, 0);
     }
 
-    public float a(final MatrixStack matrixStack, final char c, final float n, final float n2, final float n3, final float n4, final float n5, final float n6) {
-        final Glyph value = this.f.get(c);
-        if (value == null) {
-            return 0.0f;
-        }
-        final float n7 = value.x / (float) this.a;
-        final float n8 = value.y / (float) this.a;
-        final float n9 = value.width / (float) this.a;
-        final float n10 = value.height / (float) this.a;
-        final float n11 = (float) value.width;
-        final float n12 = (float) value.height;
+    public float drawChar(MatrixStack stack, char ch, float x, float y, float r, float b, float g, float alpha) {
+        final Glyph glyph = glyphs.get(ch);
+        if (glyph == null) return 0;
+
+        final float pageX = glyph.x / (float) imageSize;
+        final float pageY = glyph.y / (float) imageSize;
+
+        final float pageWidth = glyph.width / (float) imageSize;
+        final float pageHeight = glyph.height / (float) imageSize;
+
+        final float width = glyph.width;
+        final float height = glyph.height;
+
         RenderSystem.setShader(GameRenderer::getPositionTexColorProgram);
-        this.b();
-        final BufferBuilder begin = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
-        begin.vertex(matrixStack.peek().getPositionMatrix(), n, n2 + n12, 0.0f).color(n3, n5, n4, n6).texture(n7, n8 + n10);
-        begin.vertex(matrixStack.peek().getPositionMatrix(), n + n11, n2 + n12, 0.0f).color(n3, n5, n4, n6).texture(n7 + n9, n8 + n10);
-        begin.vertex(matrixStack.peek().getPositionMatrix(), n + n11, n2, 0.0f).color(n3, n5, n4, n6).texture(n7 + n9, n8);
-        begin.vertex(matrixStack.peek().getPositionMatrix(), n, n2, 0.0f).color(n3, n5, n4, n6).texture(n7, n8);
-        BufferRenderer.drawWithGlobalProgram(begin.end());
-        this.c();
-        return n11 - 8.0f;
+
+        bind();
+
+        BufferBuilder builder = Tessellator.getInstance().begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
+
+        builder.vertex(stack.peek().getPositionMatrix(), x, y + height, 0).color(r, g, b, alpha).texture(pageX, pageY + pageHeight);
+        builder.vertex(stack.peek().getPositionMatrix(), x + width, y + height, 0).color(r, g, b, alpha).texture(pageX + pageWidth, pageY + pageHeight);
+        builder.vertex(stack.peek().getPositionMatrix(), x + width, y, 0).color(r, g, b, alpha).texture(pageX + pageWidth, pageY);
+        builder.vertex(stack.peek().getPositionMatrix(), x, y, 0).color(r, g, b, alpha).texture(pageX, pageY);
+
+        BufferRenderer.drawWithGlobalProgram(builder.end());
+
+        unbind();
+
+        return width - 8;
     }
 
-    public float a(final char c) {
-        return (float) this.f.get(c).width;
+    public float getWidth(final char c) {
+        return (float) this.glyphs.get(c).width;
     }
 
-    public boolean d() {
-        return this.d;
+    public boolean isAntiAlias() {
+        return this.antiAlias;
     }
 
-    public boolean e() {
-        return this.e;
+    public boolean isFractionalMetrics() {
+        return this.fractionalMetrics;
     }
 
-    public int f() {
-        return this.b;
+    public int getMaxHeight() {
+        return this.maxHeight;
     }
 
-    static class Glyph {
+    public static final class Glyph {
         private int x;
         private int y;
         private int width;
@@ -183,8 +174,7 @@ public final class GlyphPage {
             this.height = height;
         }
 
-        Glyph() {
-        }
+        Glyph() {}
 
         public int getX() {
             return this.x;

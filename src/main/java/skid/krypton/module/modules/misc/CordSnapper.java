@@ -1,6 +1,6 @@
 package skid.krypton.module.modules.misc;
 
-import skid.krypton.utils.embed.EmbedSender;
+import skid.krypton.utils.embed.DiscordWebhook;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
@@ -43,11 +43,11 @@ public final class CordSnapper extends Module {
             return;
         }
         if (KeyUtils.isKeyPressed(this.activateKey.getValue())) {
-            EmbedSender embedSender = new EmbedSender(this.webhookUrl.value);
+            DiscordWebhook embedSender = new DiscordWebhook(this.webhookUrl.value);
             embedSender.a("Coordinates: x: " + this.mc.player.getX() + " y: " + this.mc.player.getY() + " z: " + this.mc.player.getZ());
             CompletableFuture.runAsync(() -> {
                 try {
-                    embedSender.a();
+                    embedSender.execute();
                 } catch (Throwable _t) {
                     _t.printStackTrace(System.err);
                 }

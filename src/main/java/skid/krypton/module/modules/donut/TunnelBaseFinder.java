@@ -24,8 +24,7 @@ import net.minecraft.world.chunk.WorldChunk;
 import skid.krypton.Krypton;
 import skid.krypton.module.modules.misc.AutoEat;
 import skid.krypton.module.modules.combat.AutoTotem;
-import skid.krypton.utils.embed.EmbedSender;
-import skid.krypton.utils.embed.bn;
+import skid.krypton.utils.embed.DiscordWebhook;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
@@ -470,17 +469,17 @@ public final class TunnelBaseFinder extends Module {
 
     private void notifyTotemExploded(final String s, final int n, final int n2, final int n3) {
         if (this.discordNotification.getValue()) {
-            final EmbedSender embedSender = new EmbedSender(this.webhook.value);
-            final bn bn = new bn();
-            bn.a("Totem Exploded");
-            bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
-            bn.b("Your Totem Exploded - " + MinecraftClient.getInstance().getSession().getUsername());
-            bn.a(Color.RED);
-            bn.a(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")), null);
-            bn.a("Location", "x: " + n + " y: " + n2 + " z: " + n3, true);
-            embedSender.a(bn);
+            final DiscordWebhook embedSender = new DiscordWebhook(this.webhook.value);
+            final DiscordWebhook.EmbedObject bn = new DiscordWebhook.EmbedObject();
+            bn.setTitle("Totem Exploded");
+            bn.setThumbnail("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
+            bn.setDescription("Your Totem Exploded - " + MinecraftClient.getInstance().getSession().getUsername());
+            bn.setColor(Color.RED);
+            bn.setFooter(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")), null);
+            bn.addField("Location", "x: " + n + " y: " + n2 + " z: " + n3, true);
+            embedSender.addEmbed(bn);
             try {
-                embedSender.a();
+                embedSender.execute();
             } catch (final Throwable ex) {
             }
         }
@@ -495,17 +494,17 @@ public final class TunnelBaseFinder extends Module {
             s2 = "Spawner";
         }
         if (this.discordNotification.getValue()) {
-            final EmbedSender embedSender = new EmbedSender(this.webhook.value);
-            final bn bn = new bn();
-            bn.a(s2);
-            bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
-            bn.b(s2 + " Found - " + MinecraftClient.getInstance().getSession().getUsername());
-            bn.a(Color.GRAY);
-            bn.a(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")), null);
-            bn.a(s2 + "Found at", "x: " + n + " y: " + n2 + " z: " + n3, true);
-            embedSender.a(bn);
+            final DiscordWebhook embedSender = new DiscordWebhook(this.webhook.value);
+            final DiscordWebhook.EmbedObject bn = new DiscordWebhook.EmbedObject();
+            bn.setTitle(s2);
+            bn.setThumbnail("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
+            bn.setDescription(s2 + " Found - " + MinecraftClient.getInstance().getSession().getUsername());
+            bn.setColor(Color.GRAY);
+            bn.setFooter(LocalTime.now().format(DateTimeFormatter.ofPattern("HH:mm")), null);
+            bn.addField(s2 + "Found at", "x: " + n + " y: " + n2 + " z: " + n3, true);
+            embedSender.addEmbed(bn);
             try {
-                embedSender.a();
+                embedSender.execute();
             } catch (final Throwable ex) {
             }
         }

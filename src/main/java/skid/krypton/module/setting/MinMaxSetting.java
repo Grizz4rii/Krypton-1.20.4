@@ -3,112 +3,112 @@ package skid.krypton.module.setting;
 import java.util.Random;
 
 public class MinMaxSetting extends Setting {
-    private final double a;
-    private final double c;
-    private final double d;
-    private final double e;
-    private final double f;
-    private double g;
-    private double h;
+    private final double min;
+    private final double max;
+    private final double step;
+    private final double defaultMin;
+    private final double defaultMax;
+    private double currentMin;
+    private double currentMax;
 
-    public MinMaxSetting(final CharSequence charSequence, final double a, final double c, final double d, final double n, final double n2) {
+    public MinMaxSetting(final CharSequence charSequence, final double min, final double max, final double step, final double defaultMin, final double defaultMax) {
         super(charSequence);
-        this.a = a;
-        this.c = c;
-        this.d = d;
-        this.g = n;
-        this.h = n2;
-        this.e = n;
-        this.f = n2;
+        this.min = min;
+        this.max = max;
+        this.step = step;
+        this.currentMin = defaultMin;
+        this.currentMax = defaultMax;
+        this.defaultMin = defaultMin;
+        this.defaultMax = defaultMax;
     }
 
-    public int a() {
-        return (int) this.g;
+    public int getMinInt() {
+        return (int) this.currentMin;
     }
 
-    public float b() {
-        return (float) this.g;
+    public float getMinFloat() {
+        return (float) this.currentMin;
     }
 
-    public long c() {
-        return (long) this.g;
+    public long getMinLong() {
+        return (long) this.currentMin;
     }
 
-    public int d() {
-        return (int) this.h;
+    public int getMaxInt() {
+        return (int) this.currentMax;
     }
 
-    public float e() {
-        return (float) this.h;
+    public float getMaxFloat() {
+        return (float) this.currentMax;
     }
 
-    public long f() {
-        return (long) this.h;
+    public long getMaxLong() {
+        return (long) this.currentMax;
     }
 
-    public double g() {
-        return this.a;
+    public double getMinValue() {
+        return this.min;
     }
 
-    public double h() {
-        return this.c;
+    public double getMaxValue() {
+        return this.max;
     }
 
-    public double i() {
-        return this.g;
+    public double getCurrentMin() {
+        return this.currentMin;
     }
 
-    public double j() {
-        return this.h;
+    public double getCurrentMax() {
+        return this.currentMax;
     }
 
-    public double k() {
-        return this.e;
+    public double getDefaultMin() {
+        return this.defaultMin;
     }
 
-    public double l() {
-        return this.f;
+    public double getDefaultMax() {
+        return this.defaultMax;
     }
 
-    public double m() {
-        return this.d;
+    public double getStep() {
+        return this.step;
     }
 
-    public double n() {
-        if (this.j() > this.i()) {
-            return new Random().nextDouble(this.i(), this.j());
+    public double getRandomDoubleInRange() {
+        if (this.getCurrentMax() > this.getCurrentMin()) {
+            return new Random().nextDouble(this.getCurrentMin(), this.getCurrentMax());
         }
-        return this.i();
+        return this.getCurrentMin();
     }
 
-    public int o() {
-        if (this.j() > this.i()) {
-            return new Random().nextInt(this.a(), this.d());
+    public int getRandomIntInRange() {
+        if (this.getCurrentMax() > this.getCurrentMin()) {
+            return new Random().nextInt(this.getMinInt(), this.getMaxInt());
         }
-        return this.a();
+        return this.getMinInt();
     }
 
-    public float p() {
-        if (this.j() > this.i()) {
-            return new Random().nextFloat(this.b(), this.e());
+    public float getRandomFloatInRange() {
+        if (this.getCurrentMax() > this.getCurrentMin()) {
+            return new Random().nextFloat(this.getMinFloat(), this.getMaxFloat());
         }
-        return this.b();
+        return this.getMinFloat();
     }
 
-    public long q() {
-        if (this.j() > this.i()) {
-            return new Random().nextLong(this.c(), this.f());
+    public long getRandomLongInRange() {
+        if (this.getCurrentMax() > this.getCurrentMin()) {
+            return new Random().nextLong(this.getMinLong(), this.getMaxLong());
         }
-        return this.c();
+        return this.getMinLong();
     }
 
-    public void a(final double b) {
-        final double n = 1.0 / this.d;
-        this.g = Math.round(Math.max(this.a, Math.min(this.c, b)) * n) / n;
+    public void setCurrentMin(final double value) {
+        final double n = 1.0 / this.step;
+        this.currentMin = Math.round(Math.max(this.min, Math.min(this.max, value)) * n) / n;
     }
 
-    public void b(final double b) {
-        final double n = 1.0 / this.d;
-        this.h = Math.round(Math.max(this.a, Math.min(this.c, b)) * n) / n;
+    public void setCurrentMax(final double value) {
+        final double n = 1.0 / this.step;
+        this.currentMax = Math.round(Math.max(this.min, Math.min(this.max, value)) * n) / n;
     }
 }

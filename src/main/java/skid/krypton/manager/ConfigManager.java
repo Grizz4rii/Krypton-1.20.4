@@ -81,8 +81,8 @@ public final class ConfigManager {
                     if (asJsonObject.has("min") && asJsonObject.has("max")) {
                         final double asDouble = asJsonObject.get("min").getAsDouble();
                         final double asDouble2 = asJsonObject.get("max").getAsDouble();
-                        minMaxSetting.a(asDouble);
-                        minMaxSetting.b(asDouble2);
+                        minMaxSetting.setCurrentMin(asDouble);
+                        minMaxSetting.setCurrentMax(asDouble2);
                     }
                 }
             } else if (setting instanceof ItemSetting && jsonElement.isJsonPrimitive()) {
@@ -123,8 +123,8 @@ public final class ConfigManager {
                 jsonObject.addProperty(setting.getName().toString(), stringSetting.getValue());
             } else if (setting instanceof MinMaxSetting) {
                 final JsonObject jsonObject2 = new JsonObject();
-                jsonObject2.addProperty("min", ((MinMaxSetting) setting).i());
-                jsonObject2.addProperty("max", ((MinMaxSetting) setting).j());
+                jsonObject2.addProperty("min", ((MinMaxSetting) setting).getCurrentMin());
+                jsonObject2.addProperty("max", ((MinMaxSetting) setting).getCurrentMax());
                 jsonObject.add(setting.getName().toString(), jsonObject2);
             } else if (setting instanceof final ItemSetting itemSetting) {
                 jsonObject.addProperty(setting.getName().toString(), Registries.ITEM.getId(itemSetting.getItem()).toString());

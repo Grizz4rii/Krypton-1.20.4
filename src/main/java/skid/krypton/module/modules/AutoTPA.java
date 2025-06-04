@@ -49,6 +49,6 @@ public final class AutoTPA extends Module {
             s = "tpahere ";
         }
         networkHandler.sendCommand(s + this.e.getValue());
-        this.f = this.c.o();
+        this.f = this.c.getRandomIntInRange();
     }
 }

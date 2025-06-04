@@ -4,7 +4,7 @@
 
 package skid.krypton.module.modules;
 
-import a.b.c.bn;
+import skid.krypton.auth.bn;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.InfestedBlock;
@@ -29,7 +29,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 import skid.krypton.auth.EmbedSender;

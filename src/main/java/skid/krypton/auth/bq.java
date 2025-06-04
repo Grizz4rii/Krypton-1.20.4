@@ -2,22 +2,22 @@
 // Decompiled by Procyon v0.6.0
 // 
 
-package a.b.c;
+package skid.krypton.auth;
 
-class bq {
+public class bq {
     private final String a;
     private final String b;
 
-    private bq(final bn bn, final String a, final String b) {
+    bq(final bn bn, final String a, final String b) {
         this.a = a;
         this.b = b;
     }
 
-    private String a() {
+    String a() {
         return this.a;
     }
 
-    private String b() {
+    String b() {
         return this.b;
     }
 }

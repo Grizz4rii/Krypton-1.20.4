@@ -8,6 +8,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.registry.BuiltinRegistries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.entry.RegistryEntryList;
 import net.minecraft.util.math.intprovider.ConstantIntProvider;
@@ -18,23 +19,19 @@ import net.minecraft.world.dimension.DimensionOptions;
 import net.minecraft.world.gen.HeightContext;
 import net.minecraft.world.gen.WorldPreset;
 import net.minecraft.world.gen.WorldPresets;
-import net.minecraft.world.gen.chunk.ChunkGenerator;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.feature.util.PlacedFeatureIndexer;
 import net.minecraft.world.gen.heightprovider.HeightProvider;
 import net.minecraft.world.gen.placementmodifier.CountPlacementModifier;
 import net.minecraft.world.gen.placementmodifier.HeightRangePlacementModifier;
-import net.minecraft.world.gen.placementmodifier.PlacementModifier;
 import net.minecraft.world.gen.placementmodifier.RarityFilterPlacementModifier;
 import skid.krypton.mixin.CountPlacementModifierAccessor;
 import skid.krypton.mixin.HeightRangePlacementModifierAccessor;
 import skid.krypton.mixin.RarityFilterPlacementModifierAccessor;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class Ore {
@@ -49,29 +46,41 @@ public class Ore {
     public Color i;
     public boolean j;
 
-    public static Map a() {
-        final RegistryWrapper$WrapperLookup wrapperLookup = BuiltinRegistries.createWrapperLookup();
-        final RegistryWrapper$Impl wrapperOrThrow = wrapperLookup.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE);
-        final List list = ((WorldPreset) wrapperLookup.getWrapperOrThrow(RegistryKeys.WORLD_PRESET).method_46747(WorldPresets.DEFAULT).comp_349()).createDimensionsRegistryHolder().dimensions().get(DimensionOptions.NETHER).chunkGenerator().getBiomeSource().getBiomes().stream().toList();
-        final List collectIndexedFeatures = PlacedFeatureIndexer.collectIndexedFeatures((List) list, registryEntry -> ((Biome) registryEntry.value()).getGenerationSettings().getFeatures(), true);
-        final HashMap hashMap = new HashMap();
-        a(hashMap, collectIndexedFeatures, wrapperOrThrow, OrePlacedFeatures.ORE_DEBRIS_SMALL, 7, new Color(209, 27, 245));
-        a(hashMap, collectIndexedFeatures, wrapperOrThrow, OrePlacedFeatures.ORE_ANCIENT_DEBRIS_LARGE, 7, new Color(209, 27, 245));
-        final HashMap hashMap2 = new HashMap();
-        list.forEach(registryEntry2 -> {
-            map.put(registryEntry2.getKey().get(), new ArrayList());
-            ((Biome) registryEntry2.value()).getGenerationSettings().getFeatures().stream().flatMap(RegistryEntryList::stream).map(RegistryEntry::value);
-            Objects.requireNonNull(obj);
-            final Stream stream;
-            stream.filter(obj::containsKey).forEach(placedFeature -> map2.get(registryEntry3.getKey().get()).add(map3.get(placedFeature)));
-            return;
+    public static Map register() {
+        RegistryWrapper.WrapperLookup wrapperLookup = BuiltinRegistries.createWrapperLookup();
+        RegistryWrapper.Impl<PlacedFeature> impl = wrapperLookup.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE);
+        var l = ((WorldPreset)wrapperLookup.getWrapperOrThrow(RegistryKeys.WORLD_PRESET).getOrThrow(WorldPresets.DEFAULT).value()).createDimensionsRegistryHolder().dimensions().get(DimensionOptions.NETHER).chunkGenerator().getBiomeSource().getBiomes().stream().toList();
+        var l2 = PlacedFeatureIndexer.collectIndexedFeatures(l, registryEntry -> registryEntry.value().getGenerationSettings().getFeatures(), true);
+        Map<PlacedFeature, Ore> ores = new HashMap<>();
+        var registry = OrePlacedFeatures.ORE_DEBRIS_SMALL;
+        Ore.register(ores, l2, impl, registry, 7, new Color(209, 27, 245));
+        RegistryKey<PlacedFeature> registryKey2 = OrePlacedFeatures.ORE_ANCIENT_DEBRIS_LARGE;
+        Ore.register(ores, l2, impl, registryKey2, 7, new Color(209, 27, 245));
+        Map<RegistryKey<Biome>, List<Ore>> hashMap2 = new HashMap<>();
+        l.forEach(registryEntry -> {
+            hashMap2.put(registryEntry.getKey().get(), new ArrayList<>());
+            Stream<PlacedFeature> stream = registryEntry.value().getGenerationSettings().getFeatures().stream().flatMap(RegistryEntryList::stream).map(RegistryEntry::value);
+            Objects.requireNonNull(ores);
+            stream.filter(ores::containsKey).forEach(placedFeature -> hashMap2.get(registryEntry.getKey().get()).add(ores.get(placedFeature)));
         });
         return hashMap2;
     }
 
-    private static void a(final Map map, final List list, final RegistryWrapper$Impl registryWrapper$Impl, final RegistryKey registryKey, final int n, final Color color) {
-        final Object comp_349 = registryWrapper$Impl.method_46747(registryKey).comp_349();
-        map.put(comp_349, new Ore((PlacedFeature) comp_349, n, list.get(n).indexMapping().applyAsInt(comp_349), color));
+    private static void register(
+            Map<PlacedFeature, Ore> map,
+            List<PlacedFeatureIndexer.IndexedFeatures> indexer,
+            RegistryWrapper.Impl<PlacedFeature> oreRegistry,
+            RegistryKey<PlacedFeature> oreKey,
+            int genStep,
+            Color color
+    ) {
+        var orePlacement = oreRegistry.getOrThrow(oreKey).value();
+
+        int index = indexer.get(genStep).indexMapping().applyAsInt(orePlacement);
+
+        Ore ore = new Ore(orePlacement, genStep, index, color);
+
+        map.put(orePlacement, ore);
     }
 
     private Ore(final PlacedFeature obj, final int a, final int b, final Color i) {
@@ -80,7 +89,7 @@ public class Ore {
         this.a = a;
         this.b = b;
         this.i = i;
-        this.e = new HeightContext(null, HeightLimitView.create(MinecraftClient.getInstance().world.method_31607(), MinecraftClient.getInstance().world.method_8597().logicalHeight()));
+        this.e = new HeightContext(null, HeightLimitView.create(MinecraftClient.getInstance().world.getBottomY(), MinecraftClient.getInstance().world.getDimension().logicalHeight()));
         for (final Object next : obj.placementModifiers()) {
             if (next instanceof CountPlacementModifier) {
                 this.c = ((CountPlacementModifierAccessor) next).getCount();
@@ -93,11 +102,11 @@ public class Ore {
                 this.f = (float) ((RarityFilterPlacementModifierAccessor) next).getChance();
             }
         }
-        final FeatureConfig config = ((ConfiguredFeature) obj.feature().value()).config();
+        final FeatureConfig config = obj.feature().value().config();
         if (config instanceof OreFeatureConfig) {
             this.g = ((OreFeatureConfig) config).discardOnAirChance;
             this.h = ((OreFeatureConfig) config).size;
-            if (((ConfiguredFeature) obj.feature().value()).feature() instanceof ScatteredOreFeature) {
+            if (obj.feature().value().feature() instanceof ScatteredOreFeature) {
                 this.j = true;
             }
             return;

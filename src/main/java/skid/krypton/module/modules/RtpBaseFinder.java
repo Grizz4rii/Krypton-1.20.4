@@ -4,7 +4,7 @@
 
 package skid.krypton.module.modules;
 
-import a.b.c.bn;
+import skid.krypton.auth.bn;
 import net.minecraft.block.entity.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;

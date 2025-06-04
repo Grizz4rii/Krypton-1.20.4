@@ -12,8 +12,8 @@ import java.util.Set;
 class JSONSerializer {
     private final HashMap<String, Object> a;
 
-    private JSONSerializer(final EmbedSender embedSender) {
-        this.a = new HashMap<String, Object>();
+    JSONSerializer(final EmbedSender embedSender) {
+        this.a = new HashMap<>();
     }
 
     void a(final String key, final Object value) {
@@ -54,13 +54,7 @@ class JSONSerializer {
                 sb.append("]");
             }
             ++n;
-            String str2;
-            if (n == entrySet.size()) {
-                str2 = xruxderuii(sjmbzdtcmhvtxfs(), 1921932697);
-            } else {
-                str2 = xruxderuii(hoealqbrbxaxles(), 669710273);
-            }
-            sb.append(str2);
+            sb.append(n == entrySet.size() ? "}" : ",");
         }
         return sb.toString();
     }

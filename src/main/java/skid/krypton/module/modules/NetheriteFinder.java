@@ -98,7 +98,7 @@ public final class NetheriteFinder extends Module {
     private void j() {
         this.e.clear();
         if (this.b.world != null) {
-            this.f = Ore.a();
+            this.f = Ore.register();
             this.k();
         }
     }
@@ -110,7 +110,7 @@ public final class NetheriteFinder extends Module {
     @EventListener
     public void a(final ChunkDataEvent chunkDataEvent) {
         if (this.f == null && this.b.world != null) {
-            this.f = Ore.a();
+            this.f = Ore.register();
         }
         this.a((Chunk) this.b.world.method_8497(chunkDataEvent.a.getChunkX(), chunkDataEvent.a.getChunkZ()));
     }
@@ -198,7 +198,7 @@ public final class NetheriteFinder extends Module {
 
     private List a(final RegistryKey registryKey) {
         if (this.f == null) {
-            this.f = Ore.a();
+            this.f = Ore.register();
         }
         if (this.f.containsKey(registryKey)) {
             return this.f.get(registryKey);

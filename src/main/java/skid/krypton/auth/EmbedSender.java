@@ -4,8 +4,6 @@
 
 package skid.krypton.auth;
 
-import a.b.c.*;
-
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;
 import java.io.OutputStream;
@@ -48,7 +46,7 @@ public class EmbedSender {
         this.f.add(bn);
     }
 
-    public void a() {
+    public void a() throws Throwable {
         if (this.b == null && this.f.isEmpty()) {
             throw new IllegalArgumentException("Set content or add at least one EmbedObject");
         }
@@ -107,7 +105,6 @@ public class EmbedSender {
                         continue;
                     }
                 }
-                throw new IllegalAccessException();
             }
             JSONSerializer.a("embeds", list.toArray());
         }

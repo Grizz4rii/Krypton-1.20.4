@@ -2,10 +2,11 @@
 // Decompiled by Procyon v0.6.0
 // 
 
-package a.b.c;
+package skid.krypton.auth;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class bn {
     private String a;
@@ -19,7 +20,7 @@ public class bn {
     private final List<bp> i;
 
     public bn() {
-        this.i = new ArrayList<bp>();
+        this.i = new ArrayList<>();
     }
 
     public String a() {

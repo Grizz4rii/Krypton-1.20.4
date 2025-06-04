@@ -211,42 +211,32 @@ public final class ModuleButton {
     }
 
     public void mouseClicked(final double n, final double n2, final int button) {
-        System.out.println(module.getName() + ": " + button);
         if (this.isHovered(n, n2)) {
-            System.out.println(module.getName() + ": " + button);
             if (button == 0) {
                 final int n4 = this.parent.getX() + this.parent.getWidth() - 30;
                 final int n5 = this.parent.getY() + this.offset + this.parent.getHeight() / 2 - 3;
 
                 if (n >= n4 && n <= n4 + 12 && n2 >= n5 && n2 <= n5 + 6) {
-                    System.out.println("Toggle");
                     this.module.toggle();
                 } else if (!this.module.getSettings().isEmpty() && n > this.parent.getX() + this.parent.getWidth() - 25) {
-                    System.out.println("yo");
                     if (!this.extended) {
-                        System.out.println("yo2");
                         this.onExtend();
                     }
                     this.extended = !this.extended;
                 } else {
-                    System.out.println("yo3");
                     this.module.toggle();
                 }
             } else if (button == 1) {
-                System.out.println("yo4");
                 if (this.module.getSettings().isEmpty()) {
                     return;
                 }
                 if (!this.extended) {
-                    System.out.println("yo5");
                     this.onExtend();
                 }
-                System.out.println("yo6");
                 this.extended = !this.extended;
             }
         }
         if (this.extended) {
-            System.out.println("yo7");
             for (Component setting : this.settings) {
                 setting.mouseClicked(n, n2, button);
             }

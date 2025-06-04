@@ -12,7 +12,10 @@ import skid.krypton.event.Listener;
 import skid.krypton.module.Module;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public final class EventManager {

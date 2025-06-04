@@ -5,7 +5,6 @@
 package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import skid.krypton.gui.Component;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.StringSetting;
@@ -96,7 +95,7 @@ public final class TextBox extends Component {
     @Override
     public void mouseClicked(final double n, final double n2, final int n3) {
         if (this.isHovered(n, n2) && n3 == 0) {
-            this.mc.setScreen((Screen) new StringBox(this, this.setting));
+            this.mc.setScreen(new StringBox(this, this.setting));
         }
         super.mouseClicked(n, n2, n3);
     }

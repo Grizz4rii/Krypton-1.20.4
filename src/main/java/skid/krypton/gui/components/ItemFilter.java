@@ -8,7 +8,6 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
@@ -22,7 +21,6 @@ import skid.krypton.utils.font.TextRenderer;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 class ItemFilter extends Screen {
@@ -122,7 +120,7 @@ class ItemFilter extends Screen {
                 mainColor = new Color(35, 35, 40, 255);
             }
             RenderUtils.a(drawContext.getMatrices(), mainColor, n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 20.0);
-            RenderUtils.a(drawContext, new ItemStack((ItemConvertible) this.filteredItems.get(i)), n19, n20, 40.0f, 0);
+            RenderUtils.a(drawContext, new ItemStack(this.filteredItems.get(i)), n19, n20, 40.0f, 0);
             if (n4 >= n19 && n4 <= n19 + 40 && n5 >= n20 && n5 <= n20 + 40) {
                 RenderUtils.a(drawContext, KryptonUtil.getMainColor(200, 1), n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 1.0, 20.0);
             }
@@ -155,11 +153,11 @@ class ItemFilter extends Screen {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
                 this.setting.a(this.filteredItems.get(this.selectedIndex));
             }
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (this.isInBounds(n4, n5, n10, n8, 80, 30)) {
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (this.isInBounds(n4, n5, n10 - 80 - 10, n8, 80, 30)) {
@@ -212,7 +210,7 @@ class ItemFilter extends Screen {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
                 this.setting.a(this.filteredItems.get(this.selectedIndex));
             }
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (n == 259) {
@@ -253,7 +251,7 @@ class ItemFilter extends Screen {
         if (n == 257) {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
                 this.setting.a(this.filteredItems.get(this.selectedIndex));
-                this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+                this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             }
             return true;
         }

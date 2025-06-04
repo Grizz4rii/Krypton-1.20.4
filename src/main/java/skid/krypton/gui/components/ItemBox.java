@@ -5,9 +5,7 @@
 package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import skid.krypton.gui.Component;
@@ -91,7 +89,7 @@ public final class ItemBox extends Component {
     @Override
     public void mouseClicked(final double n, final double n2, final int n3) {
         if (this.isHovered(n, n2) && n3 == 0) {
-            this.mc.setScreen((Screen) new ItemFilter(this, this.setting));
+            this.mc.setScreen(new ItemFilter(this, this.setting));
         }
         super.mouseClicked(n, n2, n3);
     }

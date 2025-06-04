@@ -6,15 +6,12 @@ package skid.krypton.manager;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import skid.krypton.Krypton;
 import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.*;
-
-import java.util.Iterator;
 
 public final class ConfigManager {
     private JsonObject a;

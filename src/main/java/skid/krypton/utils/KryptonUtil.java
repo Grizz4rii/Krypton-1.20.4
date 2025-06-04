@@ -16,7 +16,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 
 public final class KryptonUtil {
     public static Color getMainColor(final int n, final int n2) {

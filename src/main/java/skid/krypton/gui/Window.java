@@ -13,7 +13,6 @@ import skid.krypton.utils.*;
 import skid.krypton.utils.font.TextRenderer;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

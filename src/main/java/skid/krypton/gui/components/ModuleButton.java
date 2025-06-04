@@ -17,7 +17,6 @@ import skid.krypton.utils.*;
 import skid.krypton.utils.font.TextRenderer;
 
 import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -181,8 +180,8 @@ public final class ModuleButton {
                 if (!(next instanceof Slider)) {
                     continue;
                 }
-                this.renderModernSliderKnob(drawContext, next.parentX() + Math.max(((Slider) next).lerpedOffsetMinX, 2.5), next.parentY() + ((Slider) next).offset + next.parentOffset() + 27.5, ((Slider) next).accentColor1);
-                this.renderModernSliderKnob(drawContext, next.parentX() + Math.max(((Slider) next).lerpedOffsetMaxX, 2.5), next.parentY() + ((Slider) next).offset + next.parentOffset() + 27.5, ((Slider) next).accentColor1);
+                this.renderModernSliderKnob(drawContext, next.parentX() + Math.max(((Slider) next).lerpedOffsetMinX, 2.5), next.parentY() + next.offset + next.parentOffset() + 27.5, ((Slider) next).accentColor1);
+                this.renderModernSliderKnob(drawContext, next.parentX() + Math.max(((Slider) next).lerpedOffsetMaxX, 2.5), next.parentY() + next.offset + next.parentOffset() + 27.5, ((Slider) next).accentColor1);
             }
         }
     }

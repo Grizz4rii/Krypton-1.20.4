@@ -123,11 +123,11 @@ class StringBox extends Screen {
         final int n7 = (width - max) / 2 + max - 80 - 20;
         if (this.isHovered(n4, n5, n7, n6, 80, 25)) {
             this.setting.a(this.content.trim());
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (this.isHovered(n4, n5, n7 - 80 - 10, n6, 80, 25)) {
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         return super.mouseClicked(n4, n5, n3);
@@ -142,12 +142,12 @@ class StringBox extends Screen {
         this.lastCursorBlink = System.currentTimeMillis();
         if (n == 256) {
             this.setting.a(this.content.trim());
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (n == 257) {
             this.setting.a(this.content.trim());
-            this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
+            this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (isPaste(n)) {
@@ -165,7 +165,7 @@ class StringBox extends Screen {
         }
         if (isCopy(n)) {
             if (this.selectionStart != -1 && this.selectionStart != this.cursorPosition) {
-                GLFW.glfwSetClipboardString(this.this$0.mc.getWindow().getHandle(), (CharSequence) this.content.substring(Math.min(this.selectionStart, this.cursorPosition), Math.max(this.selectionStart, this.cursorPosition)));
+                GLFW.glfwSetClipboardString(this.this$0.mc.getWindow().getHandle(), this.content.substring(Math.min(this.selectionStart, this.cursorPosition), Math.max(this.selectionStart, this.cursorPosition)));
             }
             return true;
         }
@@ -173,7 +173,7 @@ class StringBox extends Screen {
             if (this.selectionStart != -1 && this.selectionStart != this.cursorPosition) {
                 final int min2 = Math.min(this.selectionStart, this.cursorPosition);
                 final int max = Math.max(this.selectionStart, this.cursorPosition);
-                GLFW.glfwSetClipboardString(this.this$0.mc.getWindow().getHandle(), (CharSequence) this.content.substring(min2, max));
+                GLFW.glfwSetClipboardString(this.this$0.mc.getWindow().getHandle(), this.content.substring(min2, max));
                 this.content = this.content.substring(0, min2) + this.content.substring(max);
                 this.cursorPosition = min2;
                 this.selectionStart = -1;

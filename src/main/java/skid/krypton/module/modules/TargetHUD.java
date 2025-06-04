@@ -1,0 +1,206 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+package skid.krypton.module.modules;
+
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.PlayerSkinDrawer;
+import net.minecraft.client.network.PlayerListEntry;
+import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import skid.krypton.event.EventListener;
+import skid.krypton.event.events.PacketEvent;
+import skid.krypton.event.events.Render2DEvent;
+import skid.krypton.module.Category;
+import skid.krypton.module.Module;
+import skid.krypton.setting.settings.BooleanSetting;
+import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.utils.ColorUtil;
+import skid.krypton.utils.EncryptedString;
+import skid.krypton.utils.MathUtil;
+import skid.krypton.utils.RenderUtils;
+import skid.krypton.utils.font.TextRenderer;
+
+import java.awt.*;
+
+public final class TargetHUD extends Module {
+    private final NumberSetting d;
+    private final NumberSetting e;
+    private final BooleanSetting f;
+    private final NumberSetting g;
+    private final Color h;
+    private final Color i;
+    private long j;
+    public static float c;
+    private static final long k = 10000L;
+    private float l;
+    private TargetHUDHandler m;
+
+    public TargetHUD() {
+        super(EncryptedString.a("Target HUD"), EncryptedString.a("Displays detailed information about your target with style"), -1, Category.d);
+        this.d = new NumberSetting(EncryptedString.a("X"), 0.0, 1920.0, 500.0, 1.0);
+        this.e = new NumberSetting(EncryptedString.a("Y"), 0.0, 1080.0, 500.0, 1.0);
+        this.f = new BooleanSetting(EncryptedString.a("Timeout"), true).a(EncryptedString.a("Target hud will disappear after 10 seconds"));
+        this.g = new NumberSetting(EncryptedString.a("Fade Speed"), 5.0, 30.0, 15.0, 1.0).a(EncryptedString.a("Speed of animations"));
+        this.h = new Color(255, 50, 100);
+        this.i = new Color(0, 0, 0, 175);
+        this.j = 0L;
+        this.l = 0.0f;
+        this.a(this.d, this.e, this.f, this.g);
+    }
+
+    @Override
+    public void onEnable() {
+        super.onEnable();
+    }
+
+    @Override
+    public void onDisable() {
+        super.onDisable();
+    }
+
+    @EventListener
+    public void a(final Render2DEvent render2DEvent) {
+        final DrawContext a = render2DEvent.a;
+        final int f = this.d.f();
+        final int f2 = this.e.f();
+        final float g = this.g.g();
+        final Color h = this.h;
+        final Color i = this.i;
+        RenderUtils.c();
+        final boolean b = this.b.player.method_6052() != null && this.b.player.method_6052() instanceof PlayerEntity && ((PlayerEntity) this.b.player.method_6052()).method_5805();
+        final boolean b2 = !this.f.c() || System.currentTimeMillis() - this.j <= 10000L;
+        float n;
+        if (b && b2) {
+            n = 0.0f;
+        } else {
+            n = 1.0f;
+        }
+        TargetHUD.c = RenderUtils.a(TargetHUD.c, n, g);
+        if (TargetHUD.c < 0.99f && b) {
+            final LivingEntity method_6052 = this.b.player.method_6052();
+            final PlayerListEntry playerListEntry = this.b.getNetworkHandler().getPlayerListEntry(((PlayerEntity) method_6052).method_5667());
+            final MatrixStack matrices = a.getMatrices();
+            matrices.push();
+            final float n2 = 1.0f - TargetHUD.c;
+            final float n3 = 0.8f + 0.2f * n2;
+            matrices.translate((float) f, (float) f2, 0.0f);
+            matrices.scale(n3, n3, 1.0f);
+            matrices.translate((float) (-f), (float) (-f2), 0.0f);
+            this.l = RenderUtils.a(this.l, ((PlayerEntity) method_6052).method_6032() + ((PlayerEntity) method_6052).method_6067(), g * 0.5f);
+            this.a(a, f, f2, (PlayerEntity) method_6052, playerListEntry, n2, h, i);
+            matrices.pop();
+        }
+        RenderUtils.d();
+    }
+
+    private void a(final DrawContext drawContext, final int n, final int n2, final PlayerEntity playerEntity, final PlayerListEntry playerListEntry, final float n3, final Color color, final Color color2) {
+        final MatrixStack matrices = drawContext.getMatrices();
+        RenderUtils.a(matrices, new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (50.0f * n3)), n - 5, n2 - 5, n + 300 + 5, n2 + 180 + 5, 15.0, 15.0, 15.0, 15.0, 30.0);
+        RenderUtils.a(matrices, new Color(color2.getRed(), color2.getGreen(), color2.getBlue(), (int) (color2.getAlpha() * n3)), n, n2, n + 300, n2 + 180, 10.0, 10.0, 10.0, 10.0, 20.0);
+        final Color color3 = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (color.getAlpha() * n3));
+        RenderUtils.a(matrices, color3, n + 20, n2, n + 300 - 20, n2 + 3, 0.0, 0.0, 0.0, 0.0, 10.0);
+        RenderUtils.a(matrices, color3, n + 20, n2 + 180 - 3, n + 300 - 20, n2 + 180, 0.0, 0.0, 0.0, 0.0, 10.0);
+        if (playerListEntry != null) {
+            RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n3)), n + 15, n2 + 15, n + 85, n2 + 85, 5.0, 5.0, 5.0, 5.0, 10.0);
+            PlayerSkinDrawer.draw(drawContext, playerListEntry.getSkinTextures().texture(), n + 25, n2 + 25, 50);
+            TextRenderer.a(playerEntity.method_5477().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
+            TextRenderer.a(MathUtil.a(playerEntity.method_5739((Entity) this.b.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
+            RenderUtils.a(matrices, new Color(60, 60, 60, (int) (200.0f * n3)), n + 15, n2 + 95, n + 300 - 15, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
+            final float b = this.l / playerEntity.method_6063();
+            final float n4 = 270.0f * Math.min(1.0f, b);
+            RenderUtils.a(matrices, this.a(b * (float) (0.800000011920929 + 0.20000000298023224 * Math.sin(System.currentTimeMillis() / 300.0)), n3), n + 15, n2 + 95, n + 15 + (int) n4, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
+            final String s = Math.round(this.l) + "/" + Math.round(playerEntity.method_6063()) + " HP";
+            TextRenderer.a(s, drawContext, n + 15 + (int) n4 / 2 - TextRenderer.a(s) / 2, n2 + 95, Color.WHITE.getRGB());
+            final int n5 = n2 + 120;
+            this.a(drawContext, n + 15, n5, 80, 45, "PING", playerListEntry.getLatency() + "ms", this.a(playerListEntry.getLatency(), n3), color3, n3);
+            String s2;
+            if (playerListEntry != null) {
+                s2 = "PLAYER";
+            } else {
+                s2 = "BOT";
+            }
+            Color color4;
+            if (playerListEntry != null) {
+                color4 = new Color(100, 255, 100, (int) (255.0f * n3));
+            } else {
+                color4 = new Color(255, 100, 100, (int) (255.0f * n3));
+            }
+            this.a(drawContext, n + 100 + 5, n5, 80, 45, "TYPE", s2, color4, color3, n3);
+            if (playerEntity.field_6235 > 0) {
+                this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "" + playerEntity.field_6235, this.b(playerEntity.field_6235, n3), color3, n3);
+            } else {
+                this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "No", new Color(150, 150, 150, (int) (255.0f * n3)), color3, n3);
+            }
+        } else {
+            TextRenderer.a("BOT DETECTED", drawContext, n + 150 - TextRenderer.a("BOT DETECTED") / 2, n2 + 90, new Color(255, 50, 50).getRGB());
+        }
+    }
+
+    private void a(final DrawContext drawContext, final int n, final int n2, final int n3, final int n4, final String s, final String s2, final Color color, final Color color2, final float n5) {
+        final MatrixStack matrices = drawContext.getMatrices();
+        RenderUtils.a(matrices, color2, n, n2, n + n3, n2 + 3, 3.0, 3.0, 0.0, 0.0, 6.0);
+        RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n5)), n, n2 + 3, n + n3, n2 + n4, 0.0, 0.0, 3.0, 3.0, 6.0);
+        TextRenderer.a(s, drawContext, n + n3 / 2 - TextRenderer.a(s) / 2, n2 + 5, new Color(200, 200, 200, (int) (255.0f * n5)).getRGB());
+        TextRenderer.a(s2, drawContext, n + n3 / 2 - TextRenderer.a(s2) / 2, n2 + n4 - 17, color.getRGB());
+    }
+
+    private Color a(final float n, final float n2) {
+        Color color;
+        if (n > 0.75f) {
+            color = ColorUtil.a(new Color(100, 255, 100), new Color(255, 255, 100), (1.0f - n) * 4.0f);
+        } else if (n > 0.25f) {
+            color = ColorUtil.a(new Color(255, 255, 100), new Color(255, 100, 100), (0.75f - n) * 2.0f);
+        } else {
+            float n3;
+            if (n < 0.1f) {
+                n3 = (float) (0.699999988079071 + 0.30000001192092896 * Math.sin(System.currentTimeMillis() / 200.0));
+            } else {
+                n3 = 1.0f;
+            }
+            color = new Color((int) (255.0f * n3), (int) (100.0f * n3), (int) (100.0f * n3));
+        }
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (color.getAlpha() * n2));
+    }
+
+    private Color a(final int n, final float n2) {
+        Color color;
+        if (n < 50) {
+            color = new Color(100, 255, 100);
+        } else if (n < 100) {
+            color = ColorUtil.a(new Color(100, 255, 100), new Color(255, 255, 100), (n - 50) / 50.0f);
+        } else if (n < 200) {
+            color = ColorUtil.a(new Color(255, 255, 100), new Color(255, 150, 50), (n - 100) / 100.0f);
+        } else {
+            color = ColorUtil.a(new Color(255, 150, 50), new Color(255, 80, 80), Math.min(1.0f, (n - 200) / 300.0f));
+        }
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (color.getAlpha() * n2));
+    }
+
+    private Color b(final int n, final float n2) {
+        final double n3 = 0.699999988079071 + 0.30000001192092896 * Math.sin(System.currentTimeMillis() / 150.0);
+        final float min = Math.min(1.0f, n / 10.0f);
+        final Color color = new Color(255, (int) (50.0f + 100.0f * (1.0f - min)), (int) (50.0f + 100.0f * (1.0f - min)));
+        return new Color((int) (color.getRed() * (float) n3), (int) (color.getGreen() * (float) n3), (int) (color.getBlue() * (float) n3), (int) (255.0f * n2));
+    }
+
+    @EventListener
+    public void a(final PacketEvent packetEvent) {
+        if (packetEvent.a instanceof final PlayerInteractEntityC2SPacket playerInteractEntityC2SPacket) {
+            if (this.m == null) {
+                this.m = new TargetHUDHandler(this);
+            }
+            if (this.m.isAttackPacket(playerInteractEntityC2SPacket)) {
+                this.j = System.currentTimeMillis();
+            }
+        }
+    }
+
+    static {
+        TargetHUD.c = 1.0f;
+    }
+}

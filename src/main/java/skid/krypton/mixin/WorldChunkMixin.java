@@ -1,0 +1,32 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+package skid.krypton.mixin;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import skid.krypton.event.events.SetBlockStateEvent;
+import skid.krypton.manager.EventManager;
+
+@Mixin({WorldChunk.class})
+public class WorldChunkMixin {
+    @Shadow
+    @Final
+    World world;
+
+    @Inject(method = {"setBlockState"}, at = {@At("TAIL")})
+    private void onSetBlockState(final BlockPos blockPos, final BlockState blockState, final boolean b, final CallbackInfoReturnable callbackInfoReturnable) {
+        if (this.world.isClient) {
+            EventManager.b(new SetBlockStateEvent(blockPos, (BlockState) callbackInfoReturnable.getReturnValue(), blockState));
+        }
+    }
+}

@@ -1,0 +1,253 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+package skid.krypton.gui;
+
+import net.minecraft.client.gui.DrawContext;
+import skid.krypton.Krypton;
+import skid.krypton.gui.components.ModuleButton;
+import skid.krypton.module.Category;
+import skid.krypton.utils.*;
+import skid.krypton.utils.font.TextRenderer;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+public final class Window {
+    public List<ModuleButton> moduleButtons;
+    public int x;
+    public int y;
+    private final int width;
+    private final int height;
+    public Color currentColor;
+    private final Category category;
+    public boolean dragging;
+    public boolean extended;
+    private int dragX;
+    private int dragY;
+    private int prevX;
+    private int prevY;
+    public ClickGUI parent;
+    private float hoverAnimation;
+
+    public Window(final int n, final int n2, final int width, final int height, final Category category, final ClickGUI parent) {
+        this.moduleButtons = new ArrayList<ModuleButton>();
+        this.hoverAnimation = 0.0f;
+        this.x = n;
+        this.y = n2;
+        this.width = width;
+        this.dragging = false;
+        this.extended = true;
+        this.height = height;
+        this.category = category;
+        this.parent = parent;
+        this.prevX = n;
+        this.prevY = n2;
+        final Iterator iterator = new ArrayList(Krypton.INSTANCE.b().a(category)).iterator();
+        int n3 = height;
+        while (iterator.hasNext()) {
+            this.moduleButtons.add(new ModuleButton(this, (Module) iterator.next(), n3));
+            n3 += height;
+        }
+    }
+
+    public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
+        final Color color = new Color(25, 25, 30, skid.krypton.module.modules.Krypton.f.f());
+        if (this.currentColor == null) {
+            this.currentColor = new Color(25, 25, 30, 0);
+        } else {
+            this.currentColor = ColorUtil.a(0.05f, color, this.currentColor);
+        }
+        float n4;
+        if (this.isHovered(n, n2) && !this.dragging) {
+            n4 = 1.0f;
+        } else {
+            n4 = 0.0f;
+        }
+        this.hoverAnimation = (float) MathUtil.a(n3 * 0.1f, this.hoverAnimation, n4);
+        final Color a = ColorUtil.a(new Color(25, 25, 30, this.currentColor.getAlpha()), new Color(255, 255, 255, 20), this.hoverAnimation);
+        float n5;
+        if (this.extended) {
+            n5 = 0.0f;
+        } else {
+            n5 = 6.0f;
+        }
+        float n6;
+        if (this.extended) {
+            n6 = 0.0f;
+        } else {
+            n6 = 6.0f;
+        }
+        RenderUtils.a(drawContext.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
+        final Color mainColor = KryptonUtil.getMainColor(255, this.category.ordinal());
+        final CharSequence f = this.category.f;
+        final int n7 = this.prevX + (this.width - TextRenderer.a(this.category.f)) / 2;
+        final int n8 = this.prevY + 8;
+        TextRenderer.a(f, drawContext, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
+        TextRenderer.a(f, drawContext, n7, n8, mainColor.brighter().getRGB());
+        this.updateButtons(n3);
+        if (this.extended) {
+            this.renderModuleButtons(drawContext, n, n2, n3);
+        }
+    }
+
+    private void renderModuleButtons(final DrawContext drawContext, final int n, final int n2, final float n3) {
+        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().render(drawContext, n, n2, n3);
+        }
+    }
+
+    public void keyPressed(final int n, final int n2, final int n3) {
+        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().keyPressed(n, n2, n3);
+        }
+    }
+
+    public void onGuiClose() {
+        this.currentColor = null;
+        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().onGuiClose();
+        }
+        this.dragging = false;
+    }
+
+    public void mouseClicked(final double n, final double n2, final int n3) {
+        if (this.isHovered(n, n2)) {
+            final int n4 = n3 ^ 0x251D4854;
+            int n5;
+            if (n4 != 0) {
+                n5 = ((n4 * 31 >>> 4) % n4 ^ n4 >>> 16);
+            } else {
+                n5 = 0;
+            }
+            switch (n5) {
+                case 132684095: {
+                    if (!this.parent.isDraggingAlready()) {
+                        this.dragging = true;
+                        this.dragX = (int) (n - this.x);
+                        this.dragY = (int) (n2 - this.y);
+                        break;
+                    }
+                    break;
+                }
+                case 132684089: {
+                    if (!this.dragging) {
+                    }
+                    break;
+                }
+            }
+        }
+        if (this.extended) {
+            final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
+            if (iterator.hasNext()) {
+                iterator.next().mouseClicked(n, n2, n3);
+            }
+        }
+    }
+
+    public void mouseDragged(final double n, final double n2, final int n3, final double n4, final double n5) {
+        if (this.extended) {
+            for (ModuleButton moduleButton : this.moduleButtons) {
+                moduleButton.mouseDragged(n, n2, n3, n4, n5);
+            }
+        }
+    }
+
+    public void updateButtons(final float n) {
+        int height = this.height;
+        for (final ModuleButton next : this.moduleButtons) {
+            final Animation animation = next.animation;
+            double n2;
+            if (next.extended) {
+                n2 = this.height * (next.settings.size() + 1);
+            } else {
+                n2 = this.height;
+            }
+            animation.a(0.5 * n, n2);
+            final double animation2 = next.animation.getAnimation();
+            next.offset = height;
+            height += (int) animation2;
+        }
+    }
+
+    public void mouseReleased(final double n, final double n2, final int n3) {
+        if (n3 == 0 && this.dragging) {
+            this.dragging = false;
+        }
+        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
+        while (iterator.hasNext()) {
+            iterator.next().mouseReleased(n, n2, n3);
+        }
+    }
+
+    public void mouseScrolled(final double n, final double n2, final double n3, final double n4) {
+        this.prevX = this.x;
+        this.prevY = this.y;
+        this.prevY += (int) (n4 * 20.0);
+        this.setY((int) (this.y + n4 * 20.0));
+    }
+
+    public int getX() {
+        return this.prevX;
+    }
+
+    public int getY() {
+        return this.prevY;
+    }
+
+    public void setY(final int y) {
+        this.y = y;
+    }
+
+    public void setX(final int x) {
+        this.x = x;
+    }
+
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
+    public boolean isHovered(final double n, final double n2) {
+        return n > this.x && n < this.x + this.width && n2 > this.y && n2 < this.y + this.height;
+    }
+
+    public boolean isPrevHovered(final double n, final double n2) {
+        return n > this.prevX && n < this.prevX + this.width && n2 > this.prevY && n2 < this.prevY + this.height;
+    }
+
+    public void updatePosition(final double n, final double n2, final float n3) {
+        this.prevX = this.x;
+        this.prevY = this.y;
+        if (this.dragging) {
+            double n4;
+            if (this.isHovered(n, n2)) {
+                n4 = this.x;
+            } else {
+                n4 = this.prevX;
+            }
+            this.x = (int) MathUtil.a(0.3f * n3, n4, n - this.dragX);
+            double n5;
+            if (this.isHovered(n, n2)) {
+                n5 = this.y;
+            } else {
+                n5 = this.prevY;
+            }
+            this.y = (int) MathUtil.a(0.3f * n3, n5, n2 - this.dragY);
+        }
+    }
+
+    private static byte[] vbfixpesqoeicux() {
+        return new byte[]{9, 39, 37, 116, 77, 48, 79, 112, 77, 114, 96, 59, 15, 85, 93, 58, 76, 29, 27, 107, 82, 38, 14, 37, 19, 125, 30, 87, 69, 24, 57, 76, 124, 68, 96, 106, 110, 78, 64, 115, 65, 67, 26, 55, 98, 72, 35, 74, 102, 123, 44, 126, 22, 89, 36, 23, 52, 71, 16, 27, 110, 57, 122, 56, 81, 70, 17, 14, 88, 36, 66, 45, 125, 98, 117, 60, 90, 125, 23, 122, 79, 93, 89, 126, 41, 19, 46, 6, 22, 9, 25};
+    }
+}

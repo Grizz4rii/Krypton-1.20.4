@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import skid.krypton.event.events.MouseButtenEvent;
+import skid.krypton.event.events.MouseButtonEvent;
 import skid.krypton.event.events.MouseScrolledEvent;
 import skid.krypton.manager.EventManager;
 
@@ -15,7 +15,7 @@ public abstract class MouseMixin {
     @Inject(method = {"onMouseButton"}, at = {@At("HEAD")}, cancellable = true)
     private void onMouseButton(final long window, final int button, final int action, final int mods, final CallbackInfo ci) {
         if (button == GLFW.GLFW_KEY_UNKNOWN) return;
-        final MouseButtenEvent event = new MouseButtenEvent(button, window, action);
+        final MouseButtonEvent event = new MouseButtonEvent(button, window, action);
         EventManager.b(event);
         if (event.isCancelled()) ci.cancel();
 

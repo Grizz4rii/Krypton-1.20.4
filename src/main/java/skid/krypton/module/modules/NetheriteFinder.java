@@ -42,13 +42,13 @@ public final class NetheriteFinder extends Module {
     private Map<RegistryKey<Biome>, List<Ore>> f;
 
     public NetheriteFinder() {
-        super(EncryptedString.a("Netherite Finder"), EncryptedString.a("Finds netherites"), -1, Category.c);
+        super(EncryptedString.of("Netherite Finder"), EncryptedString.of("Finds netherites"), -1, Category.DONUT);
         int var10001 = 1860305437;
-        this.c = new NumberSetting(EncryptedString.a("Alpha"), 1.0, 255.0, 125.0, 1.0);
-        this.d = new NumberSetting(EncryptedString.a("Range"), 1.0, 10.0, 5.0, 1.0);
+        this.c = new NumberSetting(EncryptedString.of("Alpha"), 1.0, 255.0, 125.0, 1.0);
+        this.d = new NumberSetting(EncryptedString.of("Range"), 1.0, 10.0, 5.0, 1.0);
         this.e = new ConcurrentHashMap();
         Setting[] var1 = new Setting[]{this.c, this.d};
-        this.a(var1);
+        this.addSettings(var1);
     }
 
     @Override
@@ -64,8 +64,8 @@ public final class NetheriteFinder extends Module {
 
     @EventListener
     public void a(Render3DEvent var1) {
-        if (this.b.player != null && this.f != null) {
-            Camera var3 = this.b.gameRenderer.getCamera();
+        if (this.mc.player != null && this.f != null) {
+            Camera var3 = this.mc.gameRenderer.getCamera();
             if (var3 != null) {
                 MatrixStack var4 = var1.a;
                 var1.a.push();
@@ -77,8 +77,8 @@ public final class NetheriteFinder extends Module {
                 var4.translate(-var5.x, -var5.y, -var5.z);
             }
 
-            int var9 = this.b.player.getChunkPos().x;
-            int var10 = this.b.player.getChunkPos().z;
+            int var9 = this.mc.player.getChunkPos().x;
+            int var10 = this.mc.player.getChunkPos().z;
             int var6 = this.d.getIntValue();
             if (0 > var6) {
                 var1.a.pop();
@@ -121,7 +121,7 @@ public final class NetheriteFinder extends Module {
 
     private void j() {
         this.e.clear();
-        if (this.b.world != null) {
+        if (this.mc.world != null) {
             this.f = Ore.register();
             this.k();
         }
@@ -133,11 +133,11 @@ public final class NetheriteFinder extends Module {
 
     @EventListener
     public void a(ChunkDataEvent var1) {
-        if (this.f == null && this.b.world != null) {
+        if (this.f == null && this.mc.world != null) {
             this.f = Ore.register();
         }
 
-        ClientWorld var2 = this.b.world;
+        ClientWorld var2 = this.mc.world;
         this.a(var2.getChunk(var1.a.getChunkX(), var1.a.getChunkZ()));
     }
 
@@ -159,7 +159,7 @@ public final class NetheriteFinder extends Module {
     }
 
     private void k() {
-        if (this.b.player != null) {
+        if (this.mc.player != null) {
             Iterator var1 = BlockUtil.a().iterator();
 
             while (var1.hasNext()) {
@@ -172,7 +172,7 @@ public final class NetheriteFinder extends Module {
         if (this.f != null) {
             ChunkPos var2 = var1.getPos();
             long var3 = var2.toLong();
-            ClientWorld var5 = this.b.world;
+            ClientWorld var5 = this.mc.world;
             Map var16 = this.e;
             if (!var16.containsKey(var3) && var5 != null) {
                 HashSet<RegistryKey<Biome>> var17 = new HashSet();

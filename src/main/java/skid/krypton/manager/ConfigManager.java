@@ -85,7 +85,7 @@ public final class ConfigManager {
                     }
                 }
             } else if (setting instanceof ItemSetting && jsonElement.isJsonPrimitive()) {
-                ((ItemSetting) setting).a(Registries.ITEM.get(Identifier.of(jsonElement.getAsString())));
+                ((ItemSetting) setting).setItem(Registries.ITEM.get(Identifier.of(jsonElement.getAsString())));
             }
         } catch (final Exception ex) {
         }
@@ -125,7 +125,7 @@ public final class ConfigManager {
                 jsonObject2.addProperty("max", ((MinMaxSetting) setting).j());
                 jsonObject.add(setting.getName().toString(), jsonObject2);
             } else if (setting instanceof final ItemSetting itemSetting) {
-                jsonObject.addProperty(setting.getName().toString(), Registries.ITEM.getId(itemSetting.a()).toString());
+                jsonObject.addProperty(setting.getName().toString(), Registries.ITEM.getId(itemSetting.getItem()).toString());
             }
         } catch (final Exception ex) {
             System.err.println("Error saving setting " + setting.getName() + ": " + ex.getMessage());

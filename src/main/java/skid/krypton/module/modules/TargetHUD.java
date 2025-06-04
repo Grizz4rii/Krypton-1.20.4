@@ -35,16 +35,16 @@ public final class TargetHUD extends Module {
     private TargetHUDHandler m;
 
     public TargetHUD() {
-        super(EncryptedString.a("Target HUD"), EncryptedString.a("Displays detailed information about your target with style"), -1, Category.d);
-        this.d = new NumberSetting(EncryptedString.a("X"), 0.0, 1920.0, 500.0, 1.0);
-        this.e = new NumberSetting(EncryptedString.a("Y"), 0.0, 1080.0, 500.0, 1.0);
-        this.f = new BooleanSetting(EncryptedString.a("Timeout"), true).setDescription(EncryptedString.a("Target hud will disappear after 10 seconds"));
-        this.g = new NumberSetting(EncryptedString.a("Fade Speed"), 5.0, 30.0, 15.0, 1.0).getValue(EncryptedString.a("Speed of animations"));
+        super(EncryptedString.of("Target HUD"), EncryptedString.of("Displays detailed information about your target with style"), -1, Category.RENDER);
+        this.d = new NumberSetting(EncryptedString.of("X"), 0.0, 1920.0, 500.0, 1.0);
+        this.e = new NumberSetting(EncryptedString.of("Y"), 0.0, 1080.0, 500.0, 1.0);
+        this.f = new BooleanSetting(EncryptedString.of("Timeout"), true).setDescription(EncryptedString.of("Target hud will disappear after 10 seconds"));
+        this.g = new NumberSetting(EncryptedString.of("Fade Speed"), 5.0, 30.0, 15.0, 1.0).getValue(EncryptedString.of("Speed of animations"));
         this.h = new Color(255, 50, 100);
         this.i = new Color(0, 0, 0, 175);
         this.j = 0L;
         this.l = 0.0f;
-        this.a(this.d, this.e, this.f, this.g);
+        this.addSettings(this.d, this.e, this.f, this.g);
     }
 
     @Override
@@ -66,7 +66,7 @@ public final class TargetHUD extends Module {
         final Color h = this.h;
         final Color i = this.i;
         RenderUtils.c();
-        final boolean b = this.b.player.getAttacking() != null && this.b.player.getAttacking() instanceof PlayerEntity && this.b.player.getAttacking().isAlive();
+        final boolean b = this.mc.player.getAttacking() != null && this.mc.player.getAttacking() instanceof PlayerEntity && this.mc.player.getAttacking().isAlive();
         final boolean b2 = !this.f.getValue() || System.currentTimeMillis() - this.j <= 10000L;
         float n;
         if (b && b2) {
@@ -76,8 +76,8 @@ public final class TargetHUD extends Module {
         }
         TargetHUD.c = RenderUtils.a(TargetHUD.c, n, g);
         if (TargetHUD.c < 0.99f && b) {
-            final LivingEntity getAttacking = this.b.player.getAttacking();
-            final PlayerListEntry playerListEntry = this.b.getNetworkHandler().getPlayerListEntry(getAttacking.getUuid());
+            final LivingEntity getAttacking = this.mc.player.getAttacking();
+            final PlayerListEntry playerListEntry = this.mc.getNetworkHandler().getPlayerListEntry(getAttacking.getUuid());
             final MatrixStack matrices = a.getMatrices();
             matrices.push();
             final float n2 = 1.0f - TargetHUD.c;
@@ -103,7 +103,7 @@ public final class TargetHUD extends Module {
             RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n3)), n + 15, n2 + 15, n + 85, n2 + 85, 5.0, 5.0, 5.0, 5.0, 10.0);
             PlayerSkinDrawer.draw(drawContext, playerListEntry.getSkinTextures().texture(), n + 25, n2 + 25, 50);
             TextRenderer.a(playerEntity.getName().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
-            TextRenderer.a(MathUtil.a(playerEntity.distanceTo(this.b.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
+            TextRenderer.a(MathUtil.a(playerEntity.distanceTo(this.mc.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
             RenderUtils.a(matrices, new Color(60, 60, 60, (int) (200.0f * n3)), n + 15, n2 + 95, n + 300 - 15, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
             final float b = this.l / playerEntity.getMaxHealth();
             final float n4 = 270.0f * Math.min(1.0f, b);

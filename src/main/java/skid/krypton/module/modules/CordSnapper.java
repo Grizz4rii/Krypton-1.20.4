@@ -18,11 +18,11 @@ public final class CordSnapper extends Module {
     private int e;
 
     public CordSnapper() {
-        super(EncryptedString.a("Cord Snapper"), EncryptedString.a("Sends base coordinates to discord webhook"), -1, Category.b);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), -1, false);
-        this.d = new StringSetting(EncryptedString.a("Webhook"), "");
+        super(EncryptedString.of("Cord Snapper"), EncryptedString.of("Sends base coordinates to discord webhook"), -1, Category.MISC);
+        this.c = new BindSetting(EncryptedString.of("Activate Key"), -1, false);
+        this.d = new StringSetting(EncryptedString.of("Webhook"), "");
         this.e = 0;
-        this.a(this.c, this.d);
+        this.addSettings(this.c, this.d);
     }
 
     @Override
@@ -37,7 +37,7 @@ public final class CordSnapper extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.e > 0) {
@@ -46,7 +46,7 @@ public final class CordSnapper extends Module {
         }
         if (KeyUtils.b(this.c.getValue())) {
             EmbedSender embedSender = new EmbedSender(this.d.value);
-            embedSender.a("Coordinates: x: " + this.b.player.getX() + " y: " + this.b.player.getY() + " z: " + this.b.player.getZ());
+            embedSender.a("Coordinates: x: " + this.mc.player.getX() + " y: " + this.mc.player.getY() + " z: " + this.mc.player.getZ());
             CompletableFuture.runAsync(() -> {
                 try {
                     embedSender.a();

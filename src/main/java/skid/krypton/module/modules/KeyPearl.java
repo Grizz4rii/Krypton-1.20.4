@@ -26,12 +26,12 @@ public final class KeyPearl extends Module {
     private int k;
 
     public KeyPearl() {
-        super(EncryptedString.a("Key Pearl"), EncryptedString.a("Switches to an ender pearl and throws it when you press a bind"), -1, Category.b);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), -1, false);
-        this.d = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.e = new BooleanSetting(EncryptedString.a("Switch Back"), true);
-        this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.a("Delay after throwing pearl before switching back"));
-        this.a(this.c, this.d, this.e, this.f);
+        super(EncryptedString.of("Key Pearl"), EncryptedString.of("Switches to an ender pearl and throws it when you press a bind"), -1, Category.MISC);
+        this.c = new BindSetting(EncryptedString.of("Activate Key"), -1, false);
+        this.d = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.e = new BooleanSetting(EncryptedString.of("Switch Back"), true);
+        this.f = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.of("Delay after throwing pearl before switching back"));
+        this.addSettings(this.c, this.d, this.e, this.f);
     }
 
     @Override
@@ -47,7 +47,7 @@ public final class KeyPearl extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
         if (KeyUtils.b(this.c.getValue())) {
@@ -55,7 +55,7 @@ public final class KeyPearl extends Module {
         }
         if (this.g) {
             if (this.j == -1) {
-                this.j = this.b.player.getInventory().selectedSlot;
+                this.j = this.mc.player.getInventory().selectedSlot;
             }
             InventoryUtil.a(Items.ENDER_PEARL);
             if (this.i < this.d.getIntValue()) {
@@ -63,9 +63,9 @@ public final class KeyPearl extends Module {
                 return;
             }
             if (!this.h) {
-                final ActionResult interactItem = this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
+                final ActionResult interactItem = this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
                 if (interactItem.isAccepted() && interactItem.shouldSwingHand()) {
-                    this.b.player.swingHand(Hand.MAIN_HAND);
+                    this.mc.player.swingHand(Hand.MAIN_HAND);
                 }
                 this.h = true;
             }

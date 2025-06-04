@@ -12,10 +12,10 @@ public class EncryptedString implements AutoCloseable, CharSequence {
     private final int c;
     private static final int d = 128;
     private static final SecureRandom e;
-    private boolean f;
+    private boolean closed;
 
     public EncryptedString(final String s) {
-        this.f = false;
+        this.closed = false;
         if (s == null) {
             throw new IllegalArgumentException("Input string cannot be null");
         }
@@ -27,7 +27,7 @@ public class EncryptedString implements AutoCloseable, CharSequence {
     }
 
     public EncryptedString(final char[] original, final char[] original2) {
-        this.f = false;
+        this.closed = false;
         if (original == null || original2 == null) {
             throw new IllegalArgumentException("Neither encrypted value nor key can be null");
         }
@@ -39,11 +39,11 @@ public class EncryptedString implements AutoCloseable, CharSequence {
         this.a = Arrays.copyOf(original2, original2.length);
     }
 
-    public static EncryptedString a(final String s) {
+    public static EncryptedString of(final String s) {
         return new EncryptedString(s);
     }
 
-    public static EncryptedString a(final String s, final String s2) {
+    public static EncryptedString of(final String s, final String s2) {
         if (s == null || s2 == null) {
             throw new IllegalArgumentException("Neither encrypted data nor key can be null");
         }
@@ -130,15 +130,15 @@ public class EncryptedString implements AutoCloseable, CharSequence {
 
     @Override
     public void close() {
-        if (!this.f) {
+        if (!this.closed) {
             Arrays.fill(this.b, '\0');
             Arrays.fill(this.a, '\0');
-            this.f = true;
+            this.closed = true;
         }
     }
 
     private void c() {
-        if (this.f) {
+        if (this.closed) {
             throw new IllegalStateException("This EncryptedString has been closed and cannot be used");
         }
     }

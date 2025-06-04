@@ -30,12 +30,12 @@ public final class AutoFirework extends Module {
     private int l;
 
     public AutoFirework() {
-        super(EncryptedString.a("Auto Firework"), EncryptedString.a("Switches to a firework and uses it when you press a bind."), -1, Category.b);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), -1, false);
-        this.d = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.e = new BooleanSetting(EncryptedString.a("Switch Back"), true);
-        this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.a("Delay after using firework before switching back."));
-        this.a(this.c, this.d, this.e, this.f);
+        super(EncryptedString.of("Auto Firework"), EncryptedString.of("Switches to a firework and uses it when you press a bind."), -1, Category.MISC);
+        this.c = new BindSetting(EncryptedString.of("Activate Key"), -1, false);
+        this.d = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.e = new BooleanSetting(EncryptedString.of("Switch Back"), true);
+        this.f = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.of("Delay after using firework before switching back."));
+        this.addSettings(this.c, this.d, this.e, this.f);
     }
 
     @Override
@@ -51,19 +51,19 @@ public final class AutoFirework extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
         if (this.l > 0) {
             --this.l;
             return;
         }
-        if (this.b.player != null && KeyUtils.b(this.c.getValue()) && (Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(ElytraGlide.class).isEnabled() || this.b.player.isFallFlying()) && this.b.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA) && !this.b.player.getInventory().getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) && !(this.b.player.getMainHandStack().getItem() instanceof ArmorItem)) {
+        if (this.mc.player != null && KeyUtils.b(this.c.getValue()) && (Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(ElytraGlide.class).isEnabled() || this.mc.player.isFallFlying()) && this.mc.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA) && !this.mc.player.getInventory().getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !this.mc.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) && !(this.mc.player.getMainHandStack().getItem() instanceof ArmorItem)) {
             this.g = true;
         }
         if (this.g) {
             if (this.j == -1) {
-                this.j = this.b.player.getInventory().selectedSlot;
+                this.j = this.mc.player.getInventory().selectedSlot;
             }
             if (!InventoryUtil.a(Items.FIREWORK_ROCKET)) {
                 this.k();
@@ -74,7 +74,7 @@ public final class AutoFirework extends Module {
                 return;
             }
             if (!this.h) {
-                this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
+                this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
                 this.h = true;
             }
             if (this.e.getValue()) {
@@ -105,7 +105,7 @@ public final class AutoFirework extends Module {
 
     @EventListener
     public void a(final PostItemUseEvent postItemUseEvent) {
-        if (this.b.player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
+        if (this.mc.player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
             this.h = true;
         }
         if (this.l > 0) {

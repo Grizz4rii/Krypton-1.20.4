@@ -463,6 +463,6 @@ public final class GlyphPageFontRenderer {
             }
             n3 += n4;
         }
-        return EncryptedString.a(sb.toString());
+        return EncryptedString.of(sb.toString());
     }
 }

@@ -29,11 +29,11 @@ public final class PlayerESP extends Module {
     private final BooleanSetting e;
 
     public PlayerESP() {
-        super(EncryptedString.a("Player ESP"), EncryptedString.a("Renders players through walls"), -1, Category.d);
-        this.c = new NumberSetting(EncryptedString.a("Alpha"), 0.0, 255.0, 100.0, 1.0);
-        this.d = new NumberSetting(EncryptedString.a("Line width"), 1.0, 10.0, 1.0, 1.0);
-        this.e = new BooleanSetting(EncryptedString.a("Tracers"), false).setDescription(EncryptedString.a("Draws a line from your player to the other"));
-        this.a(this.c, this.d, this.e);
+        super(EncryptedString.of("Player ESP"), EncryptedString.of("Renders players through walls"), -1, Category.RENDER);
+        this.c = new NumberSetting(EncryptedString.of("Alpha"), 0.0, 255.0, 100.0, 1.0);
+        this.d = new NumberSetting(EncryptedString.of("Line width"), 1.0, 10.0, 1.0, 1.0);
+        this.e = new BooleanSetting(EncryptedString.of("Tracers"), false).setDescription(EncryptedString.of("Draws a line from your player to the other"));
+        this.addSettings(this.c, this.d, this.e);
     }
 
     @Override
@@ -48,9 +48,9 @@ public final class PlayerESP extends Module {
 
     @EventListener
     public void a(final Render3DEvent render3DEvent) {
-        for (final Object next : this.b.world.getPlayers()) {
-            if (next != this.b.player) {
-                final Camera camera = this.b.gameRenderer.getCamera();
+        for (final Object next : this.mc.world.getPlayers()) {
+            if (next != this.mc.player) {
+                final Camera camera = this.mc.gameRenderer.getCamera();
                 if (camera != null) {
                     final MatrixStack a = render3DEvent.a;
                     render3DEvent.a.push();
@@ -64,7 +64,7 @@ public final class PlayerESP extends Module {
                 final double lerp3 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevZ, ((PlayerEntity) next).getZ());
                 RenderUtils.a(render3DEvent.a, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, KryptonUtil.getMainColor(this.c.getIntValue(), 1).brighter());
                 if (this.e.getValue()) {
-                    RenderUtils.a(render3DEvent.a, KryptonUtil.getMainColor(255, 1), this.b.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
+                    RenderUtils.a(render3DEvent.a, KryptonUtil.getMainColor(255, 1), this.mc.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
                 }
                 render3DEvent.a.pop();
             }
@@ -76,7 +76,7 @@ public final class PlayerESP extends Module {
         final float n2 = color.brighter().getGreen() / 255.0f;
         final float n3 = color.brighter().getBlue() / 255.0f;
         final float n4 = color.brighter().getAlpha() / 255.0f;
-        final Camera camera = this.b.gameRenderer.getCamera();
+        final Camera camera = this.mc.gameRenderer.getCamera();
         final Vec3d subtract = playerEntity.getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)).subtract(camera.getPos());
         final float n5 = (float) subtract.x;
         final float n6 = (float) subtract.y;

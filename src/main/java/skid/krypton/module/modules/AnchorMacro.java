@@ -17,20 +17,20 @@ import skid.krypton.utils.InventoryUtil;
 import skid.krypton.utils.KeyUtils;
 
 public final class AnchorMacro extends Module {
-    private final NumberSetting switchDelay = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-    private final NumberSetting glowstoneDelay = new NumberSetting(EncryptedString.a("Glowstone Delay"), 0.0, 20.0, 0.0, 1.0);
-    private final NumberSetting explodeDelay = new NumberSetting(EncryptedString.a("Explode Delay"), 0.0, 20.0, 0.0, 1.0);
-    private final NumberSetting totemSlot = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
+    private final NumberSetting switchDelay = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting glowstoneDelay = new NumberSetting(EncryptedString.of("Glowstone Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting explodeDelay = new NumberSetting(EncryptedString.of("Explode Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting totemSlot = new NumberSetting(EncryptedString.of("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
     private int keybind;
     private int glowstoneDelayCounter;
     private int explodeDelayCounter;
 
     public AnchorMacro() {
-        super(EncryptedString.a("Anchor Macro"), EncryptedString.a("Automatically blows up respawn anchors for you"), -1, Category.a);
+        super(EncryptedString.of("Anchor Macro"), EncryptedString.of("Automatically blows up respawn anchors for you"), -1, Category.COMBAT);
         this.keybind = 0;
         this.glowstoneDelayCounter = 0;
         this.explodeDelayCounter = 0;
-        this.a(this.switchDelay, this.glowstoneDelay, this.explodeDelay, this.totemSlot);
+        this.addSettings(this.switchDelay, this.glowstoneDelay, this.explodeDelay, this.totemSlot);
     }
 
     @Override
@@ -46,7 +46,7 @@ public final class AnchorMacro extends Module {
 
     @EventListener
     public void onTick(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
         if (this.isShieldOrFoodActive()) {
@@ -58,20 +58,20 @@ public final class AnchorMacro extends Module {
     }
 
     private boolean isShieldOrFoodActive() {
-        final boolean isFood = this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.b.player.getOffHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD);
-        final boolean isShield = this.b.player.getMainHandStack().getItem() instanceof ShieldItem || this.b.player.getOffHandStack().getItem() instanceof ShieldItem;
-        final boolean isRightClickPressed = GLFW.glfwGetMouseButton(this.b.getWindow().getHandle(), 1) == 1;
+        final boolean isFood = this.mc.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.mc.player.getOffHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD);
+        final boolean isShield = this.mc.player.getMainHandStack().getItem() instanceof ShieldItem || this.mc.player.getOffHandStack().getItem() instanceof ShieldItem;
+        final boolean isRightClickPressed = GLFW.glfwGetMouseButton(this.mc.getWindow().getHandle(), 1) == 1;
         return (isFood || isShield) && isRightClickPressed;
     }
 
     private void handleAnchorInteraction() {
-        if (!(this.b.crosshairTarget instanceof BlockHitResult blockHitResult)) {
+        if (!(this.mc.crosshairTarget instanceof BlockHitResult blockHitResult)) {
             return;
         }
         if (!BlockUtil.a(blockHitResult.getBlockPos(), Blocks.RESPAWN_ANCHOR)) {
             return;
         }
-        this.b.options.useKey.setPressed(false);
+        this.mc.options.useKey.setPressed(false);
         if (BlockUtil.b(blockHitResult.getBlockPos())) {
             this.placeGlowstone(blockHitResult);
         } else if (BlockUtil.a(blockHitResult.getBlockPos())) {
@@ -80,7 +80,7 @@ public final class AnchorMacro extends Module {
     }
 
     private void placeGlowstone(final BlockHitResult blockHitResult) {
-        if (!this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
+        if (!this.mc.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
             if (this.keybind < this.switchDelay.getIntValue()) {
                 ++this.keybind;
                 return;
@@ -88,7 +88,7 @@ public final class AnchorMacro extends Module {
             this.keybind = 0;
             InventoryUtil.a(Items.GLOWSTONE);
         }
-        if (this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
+        if (this.mc.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
             if (this.glowstoneDelayCounter < this.glowstoneDelay.getIntValue()) {
                 ++this.glowstoneDelayCounter;
                 return;
@@ -100,15 +100,15 @@ public final class AnchorMacro extends Module {
 
     private void explodeAnchor(final BlockHitResult blockHitResult) {
         final int selectedSlot = this.totemSlot.getIntValue() - 1;
-        if (this.b.player.getInventory().selectedSlot != selectedSlot) {
+        if (this.mc.player.getInventory().selectedSlot != selectedSlot) {
             if (this.keybind < this.switchDelay.getIntValue()) {
                 ++this.keybind;
                 return;
             }
             this.keybind = 0;
-            this.b.player.getInventory().selectedSlot = selectedSlot;
+            this.mc.player.getInventory().selectedSlot = selectedSlot;
         }
-        if (this.b.player.getInventory().selectedSlot == selectedSlot) {
+        if (this.mc.player.getInventory().selectedSlot == selectedSlot) {
             if (this.explodeDelayCounter < this.explodeDelay.getIntValue()) {
                 ++this.explodeDelayCounter;
                 return;

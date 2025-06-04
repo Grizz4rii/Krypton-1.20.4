@@ -25,14 +25,14 @@ public final class DoubleAnchor extends Module {
     private boolean h;
 
     public DoubleAnchor() {
-        super(EncryptedString.a("Double Anchor"), EncryptedString.a("Automatically Places 2 anchors"), -1, Category.a);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), 71, false).setDescription(EncryptedString.a("Key that starts double anchoring"));
-        this.d = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.e = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
+        super(EncryptedString.of("Double Anchor"), EncryptedString.of("Automatically Places 2 anchors"), -1, Category.COMBAT);
+        this.c = new BindSetting(EncryptedString.of("Activate Key"), 71, false).setDescription(EncryptedString.of("Key that starts double anchoring"));
+        this.d = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.e = new NumberSetting(EncryptedString.of("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
         this.f = 0;
         this.keybind = 0;
         this.h = false;
-        this.a(this.d, this.e, this.c);
+        this.addSettings(this.d, this.e, this.c);
     }
 
     @Override
@@ -47,10 +47,10 @@ public final class DoubleAnchor extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (!this.k()) {
@@ -59,8 +59,8 @@ public final class DoubleAnchor extends Module {
         if (!this.h && !this.l()) {
             return;
         }
-        final HitResult crosshairTarget = this.b.crosshairTarget;
-        if (!(this.b.crosshairTarget instanceof BlockHitResult) || BlockUtil.a(((BlockHitResult) crosshairTarget).getBlockPos(), Blocks.AIR)) {
+        final HitResult crosshairTarget = this.mc.crosshairTarget;
+        if (!(this.mc.crosshairTarget instanceof BlockHitResult) || BlockUtil.a(((BlockHitResult) crosshairTarget).getBlockPos(), Blocks.AIR)) {
             this.h = false;
             this.m();
             return;
@@ -103,7 +103,7 @@ public final class DoubleAnchor extends Module {
         boolean b = false;
         boolean b2 = false;
         for (int i = 0; i < 9; ++i) {
-            final ItemStack getStack = this.b.player.getInventory().getStack(i);
+            final ItemStack getStack = this.mc.player.getInventory().getStack(i);
             if (getStack.getItem().equals(Items.RESPAWN_ANCHOR)) {
                 b = true;
             }

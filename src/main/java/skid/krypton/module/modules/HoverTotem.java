@@ -22,12 +22,12 @@ public final class HoverTotem extends Module {
     private int keybind;
 
     public HoverTotem() {
-        super(EncryptedString.a("Hover Totem"), EncryptedString.a("Equips a totem in offhand and optionally hotbar when hovering over one in inventory"), -1, Category.a);
-        this.c = new NumberSetting(EncryptedString.a("Tick Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.a("Ticks to wait between operations"));
-        this.d = new BooleanSetting(EncryptedString.a("Hotbar Totem"), true).setDescription(EncryptedString.a("Also places a totem in your preferred hotbar slot"));
-        this.e = new NumberSetting(EncryptedString.a("Hotbar Slot"), 1.0, 9.0, 1.0, 1.0).getValue(EncryptedString.a("Your preferred hotbar slot for totem (1-9)"));
-        this.f = new BooleanSetting(EncryptedString.a("Auto Switch To Totem"), false).setDescription(EncryptedString.a("Automatically switches to totem slot when inventory is opened"));
-        this.a(this.c, this.d, this.e, this.f);
+        super(EncryptedString.of("Hover Totem"), EncryptedString.of("Equips a totem in offhand and optionally hotbar when hovering over one in inventory"), -1, Category.COMBAT);
+        this.c = new NumberSetting(EncryptedString.of("Tick Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.of("Ticks to wait between operations"));
+        this.d = new BooleanSetting(EncryptedString.of("Hotbar Totem"), true).setDescription(EncryptedString.of("Also places a totem in your preferred hotbar slot"));
+        this.e = new NumberSetting(EncryptedString.of("Hotbar Slot"), 1.0, 9.0, 1.0, 1.0).getValue(EncryptedString.of("Your preferred hotbar slot for totem (1-9)"));
+        this.f = new BooleanSetting(EncryptedString.of("Auto Switch To Totem"), false).setDescription(EncryptedString.of("Automatically switches to totem slot when inventory is opened"));
+        this.addSettings(this.c, this.d, this.e, this.f);
     }
 
     @Override
@@ -38,11 +38,11 @@ public final class HoverTotem extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
-        final Screen currentScreen = this.b.currentScreen;
-        if (!(this.b.currentScreen instanceof InventoryScreen)) {
+        final Screen currentScreen = this.mc.currentScreen;
+        if (!(this.mc.currentScreen instanceof InventoryScreen)) {
             this.j();
             return;
         }
@@ -51,7 +51,7 @@ public final class HoverTotem extends Module {
             return;
         }
         if (this.f.getValue()) {
-            this.b.player.getInventory().selectedSlot = this.e.getIntValue() - 1;
+            this.mc.player.getInventory().selectedSlot = this.e.getIntValue() - 1;
         }
         if (focusedSlot.getStack().getItem() != Items.TOTEM_OF_UNDYING) {
             return;
@@ -62,25 +62,25 @@ public final class HoverTotem extends Module {
         }
         final int index = focusedSlot.getIndex();
         final int syncId = ((InventoryScreen) currentScreen).getScreenHandler().syncId;
-        if (!this.b.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
+        if (!this.mc.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
             this.a(syncId, index);
             return;
         }
         if (this.d.getValue()) {
             final int n = this.e.getIntValue() - 1;
-            if (!this.b.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
+            if (!this.mc.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
                 this.a(syncId, index, n);
             }
         }
     }
 
     private void a(final int n, final int n2) {
-        this.b.interactionManager.clickSlot(n, n2, 40, SlotActionType.SWAP, this.b.player);
+        this.mc.interactionManager.clickSlot(n, n2, 40, SlotActionType.SWAP, this.mc.player);
         this.j();
     }
 
     private void a(final int n, final int n2, final int n3) {
-        this.b.interactionManager.clickSlot(n, n2, n3, SlotActionType.SWAP, this.b.player);
+        this.mc.interactionManager.clickSlot(n, n2, n3, SlotActionType.SWAP, this.mc.player);
         this.j();
     }
 

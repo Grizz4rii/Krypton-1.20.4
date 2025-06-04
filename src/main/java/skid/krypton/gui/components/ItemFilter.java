@@ -46,9 +46,9 @@ class ItemFilter extends Screen {
             }
         });
         this.filteredItems = new ArrayList<Item>(this.allItems);
-        if (setting.a() != null && setting.a() != Items.AIR) {
+        if (setting.getItem() != null && setting.getItem() != Items.AIR) {
             for (int i = 0; i < this.filteredItems.size(); ++i) {
-                if (this.filteredItems.get(i) == setting.a()) {
+                if (this.filteredItems.get(i) == setting.getItem()) {
                     this.selectedIndex = i;
                     break;
                 }
@@ -147,7 +147,7 @@ class ItemFilter extends Screen {
         final int n10 = n9 - 80 - 10;
         if (this.isInBounds(n4, n5, n9, n8, 80, 30)) {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
-                this.setting.a(this.filteredItems.get(this.selectedIndex));
+                this.setting.setItem(this.filteredItems.get(this.selectedIndex));
             }
             this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
@@ -157,10 +157,10 @@ class ItemFilter extends Screen {
             return true;
         }
         if (this.isInBounds(n4, n5, n10 - 80 - 10, n8, 80, 30)) {
-            this.setting.a(this.setting.b());
+            this.setting.setItem(this.setting.getDefaultValue());
             this.selectedIndex = -1;
             for (int i = 0; i < this.filteredItems.size(); ++i) {
-                if (this.filteredItems.get(i) == this.setting.b()) {
+                if (this.filteredItems.get(i) == this.setting.getDefaultValue()) {
                     this.selectedIndex = i;
                     break;
                 }
@@ -204,7 +204,7 @@ class ItemFilter extends Screen {
     public boolean keyPressed(final int n, final int n2, final int n3) {
         if (n == 256) {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
-                this.setting.a(this.filteredItems.get(this.selectedIndex));
+                this.setting.setItem(this.filteredItems.get(this.selectedIndex));
             }
             this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
@@ -246,7 +246,7 @@ class ItemFilter extends Screen {
         }
         if (n == 257) {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
-                this.setting.a(this.filteredItems.get(this.selectedIndex));
+                this.setting.setItem(this.filteredItems.get(this.selectedIndex));
                 this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             }
             return true;
@@ -268,7 +268,7 @@ class ItemFilter extends Screen {
         }
         this.scrollOffset = 0;
         this.selectedIndex = -1;
-        final Item a = this.setting.a();
+        final Item a = this.setting.getItem();
         if (a != null) {
             for (int i = 0; i < this.filteredItems.size(); ++i) {
                 if (this.filteredItems.get(i) == a) {

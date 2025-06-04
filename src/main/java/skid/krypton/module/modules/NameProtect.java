@@ -10,9 +10,9 @@ public class NameProtect extends Module {
     private final StringSetting fakeName;
 
     public NameProtect() {
-        super(EncryptedString.a("Name Protect"), EncryptedString.a("Replaces your name with given one."), -1, Category.b);
+        super(EncryptedString.of("Name Protect"), EncryptedString.of("Replaces your name with given one."), -1, Category.MISC);
         this.fakeName = new StringSetting("Fake Name", "Player");
-        this.a(new Setting[]{this.fakeName});
+        this.addSettings(new Setting[]{this.fakeName});
     }
 
     @Override

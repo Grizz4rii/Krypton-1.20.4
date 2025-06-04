@@ -3,32 +3,28 @@ package skid.krypton.module.setting;
 import net.minecraft.item.Item;
 
 public class ItemSetting extends Setting {
-    private Item a;
-    private final Item c;
+    private final Item defaultValue;
+    private Item value;
 
-    public ItemSetting(final CharSequence charSequence, final Item item) {
-        super(charSequence);
-        this.a = item;
-        this.c = item;
+    public ItemSetting(final CharSequence name, final Item value) {
+        super(name);
+        this.value = value;
+        this.defaultValue = value;
     }
 
-    public Item a() {
-        return this.a;
+    public Item getItem() {
+        return this.value;
     }
 
-    public void a(final Item a) {
-        this.a = a;
+    public void setItem(final Item a) {
+        this.value = a;
     }
 
-    public Item b() {
-        return this.c;
+    public Item getDefaultValue() {
+        return this.defaultValue;
     }
 
-    public void c() {
-        this.a = this.c;
-    }
-
-    private static byte[] nkczpkvhgkefosa() {
-        return new byte[]{63, 8, 37, 8, 37, 23, 27, 38, 23, 93, 25, 23, 17, 60, 101, 59, 68, 114, 22, 78, 7, 109, 121, 59, 72, 110, 56, 7, 23, 7, 20, 74, 92, 7, 91, 23, 48, 18, 93, 9, 106, 15, 34, 15, 33, 104, 77, 119, 38, 73, 89, 68, 20, 61, 63, 67, 71, 94, 72, 123, 116, 14, 86, 41, 35, 12, 37, 31, 2, 104, 22, 9, 38, 120, 35, 30, 52, 122, 126, 121, 82, 43, 10, 123, 127, 40, 16, 44, 28, 125, 64, 52, 107, 118, 88, 24, 100, 126, 17};
+    public void resetValue() {
+        this.value = this.defaultValue;
     }
 }

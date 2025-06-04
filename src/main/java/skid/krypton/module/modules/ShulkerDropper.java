@@ -20,10 +20,10 @@ public final class ShulkerDropper extends Module {
     private int d;
 
     public ShulkerDropper() {
-        super(EncryptedString.a("Shulker Dropper"), EncryptedString.a("Goes to shop buys shulkers and drops automatically"), -1, Category.c);
-        this.c = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 1.0, 1.0);
+        super(EncryptedString.of("Shulker Dropper"), EncryptedString.of("Goes to shop buys shulkers and drops automatically"), -1, Category.DONUT);
+        this.c = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 1.0, 1.0);
         this.d = 0;
-        this.a(new Setting[]{this.c});
+        this.addSettings(new Setting[]{this.c});
     }
 
     @Override
@@ -38,16 +38,16 @@ public final class ShulkerDropper extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.d > 0) {
             --this.d;
             return;
         }
-        final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
-        if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
-            this.b.getNetworkHandler().sendChatCommand("shop");
+        final ScreenHandler currentScreenHandler = this.mc.player.currentScreenHandler;
+        if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
+            this.mc.getNetworkHandler().sendChatCommand("shop");
             this.d = 20;
             return;
         }
@@ -55,19 +55,19 @@ public final class ShulkerDropper extends Module {
             return;
         }
         if (currentScreenHandler.getSlot(11).getStack().isOf(Items.END_STONE) && currentScreenHandler.getSlot(11).getStack().getCount() == 1) {
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 11, 0, SlotActionType.PICKUP, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 11, 0, SlotActionType.PICKUP, this.mc.player);
             this.d = 20;
             return;
         }
         if (currentScreenHandler.getSlot(17).getStack().isOf(Items.SHULKER_BOX)) {
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.mc.player);
             this.d = 20;
             return;
         }
         if (currentScreenHandler.getSlot(13).getStack().isOf(Items.SHULKER_BOX)) {
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.mc.player);
             this.d = this.c.getIntValue();
-            this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+            this.mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
         }
     }
 }

@@ -14,10 +14,10 @@ public final class Hitbox extends Module {
     private final BooleanSetting d;
 
     public Hitbox() {
-        super(EncryptedString.a("HitBox"), EncryptedString.a("Expands a player's hitbox."), -1, Category.a);
-        this.c = new NumberSetting(EncryptedString.a("Expand"), 0.0, 2.0, 0.5, 0.05);
+        super(EncryptedString.of("HitBox"), EncryptedString.of("Expands a player's hitbox."), -1, Category.COMBAT);
+        this.c = new NumberSetting(EncryptedString.of("Expand"), 0.0, 2.0, 0.5, 0.05);
         this.d = new BooleanSetting("Enable Render", true);
-        this.a(this.d, this.c);
+        this.addSettings(this.d, this.c);
     }
 
     @Override
@@ -42,9 +42,5 @@ public final class Hitbox extends Module {
             return 0.0;
         }
         return this.c.getValue();
-    }
-
-    private static byte[] pqiwnsxnnjwdwse() {
-        return new byte[]{21, 113, 66, 45, 27, 111, 12, 123, 125, 48, 5, 58, 42, 91, 97, 119, 91, 109, 25};
     }
 }

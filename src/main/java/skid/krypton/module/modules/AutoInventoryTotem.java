@@ -30,17 +30,17 @@ public final class AutoInventoryTotem extends Module {
     int d;
 
     public AutoInventoryTotem() {
-        super(EncryptedString.a("Auto Inv Totem"), EncryptedString.a("Automatically equips a totem in your offhand and main hand if empty"), -1, Category.a);
-        this.e = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.f = new BooleanSetting(EncryptedString.a("Hotbar"), true).setDescription(EncryptedString.a("Puts a totem in your hotbar as well, if enabled (Setting below will work if this is enabled)"));
-        this.g = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0).getValue(EncryptedString.a("Your preferred totem slot"));
-        this.h = new BooleanSetting(EncryptedString.a("Auto Switch"), false).setDescription(EncryptedString.a("Switches to totem slot when going inside the inventory"));
-        this.i = new BooleanSetting(EncryptedString.a("Force Totem"), false).setDescription(EncryptedString.a("Puts the totem in the slot, regardless if its space is taken up by something else"));
-        this.j = new BooleanSetting(EncryptedString.a("Auto Open"), false).setDescription(EncryptedString.a("Automatically opens and closes the inventory for you"));
-        this.k = new NumberSetting(EncryptedString.a("Stay Open For"), 0.0, 20.0, 0.0, 1.0);
+        super(EncryptedString.of("Auto Inv Totem"), EncryptedString.of("Automatically equips a totem in your offhand and main hand if empty"), -1, Category.COMBAT);
+        this.e = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.f = new BooleanSetting(EncryptedString.of("Hotbar"), true).setDescription(EncryptedString.of("Puts a totem in your hotbar as well, if enabled (Setting below will work if this is enabled)"));
+        this.g = new NumberSetting(EncryptedString.of("Totem Slot"), 1.0, 9.0, 1.0, 1.0).getValue(EncryptedString.of("Your preferred totem slot"));
+        this.h = new BooleanSetting(EncryptedString.of("Auto Switch"), false).setDescription(EncryptedString.of("Switches to totem slot when going inside the inventory"));
+        this.i = new BooleanSetting(EncryptedString.of("Force Totem"), false).setDescription(EncryptedString.of("Puts the totem in the slot, regardless if its space is taken up by something else"));
+        this.j = new BooleanSetting(EncryptedString.of("Auto Open"), false).setDescription(EncryptedString.of("Automatically opens and closes the inventory for you"));
+        this.k = new NumberSetting(EncryptedString.of("Stay Open For"), 0.0, 20.0, 0.0, 1.0);
         this.c = -1;
         this.d = -1;
-        this.a(this.e, this.f, this.g, this.h, this.i, this.j, this.k);
+        this.addSettings(this.e, this.f, this.g, this.h, this.i, this.j, this.k);
     }
 
     @Override
@@ -58,9 +58,9 @@ public final class AutoInventoryTotem extends Module {
     @EventListener
     public void a(final TickEvent tickEvent) {
         if (this.k() && this.j.getValue()) {
-            this.b.setScreen(new CustomInventoryScreen(this.b.player));
+            this.mc.setScreen(new CustomInventoryScreen(this.mc.player));
         }
-        if (!(this.b.currentScreen instanceof InventoryScreen) && !(this.b.currentScreen instanceof CustomInventoryScreen)) {
+        if (!(this.mc.currentScreen instanceof InventoryScreen) && !(this.mc.currentScreen instanceof CustomInventoryScreen)) {
             this.c = -1;
             this.d = -1;
             return;
@@ -74,7 +74,7 @@ public final class AutoInventoryTotem extends Module {
         if (this.c > 0) {
             --this.c;
         }
-        final PlayerInventory getInventory = this.b.player.getInventory();
+        final PlayerInventory getInventory = this.mc.player.getInventory();
         if (this.h.getValue()) {
             getInventory.selectedSlot = this.g.getIntValue() - 1;
         }
@@ -82,16 +82,16 @@ public final class AutoInventoryTotem extends Module {
             if (getInventory.offHand.get(0).getItem() != Items.TOTEM_OF_UNDYING) {
                 final int l = this.l();
                 if (l != -1) {
-                    this.b.interactionManager.clickSlot(((InventoryScreen) this.b.currentScreen).getScreenHandler().syncId, l, 40, SlotActionType.SWAP, this.b.player);
+                    this.mc.interactionManager.clickSlot(((InventoryScreen) this.mc.currentScreen).getScreenHandler().syncId, l, 40, SlotActionType.SWAP, this.mc.player);
                     return;
                 }
             }
             if (this.f.getValue()) {
-                final ItemStack getAbilities = this.b.player.getMainHandStack();
+                final ItemStack getAbilities = this.mc.player.getMainHandStack();
                 if (getAbilities.isEmpty() || (this.i.getValue() && getAbilities.getItem() != Items.TOTEM_OF_UNDYING)) {
                     final int i = this.l();
                     if (i != -1) {
-                        this.b.interactionManager.clickSlot(((InventoryScreen) this.b.currentScreen).getScreenHandler().syncId, i, getInventory.selectedSlot, SlotActionType.SWAP, this.b.player);
+                        this.mc.interactionManager.clickSlot(((InventoryScreen) this.mc.currentScreen).getScreenHandler().syncId, i, getInventory.selectedSlot, SlotActionType.SWAP, this.mc.player);
                         return;
                     }
                 }
@@ -101,7 +101,7 @@ public final class AutoInventoryTotem extends Module {
                     --this.d;
                     return;
                 }
-                this.b.currentScreen.close();
+                this.mc.currentScreen.close();
                 this.d = this.k.getIntValue();
             }
         }
@@ -109,20 +109,20 @@ public final class AutoInventoryTotem extends Module {
 
     public boolean j() {
         if (this.f.getValue()) {
-            return this.b.player.getInventory().getStack(this.g.getIntValue() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.b.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
+            return this.mc.player.getInventory().getStack(this.g.getIntValue() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof CustomInventoryScreen;
         }
-        return this.b.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
+        return this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof CustomInventoryScreen;
     }
 
     public boolean k() {
         if (this.f.getValue()) {
-            return (this.b.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING || this.b.player.getInventory().getStack(this.g.getIntValue() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item -> item == Items.TOTEM_OF_UNDYING) != 0;
+            return (this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING || this.mc.player.getInventory().getStack(this.g.getIntValue() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.mc.currentScreen instanceof CustomInventoryScreen) && this.a(item -> item == Items.TOTEM_OF_UNDYING) != 0;
         }
-        return this.b.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
+        return this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING && !(this.mc.currentScreen instanceof CustomInventoryScreen) && this.a(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
     }
 
     private int l() {
-        final PlayerInventory getInventory = this.b.player.getInventory();
+        final PlayerInventory getInventory = this.mc.player.getInventory();
         new Random();
         final ArrayList list = new ArrayList();
         while (true) {
@@ -135,7 +135,7 @@ public final class AutoInventoryTotem extends Module {
     private int a(final Predicate predicate) {
         int n = 0;
         while (true) {
-            final ItemStack getStack = this.b.player.getInventory().getStack(9);
+            final ItemStack getStack = this.mc.player.getInventory().getStack(9);
             if (predicate.test(getStack.getItem())) {
                 n += getStack.getCount();
             }

@@ -28,7 +28,7 @@ public class EntityMixin {
 
     @Inject(method = {"changeLookDirection"}, at = {@At("HEAD")}, cancellable = true)
     private void updateChangeLookDirection(final double n, final double n2, final CallbackInfo callbackInfo) {
-        if ((Object) this != Krypton.e.player) {
+        if ((Object) this != Krypton.mc.player) {
             return;
         }
         final Module freecam = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(Freecam.class);

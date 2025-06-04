@@ -16,13 +16,13 @@ public final class Krypton {
     public ModuleManager MODULE_MANAGER;
     public EventManager EVENT_BUS;
     public Auth auth;
-    public static MinecraftClient e;
+    public static MinecraftClient mc;
     public String build;
     public static boolean g;
     public static Krypton INSTANCE;
-    public boolean i;
+    public boolean shouldPreventClose;
     public ClickGUI GUI;
-    public Screen k;
+    public Screen screen;
     public long modified;
     public File jar;
 
@@ -30,7 +30,7 @@ public final class Krypton {
         try {
             Krypton.INSTANCE = this;
             this.build = " b1.3";
-            this.k = null;
+            this.screen = null;
             this.auth = auth;
             this.EVENT_BUS = new EventManager();
             this.MODULE_MANAGER = new ModuleManager();
@@ -39,8 +39,8 @@ public final class Krypton {
             this.a().a();
             this.jar = new File(Krypton.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             this.modified = this.jar.lastModified();
-            this.i = false;
-            Krypton.e = MinecraftClient.getInstance();
+            this.shouldPreventClose = false;
+            Krypton.mc = MinecraftClient.getInstance();
         } catch (Throwable _t) {
             _t.printStackTrace(System.err);
         }

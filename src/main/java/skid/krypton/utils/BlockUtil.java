@@ -17,16 +17,16 @@ import java.util.List;
 
 public final class BlockUtil {
     public static List a() {
-        final int n = Math.max(2, Krypton.e.options.getClampedViewDistance()) + 3;
+        final int n = Math.max(2, Krypton.mc.options.getClampedViewDistance()) + 3;
         final ArrayList list = new ArrayList();
-        final ChunkPos getChunkPos = Krypton.e.player.getChunkPos();
+        final ChunkPos getChunkPos = Krypton.mc.player.getChunkPos();
         final int n2 = getChunkPos.x + n;
         int i = getChunkPos.z - n;
         final int n3 = getChunkPos.z + n;
         for (int j = getChunkPos.x - n; j <= n2; ++j) {
             while (i <= n3) {
-                if (Krypton.e.world.isChunkLoaded(j, i)) {
-                    final WorldChunk getBlockX = Krypton.e.world.getChunk(j, i);
+                if (Krypton.mc.world.isChunkLoaded(j, i)) {
+                    final WorldChunk getBlockX = Krypton.mc.world.getChunk(j, i);
                     if (getBlockX != null) {
                         list.add(getBlockX);
                     }
@@ -38,21 +38,21 @@ public final class BlockUtil {
     }
 
     public static boolean a(final BlockPos blockPos, final Block block) {
-        return Krypton.e.world.getBlockState(blockPos).getBlock() == block;
+        return Krypton.mc.world.getBlockState(blockPos).getBlock() == block;
     }
 
     public static boolean a(final BlockPos blockPos) {
-        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.e.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
+        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
     }
 
     public static boolean b(final BlockPos blockPos) {
-        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.e.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
+        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
     }
 
     public static void a(final BlockHitResult blockHitResult, final boolean b) {
-        final ActionResult interactBlock = Krypton.e.interactionManager.interactBlock(Krypton.e.player, Hand.MAIN_HAND, blockHitResult);
+        final ActionResult interactBlock = Krypton.mc.interactionManager.interactBlock(Krypton.mc.player, Hand.MAIN_HAND, blockHitResult);
         if (interactBlock.isAccepted() && interactBlock.shouldSwingHand() && b) {
-            Krypton.e.player.swingHand(Hand.MAIN_HAND);
+            Krypton.mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 }

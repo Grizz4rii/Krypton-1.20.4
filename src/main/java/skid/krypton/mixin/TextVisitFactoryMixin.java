@@ -16,7 +16,7 @@ public class TextVisitFactoryMixin {
         if (!moduleByClass.isEnabled()) {
             return s;
         }
-        final String username = Krypton.e.getSession().getUsername();
+        final String username = Krypton.mc.getSession().getUsername();
         if (s.contains(username)) {
             return s.replace(username, ((NameProtect) moduleByClass).getFakeName());
         }

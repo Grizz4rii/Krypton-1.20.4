@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.FileTime;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -29,7 +28,6 @@ public final class SelfDestruct extends Module {
     private final BooleanSetting f;
     private final StringSetting g;
     private static final Path h;
-    private static final int i = 20;
     private static final AtomicLong j;
 
     public SelfDestruct() {
@@ -44,11 +42,11 @@ public final class SelfDestruct extends Module {
     @Override
     public void onEnable() {
         c = true;
-        ((Krypton)skid.krypton.Krypton.INSTANCE.b().getModuleByClass(Krypton.class)).toggle(false);
+        skid.krypton.Krypton.INSTANCE.b().getModuleByClass(Krypton.class).toggle(false);
         this.toggle(false);
         skid.krypton.Krypton.INSTANCE.a().shutdown();
         if (this.b.currentScreen instanceof ClickGUI) {
-            skid.krypton.Krypton.INSTANCE.i = false;
+            skid.krypton.Krypton.INSTANCE.shouldPreventClose = false;
             this.b.currentScreen.close();
         }
         if (this.d.c()) {

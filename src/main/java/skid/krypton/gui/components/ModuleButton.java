@@ -4,8 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import skid.krypton.Krypton;
+import skid.krypton.gui.CategoryWindow;
 import skid.krypton.gui.Component;
-import skid.krypton.gui.Window;
 import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.*;
@@ -19,7 +19,7 @@ import java.util.List;
 
 public final class ModuleButton {
     public List<Component> settings;
-    public Window parent;
+    public CategoryWindow parent;
     public Module module;
     public int offset;
     public boolean extended;
@@ -37,7 +37,7 @@ public final class ModuleButton {
     private float enabledAnimation;
     private final float expandAnimation;
 
-    public ModuleButton(final Window parent, final Module module, final int offset) {
+    public ModuleButton(final CategoryWindow parent, final Module module, final int offset) {
         this.settings = new ArrayList<>();
         this.animation = new Animation(0.0);
         this.ACCENT_COLOR = new Color(65, 105, 225);
@@ -159,7 +159,7 @@ public final class ModuleButton {
     private void renderSettings(final DrawContext drawContext, final int n, final int n2, final float n3) {
         final int n4 = this.parent.getY() + this.offset + this.parent.getHeight();
         final double animation = this.animation.getAnimation();
-        RenderSystem.enableScissor(this.parent.getX(), Krypton.e.getWindow().getHeight() - (n4 + (int) animation), this.parent.getWidth(), (int) animation);
+        RenderSystem.enableScissor(this.parent.getX(), Krypton.mc.getWindow().getHeight() - (n4 + (int) animation), this.parent.getWidth(), (int) animation);
         final Iterator<Component> iterator = this.settings.iterator();
         while (iterator.hasNext()) {
             iterator.next().render(drawContext, n, n2 - n4, n3);
@@ -211,34 +211,45 @@ public final class ModuleButton {
         }
     }
 
-    public void mouseClicked(final double n, final double n2, final int n3) {
+    public void mouseClicked(final double n, final double n2, final int button) {
+        System.out.println(module.getName() + ": " + button);
         if (this.isHovered(n, n2)) {
-            if (n3 == 0) {
+            System.out.println(module.getName() + ": " + button);
+            if (button == 0) {
                 final int n4 = this.parent.getX() + this.parent.getWidth() - 30;
                 final int n5 = this.parent.getY() + this.offset + this.parent.getHeight() / 2 - 3;
+
                 if (n >= n4 && n <= n4 + 12 && n2 >= n5 && n2 <= n5 + 6) {
+                    System.out.println("Toggle");
                     this.module.toggle();
                 } else if (!this.module.getSettings().isEmpty() && n > this.parent.getX() + this.parent.getWidth() - 25) {
+                    System.out.println("yo");
                     if (!this.extended) {
+                        System.out.println("yo2");
                         this.onExtend();
                     }
                     this.extended = !this.extended;
                 } else {
+                    System.out.println("yo3");
                     this.module.toggle();
                 }
-            } else if (n3 == 1) {
+            } else if (button == 1) {
+                System.out.println("yo4");
                 if (this.module.getSettings().isEmpty()) {
                     return;
                 }
                 if (!this.extended) {
+                    System.out.println("yo5");
                     this.onExtend();
                 }
+                System.out.println("yo6");
                 this.extended = !this.extended;
             }
         }
         if (this.extended) {
+            System.out.println("yo7");
             for (Component setting : this.settings) {
-                setting.mouseClicked(n, n2, n3);
+                setting.mouseClicked(n, n2, button);
             }
         }
     }
@@ -268,6 +279,8 @@ public final class ModuleButton {
     }
 
     public boolean isHovered(final double n, final double n2) {
+        //if (module.getName().equals("Self Destruct"))
+        //    System.out.println(module.getName() + ": " + (n > parent.getX()) + " && " + (n < parent.getX() + parent.getWidth()) + " && " + (n2 > parent.getY() + offset) + " && " + (n2 < parent.getY() + offset + parent.getHeight()));
         return n > this.parent.getX() && n < this.parent.getX() + this.parent.getWidth() && n2 > this.parent.getY() + this.offset && n2 < this.parent.getY() + this.offset + this.parent.getHeight();
     }
 }

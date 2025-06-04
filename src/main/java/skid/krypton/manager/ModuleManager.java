@@ -92,7 +92,7 @@ public final class ModuleManager {
 
     @EventListener
     public void a(final KeyEvent keyEvent) {
-        if (skid.krypton.Krypton.e.player == null || skid.krypton.Krypton.e.currentScreen instanceof ChatScreen) {
+        if (skid.krypton.Krypton.mc.player == null || skid.krypton.Krypton.mc.currentScreen instanceof ChatScreen) {
             return;
         }
 

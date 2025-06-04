@@ -27,13 +27,13 @@ public final class RenderUtils {
     public static boolean b;
 
     public static Vec3d a() {
-        return Krypton.e.getBlockEntityRenderDispatcher().camera.getPos();
+        return Krypton.mc.getBlockEntityRenderDispatcher().camera.getPos();
     }
 
     public static double b() {
         double n;
-        if (Krypton.e.getCurrentFps() > 0) {
-            n = 1.0 / Krypton.e.getCurrentFps();
+        if (Krypton.mc.getCurrentFps() > 0) {
+            n = 1.0 / Krypton.mc.getCurrentFps();
         } else {
             n = 1.0;
         }
@@ -53,12 +53,12 @@ public final class RenderUtils {
 
     public static void c() {
         RenderUtils.a = RenderSystem.getVertexSorting();
-        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0f, (float) Krypton.e.getWindow().getFramebufferWidth(), (float) Krypton.e.getWindow().getFramebufferHeight(), 0.0f, 1000.0f, 21000.0f), VertexSorter.BY_Z);
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0f, (float) Krypton.mc.getWindow().getFramebufferWidth(), (float) Krypton.mc.getWindow().getFramebufferHeight(), 0.0f, 1000.0f, 21000.0f), VertexSorter.BY_Z);
         RenderUtils.b = false;
     }
 
     public static void d() {
-        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0f, (float) (Krypton.e.getWindow().getFramebufferWidth() / Krypton.e.getWindow().getScaleFactor()), (float) (Krypton.e.getWindow().getFramebufferHeight() / Krypton.e.getWindow().getScaleFactor()), 0.0f, 1000.0f, 21000.0f), RenderUtils.a);
+        RenderSystem.setProjectionMatrix(new Matrix4f().setOrtho(0.0f, (float) (Krypton.mc.getWindow().getFramebufferWidth() / Krypton.mc.getWindow().getScaleFactor()), (float) (Krypton.mc.getWindow().getFramebufferHeight() / Krypton.mc.getWindow().getScaleFactor()), 0.0f, 1000.0f, 21000.0f), RenderUtils.a);
         RenderUtils.b = true;
     }
 

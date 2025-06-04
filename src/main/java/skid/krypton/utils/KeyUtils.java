@@ -233,8 +233,8 @@ public final class KeyUtils {
 
     public static boolean b(final int n) {
         if (n <= 8) {
-            return GLFW.glfwGetMouseButton(Krypton.e.getWindow().getHandle(), n) == 1;
+            return GLFW.glfwGetMouseButton(Krypton.mc.getWindow().getHandle(), n) == 1;
         }
-        return GLFW.glfwGetKey(Krypton.e.getWindow().getHandle(), n) == 1;
+        return GLFW.glfwGetKey(Krypton.mc.getWindow().getHandle(), n) == 1;
     }
 }

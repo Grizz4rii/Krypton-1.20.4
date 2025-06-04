@@ -18,7 +18,7 @@ public abstract class KeyBindingMixin implements IKeybinding {
 
     @Override
     public boolean isActuallyPressed() {
-        return InputUtil.isKeyPressed(Krypton.e.getWindow().getHandle(), this.boundKey.getCode());
+        return InputUtil.isKeyPressed(Krypton.mc.getWindow().getHandle(), this.boundKey.getCode());
     }
 
     @Override

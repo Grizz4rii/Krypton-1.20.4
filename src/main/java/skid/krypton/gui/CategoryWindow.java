@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public final class Window {
+public final class CategoryWindow {
     public List<ModuleButton> moduleButtons;
     public int x;
     public int y;
@@ -30,8 +30,8 @@ public final class Window {
     public ClickGUI parent;
     private float hoverAnimation;
 
-    public Window(final int n, final int n2, final int width, final int height, final Category category, final ClickGUI parent) {
-        this.moduleButtons = new ArrayList<ModuleButton>();
+    public CategoryWindow(final int n, final int n2, final int width, final int height, final Category category, final ClickGUI parent) {
+        this.moduleButtons = new ArrayList<>();
         this.hoverAnimation = 0.0f;
         this.x = n;
         this.y = n2;
@@ -92,58 +92,49 @@ public final class Window {
     }
 
     private void renderModuleButtons(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().render(drawContext, n, n2, n3);
+        for (ModuleButton moduleButton : this.moduleButtons) {
+            moduleButton.render(drawContext, n, n2, n3);
         }
     }
 
     public void keyPressed(final int n, final int n2, final int n3) {
-        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().keyPressed(n, n2, n3);
+        for (ModuleButton moduleButton : this.moduleButtons) {
+            moduleButton.keyPressed(n, n2, n3);
         }
     }
 
     public void onGuiClose() {
         this.currentColor = null;
-        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().onGuiClose();
+        for (ModuleButton moduleButton : this.moduleButtons) {
+            moduleButton.onGuiClose();
         }
         this.dragging = false;
     }
 
-    public void mouseClicked(final double n, final double n2, final int n3) {
-        if (this.isHovered(n, n2)) {
-            final int n4 = n3 ^ 0x251D4854;
-            int n5;
-            if (n4 != 0) {
-                n5 = ((n4 * 31 >>> 4) % n4 ^ n4 >>> 16);
-            } else {
-                n5 = 0;
-            }
-            switch (n5) {
-                case 132684095: {
+    public void mouseClicked(final double x, final double y, final int button) {
+        if (this.isHovered(x, y)) {
+            // Calculate a unique identifier based on the mouse button input
+            switch (button) {
+                case 0: // Case for left mouse button
                     if (!this.parent.isDraggingAlready()) {
                         this.dragging = true;
-                        this.dragX = (int) (n - this.x);
-                        this.dragY = (int) (n2 - this.y);
-                        break;
+                        this.dragX = (int) (x - this.x);
+                        this.dragY = (int) (y - this.y);
                     }
                     break;
-                }
-                case 132684089: {
-                    if (!this.dragging) {
-                    }
+
+                case 1: // Case for right mouse button
+                    // Add meaningful logic here if needed
                     break;
-                }
+
+                default:
+                    // Handle unexpected cases (optional)
+                    break;
             }
         }
         if (this.extended) {
-            final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
-            if (iterator.hasNext()) {
-                iterator.next().mouseClicked(n, n2, n3);
+            for (ModuleButton moduleButton : this.moduleButtons) {
+                moduleButton.mouseClicked(x, y, button);
             }
         }
     }
@@ -169,6 +160,7 @@ public final class Window {
             animation.a(0.5 * n, n2);
             final double animation2 = next.animation.getAnimation();
             next.offset = height;
+
             height += (int) animation2;
         }
     }
@@ -177,9 +169,8 @@ public final class Window {
         if (n3 == 0 && this.dragging) {
             this.dragging = false;
         }
-        final Iterator<ModuleButton> iterator = this.moduleButtons.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().mouseReleased(n, n2, n3);
+        for (ModuleButton moduleButton : this.moduleButtons) {
+            moduleButton.mouseReleased(n, n2, n3);
         }
     }
 

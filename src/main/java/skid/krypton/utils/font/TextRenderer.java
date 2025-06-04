@@ -18,7 +18,7 @@ public final class TextRenderer {
         if (Krypton.j.c()) {
             return FontInitializer.fontRenderer.a(charSequence);
         }
-        return skid.krypton.Krypton.e.textRenderer.getWidth(charSequence.toString()) * 2;
+        return skid.krypton.Krypton.mc.textRenderer.getWidth(charSequence.toString()) * 2;
     }
 
     public static void b(final CharSequence charSequence, final DrawContext drawContext, final int n, final int n2, final int n3) {
@@ -33,7 +33,7 @@ public final class TextRenderer {
         final MatrixStack matrices = drawContext.getMatrices();
         matrices.push();
         matrices.scale(2.0f, 2.0f, 2.0f);
-        drawContext.drawText(skid.krypton.Krypton.e.textRenderer, charSequence.toString(), n / 2, n2 / 2, n3, false);
+        drawContext.drawText(skid.krypton.Krypton.mc.textRenderer, charSequence.toString(), n / 2, n2 / 2, n3, false);
         matrices.scale(1.0f, 1.0f, 1.0f);
         matrices.pop();
     }
@@ -42,7 +42,7 @@ public final class TextRenderer {
         final MatrixStack matrices = drawContext.getMatrices();
         matrices.push();
         matrices.scale(2.0f, 2.0f, 2.0f);
-        drawContext.drawText(skid.krypton.Krypton.e.textRenderer, (String) charSequence, n / 2 - skid.krypton.Krypton.e.textRenderer.getWidth((String) charSequence) / 2, n2 / 2, n3, false);
+        drawContext.drawText(skid.krypton.Krypton.mc.textRenderer, (String) charSequence, n / 2 - skid.krypton.Krypton.mc.textRenderer.getWidth((String) charSequence) / 2, n2 / 2, n3, false);
         matrices.scale(1.0f, 1.0f, 1.0f);
         matrices.pop();
     }

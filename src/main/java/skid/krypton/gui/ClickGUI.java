@@ -16,9 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public final class ClickGUI extends Screen {
-    public List<Window> windows;
+    public List<CategoryWindow> windows;
     public Color currentColor;
-    private static final StackWalker sw;
     private CharSequence tooltipText;
     private int tooltipX;
     private int tooltipY;
@@ -26,19 +25,19 @@ public final class ClickGUI extends Screen {
 
     public ClickGUI() {
         super(Text.empty());
-        this.windows = new ArrayList<Window>();
+        this.windows = new ArrayList<>();
         this.tooltipText = null;
         this.DESCRIPTION_BG = new Color(40, 40, 40, 200);
         int n = 50;
         final Category[] values = Category.values();
         for (Category value : values) {
-            this.windows.add(new Window(n, 50, 230, 30, value, this));
+            this.windows.add(new CategoryWindow(n, 50, 230, 30, value, this));
             n += 250;
         }
     }
 
     public boolean isDraggingAlready() {
-        for (Window window : this.windows) {
+        for (CategoryWindow window : this.windows) {
             if (window.dragging) {
                 return true;
             }
@@ -60,9 +59,9 @@ public final class ClickGUI extends Screen {
     }
 
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        if (Krypton.e.currentScreen == this) {
-            if (Krypton.INSTANCE.k != null) {
-                Krypton.INSTANCE.k.render(drawContext, 0, 0, n3);
+        if (Krypton.mc.currentScreen == this) {
+            if (Krypton.INSTANCE.screen != null) {
+                Krypton.INSTANCE.screen.render(drawContext, 0, 0, n3);
             }
             if (this.currentColor == null) {
                 this.currentColor = new Color(0, 0, 0, 0);
@@ -85,14 +84,14 @@ public final class ClickGUI extends Screen {
                 }
                 this.currentColor = ColorUtil.a(0.05f, n5, this.currentColor);
             }
-            if (Krypton.e.currentScreen instanceof ClickGUI) {
-                drawContext.fill(0, 0, Krypton.e.getWindow().getWidth(), Krypton.e.getWindow().getHeight(), this.currentColor.getRGB());
+            if (Krypton.mc.currentScreen instanceof ClickGUI) {
+                drawContext.fill(0, 0, Krypton.mc.getWindow().getWidth(), Krypton.mc.getWindow().getHeight(), this.currentColor.getRGB());
             }
             RenderUtils.c();
             final int n6 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
             final int n7 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
             super.render(drawContext, n6, n7, n3);
-            for (final Window next : this.windows) {
+            for (final CategoryWindow next : this.windows) {
                 next.render(drawContext, n6, n7, n3);
                 next.updatePosition(n6, n7, n3);
             }
@@ -105,7 +104,7 @@ public final class ClickGUI extends Screen {
     }
 
     public boolean keyPressed(final int n, final int n2, final int n3) {
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().keyPressed(n, n2, n3);
         }
@@ -115,7 +114,7 @@ public final class ClickGUI extends Screen {
     public boolean mouseClicked(final double n, final double n2, final int n3) {
         final double n4 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n5 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().mouseClicked(n4, n5, n3);
         }
@@ -125,7 +124,7 @@ public final class ClickGUI extends Screen {
     public boolean mouseDragged(final double n, final double n2, final int n3, final double n4, final double n5) {
         final double n6 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n7 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().mouseDragged(n6, n7, n3, n4, n5);
         }
@@ -134,7 +133,7 @@ public final class ClickGUI extends Screen {
 
     public boolean mouseScrolled(final double n, final double n2, final double n3, final double n4) {
         final double n5 = n2 * MinecraftClient.getInstance().getWindow().getScaleFactor();
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().mouseScrolled(n, n5, n3, n4);
         }
@@ -151,9 +150,9 @@ public final class ClickGUI extends Screen {
     }
 
     public void onGuiClose() {
-        Krypton.e.setScreenAndRender(Krypton.INSTANCE.k);
+        Krypton.mc.setScreenAndRender(Krypton.INSTANCE.screen);
         this.currentColor = null;
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().onGuiClose();
         }
@@ -162,7 +161,7 @@ public final class ClickGUI extends Screen {
     public boolean mouseReleased(final double n, final double n2, final int n3) {
         final double n4 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n5 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
-        final Iterator<Window> iterator = this.windows.iterator();
+        final Iterator<CategoryWindow> iterator = this.windows.iterator();
         while (iterator.hasNext()) {
             iterator.next().mouseReleased(n4, n5, n3);
         }
@@ -174,7 +173,7 @@ public final class ClickGUI extends Screen {
             return;
         }
         final int a = TextRenderer.a(charSequence);
-        final int framebufferWidth = Krypton.e.getWindow().getFramebufferWidth();
+        final int framebufferWidth = Krypton.mc.getWindow().getFramebufferWidth();
         if (n + a + 10 > framebufferWidth) {
             n = framebufferWidth - a - 10;
         }
@@ -183,7 +182,6 @@ public final class ClickGUI extends Screen {
     }
 
     static {
-        sw = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
     }
 
     private static byte[] brdaposwnczucua() {

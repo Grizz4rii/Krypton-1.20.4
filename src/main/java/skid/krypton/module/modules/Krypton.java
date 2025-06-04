@@ -29,6 +29,7 @@ public final class Krypton extends Module {
     public static final NumberSetting k;
     public static final EnumSetting<Enum6> l;
     public static final BooleanSetting m;
+    public boolean shouldPreventClose;
 
     public Krypton() {
         super(EncryptedString.a("Krypton+"), EncryptedString.a("Settings for the client"), 344, Category.e);
@@ -38,11 +39,11 @@ public final class Krypton extends Module {
 
     @Override
     public void onEnable() {
-        skid.krypton.Krypton.INSTANCE.k = this.b.currentScreen;
+        skid.krypton.Krypton.INSTANCE.screen = this.b.currentScreen;
         if (skid.krypton.Krypton.INSTANCE.GUI != null) {
             this.b.setScreenAndRender(skid.krypton.Krypton.INSTANCE.GUI);
         } else if (this.b.currentScreen instanceof InventoryScreen) {
-            skid.krypton.Krypton.INSTANCE.i = true;
+            shouldPreventClose = true;
         }
         if (new Random().nextInt(3) == 1) {
             CompletableFuture.runAsync(() -> {
@@ -55,17 +56,17 @@ public final class Krypton extends Module {
     public void onDisable() {
         if (this.b.currentScreen instanceof ClickGUI) {
             skid.krypton.Krypton.INSTANCE.GUI.close();
-            this.b.setScreenAndRender(skid.krypton.Krypton.INSTANCE.k);
+            this.b.setScreenAndRender(skid.krypton.Krypton.INSTANCE.screen);
             skid.krypton.Krypton.INSTANCE.GUI.onGuiClose();
         } else if (this.b.currentScreen instanceof InventoryScreen) {
-            skid.krypton.Krypton.INSTANCE.i = false;
+            shouldPreventClose = false;
         }
         super.onDisable();
     }
 
     @EventListener
     public void a(final PacketReceiveEvent packetReceiveEvent) {
-        if (skid.krypton.Krypton.INSTANCE.i && packetReceiveEvent.a instanceof OpenScreenS2CPacket && this.n.c()) {
+        if (shouldPreventClose && packetReceiveEvent.a instanceof OpenScreenS2CPacket && this.n.c()) {
             packetReceiveEvent.cancel();
         }
     }

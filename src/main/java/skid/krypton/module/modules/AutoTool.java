@@ -56,7 +56,7 @@ public final class AutoTool extends Module {
 
     @EventListener
     public void a(final AttackBlockEvent attackBlockEvent) {
-        final BlockState getBlockState = this.mc.world.getBlockState(attackBlockEvent.a);
+        final BlockState getBlockState = this.mc.world.getBlockState(attackBlockEvent.pos);
         final ItemStack getBlockEntity = this.mc.player.getMainHandStack();
         double n = -1.0;
         this.h = -1;

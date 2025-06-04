@@ -5,13 +5,13 @@ import net.minecraft.util.math.BlockPos;
 import skid.krypton.event.CancellableEvent;
 
 public class SetBlockStateEvent extends CancellableEvent {
-    public BlockPos a;
-    public BlockState b;
-    public BlockState c;
+    public BlockPos pos;
+    public BlockState newState;
+    public BlockState oldState;
 
-    public SetBlockStateEvent(final BlockPos a, final BlockState b, final BlockState c) {
-        this.a = a;
-        this.b = b;
-        this.c = c;
+    public SetBlockStateEvent(final BlockPos pos, final BlockState newState, final BlockState oldState) {
+        this.pos = pos;
+        this.newState = oldState;
+        this.oldState = newState;
     }
 }

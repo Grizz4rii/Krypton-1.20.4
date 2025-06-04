@@ -4,11 +4,11 @@ import net.minecraft.client.gui.DrawContext;
 import skid.krypton.event.CancellableEvent;
 
 public class Render2DEvent extends CancellableEvent {
-    public DrawContext a;
-    public float b;
+    public DrawContext context;
+    public float tickDelta;
 
-    public Render2DEvent(final DrawContext a, final float b) {
-        this.a = a;
-        this.b = b;
+    public Render2DEvent(final DrawContext context, final float tickDelta) {
+        this.context = context;
+        this.tickDelta = tickDelta;
     }
 }

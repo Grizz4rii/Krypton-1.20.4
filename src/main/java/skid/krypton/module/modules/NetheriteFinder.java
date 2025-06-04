@@ -67,8 +67,8 @@ public final class NetheriteFinder extends Module {
         if (this.mc.player != null && this.f != null) {
             Camera var3 = this.mc.gameRenderer.getCamera();
             if (var3 != null) {
-                MatrixStack var4 = var1.a;
-                var1.a.push();
+                MatrixStack var4 = var1.matrixStack;
+                var1.matrixStack.push();
                 Vec3d var5 = var3.getPos();
                 RotationAxis var2 = RotationAxis.POSITIVE_X;
                 var4.multiply(var2.rotationDegrees(var3.getPitch()));
@@ -81,7 +81,7 @@ public final class NetheriteFinder extends Module {
             int var10 = this.mc.player.getChunkPos().z;
             int var6 = this.d.getIntValue();
             if (0 > var6) {
-                var1.a.pop();
+                var1.matrixStack.pop();
             } else {
                 for (int var7 = var9; var7 <= var9; var7++) {
                     this.a(var7, var10 - var6, var1);
@@ -100,7 +100,7 @@ public final class NetheriteFinder extends Module {
 
             while (var6.hasNext()) {
                 for (Object var14 : (Set)((Entry)var6.next()).getValue()) {
-                    MatrixStack var10 = var3.a;
+                    MatrixStack var10 = var3.matrixStack;
                     float var11 = (float)((Vec3d)var14).x;
                     float var12 = (float)((Vec3d)var14).y;
                     float var13 = (float)((Vec3d)var14).z;
@@ -138,16 +138,16 @@ public final class NetheriteFinder extends Module {
         }
 
         ClientWorld var2 = this.mc.world;
-        this.a(var2.getChunk(var1.a.getChunkX(), var1.a.getChunkZ()));
+        this.a(var2.getChunk(var1.packet.getChunkX(), var1.packet.getChunkZ()));
     }
 
     @EventListener
     public void a(SetBlockStateEvent var1) {
-        if (var1.c.getBlock().equals(Blocks.AIR)) {
-            long var2 = ChunkPos.toLong(var1.a);
+        if (var1.oldState.getBlock().equals(Blocks.AIR)) {
+            long var2 = ChunkPos.toLong(var1.pos);
             Map var6 = this.e;
             if (var6.containsKey(var2)) {
-                Vec3d var4 = Vec3d.of(var1.a);
+                Vec3d var4 = Vec3d.of(var1.pos);
                 Map var7 = this.e;
                 Iterator var5 = ((Map)var7.get(var2)).values().iterator();
 

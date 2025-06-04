@@ -65,6 +65,6 @@ public class FastPlace extends Module {
         if (item instanceof RangedWeaponItem || item2 instanceof RangedWeaponItem) {
             return;
         }
-        postItemUseEvent.a = this.f.getIntValue();
+        postItemUseEvent.cooldown = this.f.getIntValue();
     }
 }

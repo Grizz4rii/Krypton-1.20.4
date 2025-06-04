@@ -59,7 +59,7 @@ public final class HUD
     @EventListener
     public void a(Render2DEvent render2DEvent) {
         if (this.mc.currentScreen != Krypton.INSTANCE.GUI) {
-            DrawContext drawContext = render2DEvent.a;
+            DrawContext drawContext = render2DEvent.context;
             int n = this.mc.getWindow().getWidth();
             int n2 = this.mc.getWindow().getHeight();
             RenderUtils.c();

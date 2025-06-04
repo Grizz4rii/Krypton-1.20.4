@@ -4,9 +4,9 @@ import net.minecraft.network.packet.Packet;
 import skid.krypton.event.CancellableEvent;
 
 public class PacketEvent extends CancellableEvent {
-    public Packet a;
+    public Packet<?> packet;
 
-    public PacketEvent(final Packet a) {
-        this.a = a;
+    public PacketEvent(final Packet<?> a) {
+        this.packet = a;
     }
 }

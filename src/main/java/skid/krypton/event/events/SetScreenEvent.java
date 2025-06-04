@@ -4,9 +4,9 @@ import net.minecraft.client.gui.screen.Screen;
 import skid.krypton.event.CancellableEvent;
 
 public class SetScreenEvent extends CancellableEvent {
-    public Screen a;
+    public Screen screen;
 
-    public SetScreenEvent(final Screen a) {
-        this.a = a;
+    public SetScreenEvent(final Screen screen) {
+        this.screen = screen;
     }
 }

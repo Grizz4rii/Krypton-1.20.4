@@ -182,38 +182,38 @@ public final class Freecam extends Module {
     }
 
     @EventListener
-    private void a(final MouseButtenEvent mouseButtenEvent) {
+    private void a(final MouseButtonEvent event) {
         boolean b = true;
-        if (this.mc.options.forwardKey.matchesMouse(mouseButtenEvent.a)) {
-            this.l = (mouseButtenEvent.b != 0);
+        if (this.mc.options.forwardKey.matchesMouse(event.button)) {
+            this.l = (event.actions != 0);
             this.mc.options.forwardKey.setPressed(false);
-        } else if (this.mc.options.backKey.matchesMouse(mouseButtenEvent.a)) {
-            this.m = (mouseButtenEvent.b != 0);
+        } else if (this.mc.options.backKey.matchesMouse(event.button)) {
+            this.m = (event.actions != 0);
             this.mc.options.backKey.setPressed(false);
-        } else if (this.mc.options.rightKey.matchesMouse(mouseButtenEvent.a)) {
-            this.n = (mouseButtenEvent.b != 0);
+        } else if (this.mc.options.rightKey.matchesMouse(event.button)) {
+            this.n = (event.actions != 0);
             this.mc.options.rightKey.setPressed(false);
-        } else if (this.mc.options.leftKey.matchesMouse(mouseButtenEvent.a)) {
-            this.o = (mouseButtenEvent.b != 0);
+        } else if (this.mc.options.leftKey.matchesMouse(event.button)) {
+            this.o = (event.actions != 0);
             this.mc.options.leftKey.setPressed(false);
-        } else if (this.mc.options.jumpKey.matchesMouse(mouseButtenEvent.a)) {
-            this.p = (mouseButtenEvent.b != 0);
+        } else if (this.mc.options.jumpKey.matchesMouse(event.button)) {
+            this.p = (event.actions != 0);
             this.mc.options.jumpKey.setPressed(false);
-        } else if (this.mc.options.sneakKey.matchesMouse(mouseButtenEvent.a)) {
-            this.q = (mouseButtenEvent.b != 0);
+        } else if (this.mc.options.sneakKey.matchesMouse(event.button)) {
+            this.q = (event.actions != 0);
             this.mc.options.sneakKey.setPressed(false);
         } else {
             b = false;
         }
         if (b) {
-            mouseButtenEvent.cancel();
+            event.cancel();
         }
     }
 
     @EventListener
     private void a(final MouseScrolledEvent mouseScrolledEvent) {
         if (this.mc.currentScreen == null) {
-            this.k += mouseScrolledEvent.a * 0.25 * this.k;
+            this.k += mouseScrolledEvent.amount * 0.25 * this.k;
             if (this.k < 0.1) {
                 this.k = 0.1;
             }

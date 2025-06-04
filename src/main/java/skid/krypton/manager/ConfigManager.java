@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.manager;
 
 import com.google.gson.JsonElement;

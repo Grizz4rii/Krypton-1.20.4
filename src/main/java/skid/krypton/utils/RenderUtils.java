@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.utils;
 
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -20,7 +16,7 @@ import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import skid.krypton.Krypton;
-import skid.krypton.mixininterfaces.IBufferBuilder;
+import skid.krypton.imixin.IBufferBuilder;
 
 import java.awt.*;
 import java.util.function.Consumer;

@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.font;
 
 import com.mojang.blaze3d.systems.RenderSystem;

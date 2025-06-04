@@ -1,8 +1,4 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-package skid.krypton.mixininterfaces;
+package skid.krypton.imixin;
 
 import net.minecraft.util.math.Vec3d;
 

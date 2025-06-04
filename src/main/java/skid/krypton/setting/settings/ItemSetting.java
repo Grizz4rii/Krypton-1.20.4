@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.setting.settings;
 
 import net.minecraft.item.Item;

@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.mixin;
 
 import com.mojang.authlib.GameProfile;

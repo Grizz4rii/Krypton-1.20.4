@@ -1,8 +1,4 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-package skid.krypton.mixininterfaces;
+package skid.krypton.imixin;
 
 public interface IServerboundMovePlayerPacket {
     void setYRot(final float p0);

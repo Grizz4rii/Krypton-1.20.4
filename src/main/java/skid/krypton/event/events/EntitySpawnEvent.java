@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.event.events;
 
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;

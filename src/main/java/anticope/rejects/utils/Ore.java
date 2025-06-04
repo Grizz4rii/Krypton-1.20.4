@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package anticope.rejects.utils;
 
 import net.minecraft.client.MinecraftClient;

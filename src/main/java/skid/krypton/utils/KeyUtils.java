@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.utils;
 
 import org.apache.commons.lang3.StringUtils;

@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 package skid.krypton.utils;
 
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;

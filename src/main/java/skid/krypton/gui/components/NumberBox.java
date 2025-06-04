@@ -9,7 +9,7 @@ import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
-import skid.krypton.utils.font.TextRenderer;
+import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 

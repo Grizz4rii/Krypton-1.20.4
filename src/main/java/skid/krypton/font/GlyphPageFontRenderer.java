@@ -1,15 +1,14 @@
-package skid.krypton.utils.font;
+package skid.krypton.font;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import skid.krypton.font.GlyphPage;
 import skid.krypton.utils.EncryptedString;
 
 import java.awt.*;
 import java.util.Random;
 
-public final class FontRenderer {
+public final class GlyphPageFontRenderer {
     public Random a;
     private float b;
     private float c;
@@ -23,7 +22,7 @@ public final class FontRenderer {
     private final GlyphPage k;
     private final GlyphPage l;
 
-    public FontRenderer(final GlyphPage i, final GlyphPage j, final GlyphPage k, final GlyphPage l) {
+    public GlyphPageFontRenderer(final GlyphPage i, final GlyphPage j, final GlyphPage k, final GlyphPage l) {
         this.a = new Random();
         this.d = new int[32];
         this.i = i;
@@ -47,7 +46,7 @@ public final class FontRenderer {
         }
     }
 
-    public static FontRenderer a(final CharSequence charSequence, final int n, final boolean b, final boolean b2, final boolean b3) {
+    public static GlyphPageFontRenderer a(final CharSequence charSequence, final int n, final boolean b, final boolean b2, final boolean b3) {
         final char[] array = new char[256];
         for (int i = 0; i < 256; ++i) {
             array[i] = (char) i;
@@ -79,17 +78,17 @@ public final class FontRenderer {
         } else {
             glyphPage4 = glyphPage;
         }
-        return new FontRenderer(glyphPage, glyphPage2, glyphPage3, glyphPage4);
+        return new GlyphPageFontRenderer(glyphPage, glyphPage2, glyphPage3, glyphPage4);
     }
 
-    public static FontRenderer init(final CharSequence charSequence, final int n, final boolean b, final boolean b2, final boolean b3) {
+    public static GlyphPageFontRenderer init(final CharSequence charSequence, final int n, final boolean b, final boolean b2, final boolean b3) {
         final char[] array = new char[256];
         for (int i = 0; i < 256; ++i) {
             array[i] = (char) i;
         }
         Font deriveFont = null;
         try {
-            deriveFont = Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(0, (float) n);
+            deriveFont = Font.createFont(0, GlyphPageFontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(0, (float) n);
         } catch (final Exception ex) {
             ex.printStackTrace();
         }
@@ -104,19 +103,19 @@ public final class FontRenderer {
             glyphPage3 = (glyphPage4 = glyphPage2);
             glyphPage2 = (glyphPage3 = glyphPage4);
             if (b) {
-                final GlyphPage glyphPage5 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(1, (float) n), true, true);
+                final GlyphPage glyphPage5 = new GlyphPage(Font.createFont(0, GlyphPageFontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(1, (float) n), true, true);
                 glyphPage5.a(array);
                 glyphPage5.a();
                 glyphPage2 = glyphPage5;
             }
             if (b2) {
-                final GlyphPage glyphPage6 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(2, (float) n), true, true);
+                final GlyphPage glyphPage6 = new GlyphPage(Font.createFont(0, GlyphPageFontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(2, (float) n), true, true);
                 glyphPage6.a(array);
                 glyphPage6.a();
                 glyphPage3 = glyphPage6;
             }
             if (b3) {
-                final GlyphPage glyphPage7 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(3, (float) n), true, true);
+                final GlyphPage glyphPage7 = new GlyphPage(Font.createFont(0, GlyphPageFontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(3, (float) n), true, true);
                 glyphPage7.a(array);
                 glyphPage7.a();
                 glyphPage4 = glyphPage7;
@@ -124,7 +123,7 @@ public final class FontRenderer {
         } catch (final Exception ex2) {
             ex2.printStackTrace();
         }
-        return new FontRenderer(glyphPage, glyphPage2, glyphPage3, glyphPage4);
+        return new GlyphPageFontRenderer(glyphPage, glyphPage2, glyphPage3, glyphPage4);
     }
 
     public int a(final MatrixStack matrixStack, final CharSequence charSequence, final float n, final float n2, final int n3) {

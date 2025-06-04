@@ -24,7 +24,7 @@ public final class GlyphPage {
     private final Font c;
     private final boolean d;
     private final boolean e;
-    private final HashMap<Character, Rectangle> f;
+    private final HashMap<Character, Glyph> f;
     private BufferedImage g;
     private AbstractTexture h;
 
@@ -86,9 +86,8 @@ public final class GlyphPage {
         int height2 = 0;
         int x = 0;
         int y = 1;
-        for (int j = 0; j < array.length; ++j) {
-            final char c = array[j];
-            final Rectangle value = new Rectangle();
+        for (final char c : array) {
+            final Glyph value = new Glyph();
             final Rectangle2D stringBounds2 = fontMetrics.getStringBounds(Character.toString(c), graphics);
             value.width = stringBounds2.getBounds().width + 8;
             value.height = stringBounds2.getBounds().height;
@@ -133,7 +132,7 @@ public final class GlyphPage {
     }
 
     public float a(final MatrixStack matrixStack, final char c, final float n, final float n2, final float n3, final float n4, final float n5, final float n6) {
-        final Rectangle value = this.f.get(c);
+        final Glyph value = this.f.get(c);
         if (value == null) {
             return 0.0f;
         }
@@ -169,5 +168,38 @@ public final class GlyphPage {
 
     public int f() {
         return this.b;
+    }
+
+    static class Glyph {
+        private int x;
+        private int y;
+        private int width;
+        private int height;
+
+        Glyph(int x, int y, int width, int height) {
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        Glyph() {
+        }
+
+        public int getX() {
+            return this.x;
+        }
+
+        public int getY() {
+            return this.y;
+        }
+
+        public int getWidth() {
+            return this.width;
+        }
+
+        public int getHeight() {
+            return this.height;
+        }
     }
 }

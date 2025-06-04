@@ -30,70 +30,57 @@ public final class CategoryWindow {
     public ClickGUI parent;
     private float hoverAnimation;
 
-    public CategoryWindow(final int n, final int n2, final int width, final int height, final Category category, final ClickGUI parent) {
+    public CategoryWindow(final int x, final int y, final int width, final int height, final Category category, final ClickGUI parent) {
         this.moduleButtons = new ArrayList<>();
         this.hoverAnimation = 0.0f;
-        this.x = n;
-        this.y = n2;
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.dragging = false;
         this.extended = true;
         this.height = height;
         this.category = category;
         this.parent = parent;
-        this.prevX = n;
-        this.prevY = n2;
-        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.getModuleManager().a(category)).iterator();
-        int n3 = height;
-        while (iterator.hasNext()) {
-            this.moduleButtons.add(new ModuleButton(this, iterator.next(), n3));
-            n3 += height;
+        this.prevX = x;
+        this.prevY = y;
+
+        final List<Module> modules = new ArrayList<>(Krypton.INSTANCE.getModuleManager().a(category));
+        int offset = height;
+
+        for (Module module : modules) {
+            this.moduleButtons.add(new ModuleButton(this, module, offset));
+            offset += height;
         }
     }
 
-    public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
+    public void render(final DrawContext context, final int n, final int n2, final float n3) {
         final Color color = new Color(25, 25, 30, skid.krypton.module.modules.client.Krypton.windowAlpha.getIntValue());
         if (this.currentColor == null) {
             this.currentColor = new Color(25, 25, 30, 0);
         } else {
             this.currentColor = ColorUtil.a(0.05f, color, this.currentColor);
         }
-        float n4;
-        if (this.isHovered(n, n2) && !this.dragging) {
-            n4 = 1.0f;
-        } else {
-            n4 = 0.0f;
-        }
+        float n4 = this.isHovered(n, n2) && !this.dragging ? 1.0F : 0.0F;
         this.hoverAnimation = (float) MathUtil.a(n3 * 0.1f, this.hoverAnimation, n4);
         final Color a = ColorUtil.a(new Color(25, 25, 30, this.currentColor.getAlpha()), new Color(255, 255, 255, 20), this.hoverAnimation);
-        float n5;
-        if (this.extended) {
-            n5 = 0.0f;
-        } else {
-            n5 = 6.0f;
-        }
-        float n6;
-        if (this.extended) {
-            n6 = 0.0f;
-        } else {
-            n6 = 6.0f;
-        }
-        RenderUtils.a(drawContext.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
+        float n5 = this.extended ? 0.0F : 6.0F;
+        float n6 = this.extended ? 0.0F : 6.0F;
+        RenderUtils.a(context.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
         final Color mainColor = KryptonUtil.getMainColor(255, this.category.ordinal());
         final CharSequence f = this.category.name;
         final int n7 = this.prevX + (this.width - TextRenderer.a(this.category.name)) / 2;
         final int n8 = this.prevY + 8;
-        TextRenderer.a(f, drawContext, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
-        TextRenderer.a(f, drawContext, n7, n8, mainColor.brighter().getRGB());
+        TextRenderer.a(f, context, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
+        TextRenderer.a(f, context, n7, n8, mainColor.brighter().getRGB());
         this.updateButtons(n3);
         if (this.extended) {
-            this.renderModuleButtons(drawContext, n, n2, n3);
+            this.renderModuleButtons(context, n, n2, n3);
         }
     }
 
-    private void renderModuleButtons(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        for (ModuleButton moduleButton : this.moduleButtons) {
-            moduleButton.render(drawContext, n, n2, n3);
+    private void renderModuleButtons(final DrawContext context, final int n, final int n2, final float n3) {
+        for (ModuleButton module : this.moduleButtons) {
+            module.render(context, n, n2, n3);
         }
     }
 

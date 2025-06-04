@@ -83,39 +83,44 @@ public final class GlyphPageFontRenderer {
         return new GlyphPageFontRenderer(regularPage, boldPage, italicPage, boldItalicPage);
     }
 
-    public static GlyphPageFontRenderer init(final CharSequence id, final int size, final boolean bold, final boolean italic, final boolean boldItalic) throws Exception {
-        final char[] chars = new char[256];
-        for (int i = 0; i < chars.length; i++) chars[i] = (char) i;
+    public static GlyphPageFontRenderer init(final CharSequence id, final int size, final boolean bold, final boolean italic, final boolean boldItalic) {
+        try {
+            final char[] chars = new char[256];
+            for (int i = 0; i < chars.length; i++) chars[i] = (char) i;
 
-        Font font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.PLAIN, size);
+            Font font = Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.PLAIN, size);
 
-        GlyphPage regularPage = new GlyphPage(font, true, true);
-        regularPage.generate(chars);
-        regularPage.setup();
+            GlyphPage regularPage = new GlyphPage(font, true, true);
+            regularPage.generate(chars);
+            regularPage.setup();
 
-        GlyphPage boldPage = regularPage;
-        GlyphPage italicPage = regularPage;
-        GlyphPage boldItalicPage = regularPage;
+            GlyphPage boldPage = regularPage;
+            GlyphPage italicPage = regularPage;
+            GlyphPage boldItalicPage = regularPage;
 
-        if (bold) {
-            boldPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.BOLD, size), true, true);
-            boldPage.generate(chars);
-            boldPage.setup();
+            if (bold) {
+                boldPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.BOLD, size), true, true);
+                boldPage.generate(chars);
+                boldPage.setup();
+            }
+
+            if (italic) {
+                italicPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.ITALIC, size), true, true);
+                italicPage.generate(chars);
+                italicPage.setup();
+            }
+
+            if (boldItalic) {
+                boldItalicPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.BOLD | Font.ITALIC, size), true, true);
+                boldItalicPage.generate(chars);
+                boldItalicPage.setup();
+            }
+
+            return new GlyphPageFontRenderer(regularPage, boldPage, italicPage, boldItalicPage);
+        } catch (Throwable _t) {
+            _t.printStackTrace(System.err);
+            return null;
         }
-
-        if (italic) {
-            italicPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.ITALIC, size), true, true);
-            italicPage.generate(chars);
-            italicPage.setup();
-        }
-
-        if (boldItalic) {
-            boldItalicPage = new GlyphPage(Font.createFont(Font.TRUETYPE_FONT, Objects.requireNonNull(GlyphPageFontRenderer.class.getResourceAsStream(id.toString()))).deriveFont(Font.BOLD | Font.ITALIC, size), true, true);
-            boldItalicPage.generate(chars);
-            boldItalicPage.setup();
-        }
-
-        return new GlyphPageFontRenderer(regularPage, boldPage, italicPage, boldItalicPage);
     }
 
     public int drawStringWithShadow(final MatrixStack matrices, final CharSequence text, final float x, final float y, final int color) {

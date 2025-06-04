@@ -9,7 +9,7 @@ import skid.krypton.gui.Component;
 import skid.krypton.module.Module;
 import skid.krypton.module.setting.*;
 import skid.krypton.utils.*;
-import skid.krypton.utils.font.TextRenderer;
+import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;

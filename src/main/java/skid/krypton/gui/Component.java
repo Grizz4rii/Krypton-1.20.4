@@ -6,7 +6,7 @@ import skid.krypton.gui.components.ModuleButton;
 import skid.krypton.module.setting.Setting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.RenderUtils;
-import skid.krypton.utils.font.TextRenderer;
+import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 

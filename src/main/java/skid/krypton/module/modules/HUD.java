@@ -16,7 +16,7 @@ import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.RenderUtils;
-import skid.krypton.utils.font.TextRenderer;
+import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;

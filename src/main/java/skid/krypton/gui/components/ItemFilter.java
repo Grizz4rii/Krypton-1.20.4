@@ -12,7 +12,7 @@ import skid.krypton.module.modules.Krypton;
 import skid.krypton.module.setting.ItemSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.RenderUtils;
-import skid.krypton.utils.font.TextRenderer;
+import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;

@@ -5,13 +5,13 @@
 package skid.krypton.module.modules;
 
 import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
+import skid.krypton.Krypton;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.PostItemUseEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -62,12 +62,12 @@ public final class AutoFirework extends Module {
             --this.l;
             return;
         }
-        if (this.b.player != null && KeyUtils.b(this.c.d()) && (Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(ElytraGlide.class).isEnabled() || this.b.player.method_6128()) && this.b.player.method_31548().getArmorStack(2).isOf(Items.ELYTRA) && !this.b.player.method_31548().getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !this.b.player.method_6047().getItem().getComponents().contains(DataComponentTypes.FOOD) && !(this.b.player.method_6047().getItem() instanceof ArmorItem)) {
+        if (this.b.player != null && KeyUtils.b(this.c.d()) && (Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(ElytraGlide.class).isEnabled() || this.b.player.isFallFlying()) && this.b.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA) && !this.b.player.getInventory().getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) && !(this.b.player.getMainHandStack().getItem() instanceof ArmorItem)) {
             this.g = true;
         }
         if (this.g) {
             if (this.j == -1) {
-                this.j = this.b.player.method_31548().selectedSlot;
+                this.j = this.b.player.getInventory().selectedSlot;
             }
             if (!InventoryUtil.a(Items.FIREWORK_ROCKET)) {
                 this.k();
@@ -109,15 +109,11 @@ public final class AutoFirework extends Module {
 
     @EventListener
     public void a(final PostItemUseEvent postItemUseEvent) {
-        if (this.b.player.method_6047().isOf(Items.FIREWORK_ROCKET)) {
+        if (this.b.player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
             this.h = true;
         }
         if (this.l > 0) {
             postItemUseEvent.cancel();
         }
-    }
-
-    private static byte[] hzvoneomkmqudhx() {
-        return new byte[]{126, 93, 45, 64, 126, 5, 56, 66, 14, 81, 6, 31, 3, 10, 114, 126, 122, 55, 114, 52, 34, 7, 38, 111, 10, 114, 113, 21, 99, 24, 65, 123, 49, 108, 113, 120, 104, 102, 32, 40, 84, 34, 52, 11, 112, 79, 8, 53, 5, 114, 8, 67, 111, 66, 12, 28, 124, 86, 79, 85, 69, 108, 5, 111, 20, 63, 91, 13, 105, 126, 4};
     }
 }

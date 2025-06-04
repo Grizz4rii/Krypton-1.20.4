@@ -13,6 +13,7 @@ import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
+import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -51,7 +52,7 @@ public final class PlayerESP extends Module {
 
     @EventListener
     public void a(final Render3DEvent render3DEvent) {
-        for (final Object next : this.b.world.method_18456()) {
+        for (final Object next : this.b.world.getPlayers()) {
             if (next != this.b.player) {
                 final Camera camera = this.b.gameRenderer.getCamera();
                 if (camera != null) {
@@ -62,12 +63,12 @@ public final class PlayerESP extends Module {
                     a.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0f));
                     a.translate(-pos.x, -pos.y, -pos.z);
                 }
-                final double lerp = MathHelper.lerp((double) RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).field_6014, ((PlayerEntity) next).method_23317());
-                final double lerp2 = MathHelper.lerp((double) RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).field_6036, ((PlayerEntity) next).method_23318());
-                final double lerp3 = MathHelper.lerp((double) RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).field_5969, ((PlayerEntity) next).method_23321());
-                RenderUtils.a(render3DEvent.a, (float) lerp - ((PlayerEntity) next).method_17681() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).method_17681() / 2.0f, (float) lerp + ((PlayerEntity) next).method_17681() / 2.0f, (float) lerp2 + ((PlayerEntity) next).method_17682(), (float) lerp3 + ((PlayerEntity) next).method_17681() / 2.0f, KryptonUtil.getMainColor(this.c.f(), 1).brighter());
+                final double lerp = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevX, ((PlayerEntity) next).getX());
+                final double lerp2 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevY, ((PlayerEntity) next).getY());
+                final double lerp3 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevZ, ((PlayerEntity) next).getZ());
+                RenderUtils.a(render3DEvent.a, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, KryptonUtil.getMainColor(this.c.f(), 1).brighter());
                 if (this.e.c()) {
-                    RenderUtils.a(render3DEvent.a, KryptonUtil.getMainColor(255, 1), this.b.crosshairTarget.getPos(), ((PlayerEntity) next).method_30950(RenderTickCounter.ONE.getTickDelta(true)));
+                    RenderUtils.a(render3DEvent.a, KryptonUtil.getMainColor(255, 1), this.b.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
                 }
                 render3DEvent.a.pop();
             }
@@ -80,13 +81,13 @@ public final class PlayerESP extends Module {
         final float n3 = color.brighter().getBlue() / 255.0f;
         final float n4 = color.brighter().getAlpha() / 255.0f;
         final Camera camera = this.b.gameRenderer.getCamera();
-        final Vec3d subtract = playerEntity.method_30950(RenderTickCounter.ONE.getTickDelta(true)).subtract(camera.getPos());
+        final Vec3d subtract = playerEntity.getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)).subtract(camera.getPos());
         final float n5 = (float) subtract.x;
         final float n6 = (float) subtract.y;
         final float n7 = (float) subtract.z;
         final double radians = Math.toRadians(camera.getYaw() + 90.0f);
-        final double n8 = Math.sin(radians) * (playerEntity.method_17681() / 1.7);
-        final double n9 = Math.cos(radians) * (playerEntity.method_17681() / 1.7);
+        final double n8 = Math.sin(radians) * (playerEntity.getWidth() / 1.7);
+        final double n9 = Math.cos(radians) * (playerEntity.getWidth() / 1.7);
         matrixStack.push();
         final Matrix4f positionMatrix = matrixStack.peek().getPositionMatrix();
         RenderSystem.setShader((Supplier) GameRenderer::getPositionColorProgram);
@@ -100,16 +101,16 @@ public final class PlayerESP extends Module {
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
         GL11.glLineWidth((float) this.d.f());
-        final BufferBuilder begin = Tessellator.getInstance().begin(VertexFormat$DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
-        begin.method_22918(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 - (float) n8, n6, n7 - (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 - (float) n8, n6, n7 - (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 - (float) n8, n6 + playerEntity.method_17682(), n7 - (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 - (float) n8, n6 + playerEntity.method_17682(), n7 - (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 + (float) n8, n6 + playerEntity.method_17682(), n7 + (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 + (float) n8, n6 + playerEntity.method_17682(), n7 + (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
-        begin.method_22918(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
+        final BufferBuilder begin = Tessellator.getInstance().begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        begin.vertex(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 - (float) n8, n6, n7 - (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 - (float) n8, n6, n7 - (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 - (float) n8, n6 + playerEntity.getHeight(), n7 - (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 - (float) n8, n6 + playerEntity.getHeight(), n7 - (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 + (float) n8, n6 + playerEntity.getHeight(), n7 + (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 + (float) n8, n6 + playerEntity.getHeight(), n7 + (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
+        begin.vertex(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
         BufferRenderer.drawWithGlobalProgram(begin.end());
         GL11.glDepthFunc(515);
         GL11.glLineWidth(1.0f);

@@ -41,11 +41,11 @@ public class FastPlace extends Module {
 
     @EventListener
     public void a(final PostItemUseEvent postItemUseEvent) {
-        final ItemStack method_6047 = this.b.player.method_6047();
-        final ItemStack method_6048 = this.b.player.method_6079();
-        final Item item = method_6047.getItem();
-        final Item item2 = this.b.player.method_6079().getItem();
-        if (!method_6047.isOf(Items.EXPERIENCE_BOTTLE) && !method_6048.isOf(Items.EXPERIENCE_BOTTLE) && this.c.c()) {
+        final ItemStack getMainHandStack = this.b.player.getMainHandStack();
+        final ItemStack getItemUseTime = this.b.player.getOffHandStack();
+        final Item item = getMainHandStack.getItem();
+        final Item item2 = this.b.player.getOffHandStack().getItem();
+        if (!getMainHandStack.isOf(Items.EXPERIENCE_BOTTLE) && !getItemUseTime.isOf(Items.EXPERIENCE_BOTTLE) && this.c.c()) {
             return;
         }
         if (!this.c.c()) {
@@ -63,7 +63,7 @@ public class FastPlace extends Module {
         if (item2.getComponents().get(DataComponentTypes.FOOD) != null) {
             return;
         }
-        if (method_6047.isOf(Items.RESPAWN_ANCHOR) || method_6047.isOf(Items.GLOWSTONE) || method_6048.isOf(Items.RESPAWN_ANCHOR) || method_6048.isOf(Items.GLOWSTONE)) {
+        if (getMainHandStack.isOf(Items.RESPAWN_ANCHOR) || getMainHandStack.isOf(Items.GLOWSTONE) || getItemUseTime.isOf(Items.RESPAWN_ANCHOR) || getItemUseTime.isOf(Items.GLOWSTONE)) {
             return;
         }
         if (item instanceof RangedWeaponItem || item2 instanceof RangedWeaponItem) {

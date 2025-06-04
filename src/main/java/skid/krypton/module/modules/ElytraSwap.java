@@ -5,13 +5,12 @@
 package skid.krypton.module.modules;
 
 import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -76,15 +75,15 @@ public final class ElytraSwap extends Module {
         }
         if (this.i) {
             if (this.o == -1) {
-                this.o = this.b.player.method_31548().selectedSlot;
+                this.o = this.b.player.getInventory().selectedSlot;
             }
             if (this.l < this.d.f()) {
                 ++this.l;
                 return;
             }
             Predicate predicate;
-            if (this.b.player.method_31548().getArmorStack(2).isOf(Items.ELYTRA)) {
-                predicate = (item -> item instanceof ArmorItem && ((ArmorItem) item).method_7685() == EquipmentSlot.CHEST);
+            if (this.b.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+                predicate = (item -> item instanceof ArmorItem && ((ArmorItem) item).getSlotType() == EquipmentSlot.CHEST);
             } else {
                 predicate = (item2 -> item2.equals(Items.ELYTRA));
             }
@@ -94,9 +93,9 @@ public final class ElytraSwap extends Module {
                         this.k();
                         return;
                     }
-                    while (!predicate.test(this.b.player.method_31548().method_5438(9).getItem())) {
+                    while (!predicate.test(this.b.player.getInventory().getStack(9).getItem())) {
                     }
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 9, this.h.f() - 1, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 9, this.h.f() - 1, SlotActionType.SWAP, this.b.player);
                     this.l = 0;
                     return;
                 } else {
@@ -105,7 +104,7 @@ public final class ElytraSwap extends Module {
             }
             if (!this.j) {
                 this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
-                this.b.player.method_6104(Hand.MAIN_HAND);
+                this.b.player.swingHand(Hand.MAIN_HAND);
                 this.j = true;
             }
             if (this.e.c()) {

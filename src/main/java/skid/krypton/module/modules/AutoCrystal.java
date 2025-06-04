@@ -8,7 +8,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.decoration.EndCrystalEntity;
 import net.minecraft.entity.mob.SlimeEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.PreItemUseEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -61,13 +60,13 @@ public final class AutoCrystal extends Module {
             return;
         }
         this.k();
-        if (this.b.player.method_6115()) {
+        if (this.b.player.isUsingItem()) {
             return;
         }
         if (!this.l()) {
             return;
         }
-        if (this.b.player.method_6047().getItem() != Items.END_CRYSTAL) {
+        if (this.b.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
             return;
         }
         this.m();
@@ -101,7 +100,7 @@ public final class AutoCrystal extends Module {
     }
 
     private void a(final BlockHitResult blockHitResult) {
-        if (blockHitResult.method_17783() != HitResult$Type.BLOCK) {
+        if (blockHitResult.getType() != HitResult.Type.BLOCK) {
             return;
         }
         if (this.keybind > 0) {
@@ -123,19 +122,19 @@ public final class AutoCrystal extends Module {
             return;
         }
         this.b.interactionManager.attackEntity(this.b.player, entity);
-        this.b.player.method_6104(Hand.MAIN_HAND);
+        this.b.player.swingHand(Hand.MAIN_HAND);
         this.h = this.f.f();
     }
 
     @EventListener
     public void a(final PreItemUseEvent preItemUseEvent) {
-        if (this.b.player.method_6047().getItem() != Items.END_CRYSTAL) {
+        if (this.b.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
             return;
         }
         if (!(this.b.crosshairTarget instanceof BlockHitResult blockHitResult)) {
             return;
         }
-        if (((BlockHitResult) this.b.crosshairTarget).method_17783() != HitResult$Type.BLOCK) {
+        if (this.b.crosshairTarget.getType() != HitResult.Type.BLOCK) {
             return;
         }
         final BlockPos blockPos = blockHitResult.getBlockPos();
@@ -146,12 +145,12 @@ public final class AutoCrystal extends Module {
 
     private boolean a(final BlockPos blockPos) {
         final BlockPos up = blockPos.up();
-        if (!this.b.world.method_22347(up)) {
+        if (!this.b.world.isAir(up)) {
             return false;
         }
-        final int method_10263 = up.method_10263();
-        final int method_10264 = up.method_10264();
-        final int method_10265 = up.method_10260();
-        return this.b.world.method_8335((Entity) null, new Box(method_10263, method_10264, method_10265, method_10263 + 1.0, method_10264 + 2.0, method_10265 + 1.0)).isEmpty();
+        final int getX = up.getX();
+        final int getY = up.getY();
+        final int compareTo = up.getZ();
+        return this.b.world.getOtherEntities(null, new Box(getX, getY, compareTo, getX + 1.0, getY + 2.0, compareTo + 1.0)).isEmpty();
     }
 }

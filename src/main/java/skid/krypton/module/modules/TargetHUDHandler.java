@@ -4,14 +4,16 @@
 
 package skid.krypton.module.modules;
 
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import net.minecraft.util.Hand;
 
 public class TargetHUDHandler {
+    public static final MinecraftClient MC = MinecraftClient.getInstance();
     final /* synthetic */ TargetHUD this$0;
 
-    private TargetHUDHandler(final TargetHUD this$0) {
+    TargetHUDHandler(final TargetHUD this$0) {
         this.this$0 = this$0;
     }
 
@@ -23,10 +25,10 @@ public class TargetHUDHandler {
                 return true;
             }
         } catch (final Exception ex) {
-            return TargetHUD.f(this.this$0).player != null && TargetHUD.g(this.this$0).player.method_6052() != null && TargetHUD.h(this.this$0).player.method_6052() instanceof PlayerEntity;
+            return MC.player != null && MC.player.getAttacking() != null && MC.player.getAttacking() instanceof PlayerEntity;
         }
         try {
-            if (TargetHUD.a(this.this$0).player == null || TargetHUD.b(this.this$0).player.method_6052() == null || !(TargetHUD.c(this.this$0).player.method_6052() instanceof PlayerEntity)) {
+            if (MC.player == null || MC.player.getAttacking() == null || !(MC.player.getAttacking() instanceof PlayerEntity)) {
                 return false;
             }
             final boolean contains = string.contains(Hand.MAIN_HAND.toString());
@@ -35,12 +37,12 @@ public class TargetHUDHandler {
                 return true;
             }
         } catch (final Exception ex2) {
-            return TargetHUD.f(this.this$0).player != null && TargetHUD.g(this.this$0).player.method_6052() != null && TargetHUD.h(this.this$0).player.method_6052() instanceof PlayerEntity;
+            return MC.player != null && MC.player.getAttacking() != null && MC.player.getAttacking() instanceof PlayerEntity;
         }
         try {
-            return TargetHUD.d(this.this$0).player.field_6252 && TargetHUD.e(this.this$0).player.method_6052() != null;
+            return MC.player.handSwinging && MC.player.getAttacking() != null;
         } catch (final Exception ex3) {
         }
-        return TargetHUD.f(this.this$0).player != null && TargetHUD.g(this.this$0).player.method_6052() != null && TargetHUD.h(this.this$0).player.method_6052() instanceof PlayerEntity;
+        return MC.player != null && MC.player.getAttacking() != null && MC.player.getAttacking() instanceof PlayerEntity;
     }
 }

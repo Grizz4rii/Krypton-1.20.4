@@ -6,13 +6,11 @@ package skid.krypton.module.modules;
 
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.HandledScreenMixin;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -57,7 +55,7 @@ public final class HoverTotem extends Module {
             return;
         }
         if (this.f.c()) {
-            this.b.player.method_31548().selectedSlot = this.e.f() - 1;
+            this.b.player.getInventory().selectedSlot = this.e.f() - 1;
         }
         if (focusedSlot.getStack().getItem() != Items.TOTEM_OF_UNDYING) {
             return;
@@ -67,15 +65,15 @@ public final class HoverTotem extends Module {
             return;
         }
         final int index = focusedSlot.getIndex();
-        final int field_7763 = ((PlayerScreenHandler) ((InventoryScreen) currentScreen).method_17577()).field_7763;
-        if (!this.b.player.method_6079().isOf(Items.TOTEM_OF_UNDYING)) {
-            this.a(field_7763, index);
+        final int syncId = ((InventoryScreen) currentScreen).getScreenHandler().syncId;
+        if (!this.b.player.getOffHandStack().isOf(Items.TOTEM_OF_UNDYING)) {
+            this.a(syncId, index);
             return;
         }
         if (this.d.c()) {
             final int n = this.e.f() - 1;
-            if (!this.b.player.method_31548().method_5438(n).isOf(Items.TOTEM_OF_UNDYING)) {
-                this.a(field_7763, index, n);
+            if (!this.b.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
+                this.a(syncId, index, n);
             }
         }
     }

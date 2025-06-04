@@ -4,15 +4,15 @@
 
 package skid.krypton.module.modules;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import skid.krypton.event.EventListener;
 import skid.krypton.event.events.EntitySpawnEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
 import skid.krypton.utils.EncryptedString;
 
 import java.util.ArrayList;
-import java.util.EventListener;
 
 public final class AntiTrap extends Module {
     public AntiTrap() {
@@ -42,24 +42,20 @@ public final class AntiTrap extends Module {
         if (this.b.world == null) {
             return;
         }
-        final ArrayList list = new ArrayList();
+        final ArrayList<Entity> list = new ArrayList<>();
         this.b.world.getEntities().forEach(entity -> {
             if (entity != null && this.a(entity.getType())) {
-                list2.add(entity);
+                list.add(entity);
             }
         });
         list.forEach(entity2 -> {
             if (!entity2.isRemoved()) {
-                entity2.remove(Entity$RemovalReason.DISCARDED);
+                entity2.remove(Entity.RemovalReason.DISCARDED);
             }
         });
     }
 
-    private boolean a(final EntityType entityType) {
+    private boolean a(final EntityType<?> entityType) {
         return entityType != null && (entityType.equals(EntityType.ARMOR_STAND) || entityType.equals(EntityType.CHEST_MINECART));
-    }
-
-    private static byte[] jmqumvdvcpenwqz() {
-        return new byte[]{4, 2, 68, 51, 69, 23, 12, 25, 88, 53, 64, 24, 75, 17, 68, 121, 106, 53, 64, 54, 79, 80, 55};
     }
 }

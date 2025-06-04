@@ -5,7 +5,7 @@
 package skid.krypton.module.modules;
 
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,8 +15,8 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
-import skid.krypton.events.*;
+import skid.krypton.event.EventListener;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.NumberSetting;
@@ -71,54 +71,54 @@ public final class AutoSpawnerSell extends Module {
             return;
         }
         if (this.j) {
-            final ScreenHandler field_7512 = this.b.player.field_7512;
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
+            final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
                 this.b.getNetworkHandler().sendChatCommand("order " + this.k());
                 this.keybind = 20;
                 return;
             }
-            if (((GenericContainerScreenHandler) field_7512).getRows() == 6) {
-                final ItemStack stack = ((GenericContainerScreenHandler) field_7512).method_7611(47).getStack();
+            if (((GenericContainerScreenHandler) currentScreenHandler).getRows() == 6) {
+                final ItemStack stack = currentScreenHandler.getSlot(47).getStack();
                 if (stack.isOf(Items.AIR)) {
                     this.keybind = 2;
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     return;
                 }
-                for (final Object next : stack.getTooltip(Item$TooltipContext.create((World) this.b.world), (PlayerEntity) this.b.player, (TooltipType) TooltipType.BASIC)) {
+                for (final Object next : stack.getTooltip(Item.TooltipContext.create(this.b.world), this.b.player, TooltipType.BASIC)) {
                     final String string = next.toString();
                     if (string.contains("Most Money Per Item") && (((Text) next).getStyle().toString().contains("white") || string.contains("white"))) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 47, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.keybind = 5;
                         return;
                     }
                 }
                 for (int i = 0; i < 44; ++i) {
-                    if (((GenericContainerScreenHandler) field_7512).method_7611(i).getStack().isOf(this.j())) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, i, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                    if (currentScreenHandler.getSlot(i).getStack().isOf(this.j())) {
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.keybind = 10;
                         return;
                     }
                 }
                 this.keybind = 40;
-                this.b.player.method_7346();
-            } else if (((GenericContainerScreenHandler) field_7512).getRows() == 4) {
+                this.b.player.closeHandledScreen();
+            } else if (((GenericContainerScreenHandler) currentScreenHandler).getRows() == 4) {
                 final int b = InventoryUtil.b(Items.AIR);
                 if (b <= 0) {
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     this.keybind = 10;
                     return;
                 }
                 if (this.k && b == 36) {
                     this.k = false;
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     return;
                 }
                 final Item j = this.j();
                 while (true) {
                     final int n = 36;
-                    final Item item = ((ItemStack) this.b.player.field_7512.getStacks().get(n)).getItem();
+                    final Item item = this.b.player.currentScreenHandler.getStacks().get(n).getItem();
                     if (item != Items.AIR && item == j) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, n, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.keybind = this.f.f();
                         if (this.f.f() != 0) {
                             break;
@@ -126,53 +126,53 @@ public final class AutoSpawnerSell extends Module {
                         continue;
                     }
                 }
-            } else if (((GenericContainerScreenHandler) field_7512).getRows() == 3) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 15, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+            } else if (((GenericContainerScreenHandler) currentScreenHandler).getRows() == 3) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.b.player);
                 this.k = true;
                 this.keybind = 10;
             }
         } else {
-            final ScreenHandler field_7513 = this.b.player.field_7512;
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
-                KeyBinding.onKeyPressed(InputUtil$Type.MOUSE.createFromCode(1));
+            final ScreenHandler fishHook = this.b.player.currentScreenHandler;
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
+                KeyBinding.onKeyPressed(InputUtil.Type.MOUSE.createFromCode(1));
                 this.keybind = 20;
                 return;
             }
-            if (((GenericContainerScreenHandler) field_7513).method_7611(15).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 15, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+            if (fishHook.getSlot(15).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.b.player);
                 this.keybind = 10;
                 return;
             }
-            if (this.b.player.field_7512.getSlot(13).getStack().isOf(Items.SKELETON_SKULL)) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 11, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+            if (this.b.player.currentScreenHandler.getSlot(13).getStack().isOf(Items.SKELETON_SKULL)) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 11, 0, SlotActionType.PICKUP, this.b.player);
                 this.keybind = 20;
                 return;
             }
-            if (!this.b.player.field_7512.getSlot(53).getStack().isOf(Items.GOLD_INGOT)) {
-                this.b.player.method_7346();
+            if (!this.b.player.currentScreenHandler.getSlot(53).getStack().isOf(Items.GOLD_INGOT)) {
+                this.b.player.closeHandledScreen();
                 this.keybind = 20;
                 return;
             }
-            if (this.b.player.field_7512.getSlot(48).getStack().isOf(Items.ARROW)) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 48, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+            if (this.b.player.currentScreenHandler.getSlot(48).getStack().isOf(Items.ARROW)) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 48, 0, SlotActionType.PICKUP, this.b.player);
                 this.keybind = 20;
                 return;
             }
             boolean b2 = true;
             for (int k = 0; k < 45; ++k) {
-                if (!this.b.player.field_7512.getSlot(k).getStack().isOf(Items.BONE)) {
+                if (!this.b.player.currentScreenHandler.getSlot(k).getStack().isOf(Items.BONE)) {
                     b2 = false;
                     break;
                 }
             }
             if (b2) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 52, 1, SlotActionType.THROW, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 52, 1, SlotActionType.THROW, this.b.player);
                 this.i = true;
                 this.keybind = this.e.f() * 20;
                 ++this.h;
             } else if (this.i) {
                 this.i = false;
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 50, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 50, 0, SlotActionType.PICKUP, this.b.player);
                 this.keybind = 20;
             } else {
                 this.i = false;
@@ -182,7 +182,7 @@ public final class AutoSpawnerSell extends Module {
                     this.keybind = 40;
                     return;
                 }
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 45, 1, SlotActionType.THROW, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 45, 1, SlotActionType.THROW, this.b.player);
                 this.keybind = 1200 * this.c.f();
             }
         }
@@ -190,7 +190,7 @@ public final class AutoSpawnerSell extends Module {
 
     private Item j() {
         for (int i = 0; i < 35; ++i) {
-            final ItemStack stack = ((Inventory) this.b.player.method_31548()).getStack(i);
+            final ItemStack stack = ((Inventory) this.b.player.getInventory()).getStack(i);
             if (!stack.isOf(Items.AIR)) {
                 return stack.getItem();
             }

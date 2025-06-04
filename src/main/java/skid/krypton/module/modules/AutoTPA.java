@@ -7,7 +7,7 @@ package skid.krypton.module.modules;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import skid.krypton.enums.Enum5;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.EnumSetting;

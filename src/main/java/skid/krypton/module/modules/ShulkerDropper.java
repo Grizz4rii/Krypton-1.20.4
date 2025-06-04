@@ -4,9 +4,7 @@
 
 package skid.krypton.module.modules;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
@@ -14,7 +12,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
@@ -51,29 +49,29 @@ public final class ShulkerDropper extends Module {
             --this.d;
             return;
         }
-        final ScreenHandler field_7512 = this.b.player.field_7512;
-        if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
+        final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
+        if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
             this.b.getNetworkHandler().sendChatCommand("shop");
             this.d = 20;
             return;
         }
-        if (((GenericContainerScreenHandler) field_7512).getRows() != 3) {
+        if (((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
             return;
         }
-        if (((GenericContainerScreenHandler) field_7512).method_7611(11).getStack().isOf(Items.END_STONE) && ((GenericContainerScreenHandler) field_7512).method_7611(11).getStack().getCount() == 1) {
-            this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 11, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+        if (currentScreenHandler.getSlot(11).getStack().isOf(Items.END_STONE) && currentScreenHandler.getSlot(11).getStack().getCount() == 1) {
+            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 11, 0, SlotActionType.PICKUP, this.b.player);
             this.d = 20;
             return;
         }
-        if (((GenericContainerScreenHandler) field_7512).method_7611(17).getStack().isOf(Items.SHULKER_BOX)) {
-            this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 17, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+        if (currentScreenHandler.getSlot(17).getStack().isOf(Items.SHULKER_BOX)) {
+            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.b.player);
             this.d = 20;
             return;
         }
-        if (((GenericContainerScreenHandler) field_7512).method_7611(13).getStack().isOf(Items.SHULKER_BOX)) {
-            this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 23, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+        if (currentScreenHandler.getSlot(13).getStack().isOf(Items.SHULKER_BOX)) {
+            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
             this.d = this.c.f();
-            this.b.player.networkHandler.method_52787((Packet) new PlayerActionC2SPacket(PlayerActionC2SPacket$Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+            this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
         }
     }
 }

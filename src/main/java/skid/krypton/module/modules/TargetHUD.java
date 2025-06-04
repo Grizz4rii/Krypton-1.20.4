@@ -8,7 +8,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.PlayerSkinDrawer;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -72,7 +71,7 @@ public final class TargetHUD extends Module {
         final Color h = this.h;
         final Color i = this.i;
         RenderUtils.c();
-        final boolean b = this.b.player.method_6052() != null && this.b.player.method_6052() instanceof PlayerEntity && ((PlayerEntity) this.b.player.method_6052()).method_5805();
+        final boolean b = this.b.player.getAttacking() != null && this.b.player.getAttacking() instanceof PlayerEntity && this.b.player.getAttacking().isAlive();
         final boolean b2 = !this.f.c() || System.currentTimeMillis() - this.j <= 10000L;
         float n;
         if (b && b2) {
@@ -82,8 +81,8 @@ public final class TargetHUD extends Module {
         }
         TargetHUD.c = RenderUtils.a(TargetHUD.c, n, g);
         if (TargetHUD.c < 0.99f && b) {
-            final LivingEntity method_6052 = this.b.player.method_6052();
-            final PlayerListEntry playerListEntry = this.b.getNetworkHandler().getPlayerListEntry(((PlayerEntity) method_6052).method_5667());
+            final LivingEntity getAttacking = this.b.player.getAttacking();
+            final PlayerListEntry playerListEntry = this.b.getNetworkHandler().getPlayerListEntry(getAttacking.getUuid());
             final MatrixStack matrices = a.getMatrices();
             matrices.push();
             final float n2 = 1.0f - TargetHUD.c;
@@ -91,8 +90,8 @@ public final class TargetHUD extends Module {
             matrices.translate((float) f, (float) f2, 0.0f);
             matrices.scale(n3, n3, 1.0f);
             matrices.translate((float) (-f), (float) (-f2), 0.0f);
-            this.l = RenderUtils.a(this.l, ((PlayerEntity) method_6052).method_6032() + ((PlayerEntity) method_6052).method_6067(), g * 0.5f);
-            this.a(a, f, f2, (PlayerEntity) method_6052, playerListEntry, n2, h, i);
+            this.l = RenderUtils.a(this.l, getAttacking.getHealth() + getAttacking.getAbsorptionAmount(), g * 0.5f);
+            this.a(a, f, f2, (PlayerEntity) getAttacking, playerListEntry, n2, h, i);
             matrices.pop();
         }
         RenderUtils.d();
@@ -108,13 +107,13 @@ public final class TargetHUD extends Module {
         if (playerListEntry != null) {
             RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n3)), n + 15, n2 + 15, n + 85, n2 + 85, 5.0, 5.0, 5.0, 5.0, 10.0);
             PlayerSkinDrawer.draw(drawContext, playerListEntry.getSkinTextures().texture(), n + 25, n2 + 25, 50);
-            TextRenderer.a(playerEntity.method_5477().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
-            TextRenderer.a(MathUtil.a(playerEntity.method_5739((Entity) this.b.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
+            TextRenderer.a(playerEntity.getName().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
+            TextRenderer.a(MathUtil.a(playerEntity.distanceTo(this.b.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
             RenderUtils.a(matrices, new Color(60, 60, 60, (int) (200.0f * n3)), n + 15, n2 + 95, n + 300 - 15, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
-            final float b = this.l / playerEntity.method_6063();
+            final float b = this.l / playerEntity.getMaxHealth();
             final float n4 = 270.0f * Math.min(1.0f, b);
             RenderUtils.a(matrices, this.a(b * (float) (0.800000011920929 + 0.20000000298023224 * Math.sin(System.currentTimeMillis() / 300.0)), n3), n + 15, n2 + 95, n + 15 + (int) n4, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
-            final String s = Math.round(this.l) + "/" + Math.round(playerEntity.method_6063()) + " HP";
+            final String s = Math.round(this.l) + "/" + Math.round(playerEntity.getMaxHealth()) + " HP";
             TextRenderer.a(s, drawContext, n + 15 + (int) n4 / 2 - TextRenderer.a(s) / 2, n2 + 95, Color.WHITE.getRGB());
             final int n5 = n2 + 120;
             this.a(drawContext, n + 15, n5, 80, 45, "PING", playerListEntry.getLatency() + "ms", this.a(playerListEntry.getLatency(), n3), color3, n3);
@@ -131,8 +130,8 @@ public final class TargetHUD extends Module {
                 color4 = new Color(255, 100, 100, (int) (255.0f * n3));
             }
             this.a(drawContext, n + 100 + 5, n5, 80, 45, "TYPE", s2, color4, color3, n3);
-            if (playerEntity.field_6235 > 0) {
-                this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "" + playerEntity.field_6235, this.b(playerEntity.field_6235, n3), color3, n3);
+            if (playerEntity.hurtTime > 0) {
+                this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "" + playerEntity.hurtTime, this.b(playerEntity.hurtTime, n3), color3, n3);
             } else {
                 this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "No", new Color(150, 150, 150, (int) (255.0f * n3)), color3, n3);
             }

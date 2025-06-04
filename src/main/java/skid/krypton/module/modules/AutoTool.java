@@ -12,7 +12,7 @@ import net.minecraft.item.*;
 import net.minecraft.registry.tag.BlockTags;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.AttackBlockEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BooleanSetting;
@@ -60,12 +60,12 @@ public final class AutoTool extends Module {
 
     @EventListener
     public void a(final AttackBlockEvent attackBlockEvent) {
-        final BlockState method_8320 = this.b.world.method_8320(attackBlockEvent.a);
-        final ItemStack method_8321 = this.b.player.method_6047();
+        final BlockState getBlockState = this.b.world.getBlockState(attackBlockEvent.a);
+        final ItemStack getBlockEntity = this.b.player.getMainHandStack();
         double n = -1.0;
         this.h = -1;
         for (int i = 0; i < 9; ++i) {
-            final double a = a(this.b.player.method_31548().method_5438(i), method_8320, itemStack -> !this.b(itemStack));
+            final double a = a(this.b.player.getInventory().getStack(i), getBlockState, itemStack -> !this.b(itemStack));
             if (a >= 0.0) {
                 if (a > n) {
                     this.h = i;
@@ -73,21 +73,21 @@ public final class AutoTool extends Module {
                 }
             }
         }
-        if ((this.h != -1 && n > a(method_8321, method_8320, itemStack2 -> !this.b(itemStack2))) || this.b(method_8321) || !a(method_8321)) {
+        if ((this.h != -1 && n > a(getBlockEntity, getBlockState, itemStack2 -> !this.b(itemStack2))) || this.b(getBlockEntity) || !a(getBlockEntity)) {
             InventoryUtil.a(this.h);
         }
-        final ItemStack method_8322 = this.b.player.method_6047();
+        final ItemStack method_8322 = this.b.player.getMainHandStack();
         if (this.b(method_8322) && a(method_8322)) {
             this.b.options.attackKey.setPressed(false);
             attackBlockEvent.cancel();
         }
     }
 
-    public static double a(final ItemStack itemStack, final BlockState blockState, final Predicate predicate) {
+    public static double a(final ItemStack itemStack, final BlockState blockState, final Predicate<ItemStack> predicate) {
         if (!predicate.test(itemStack) || !a(itemStack)) {
             return -1.0;
         }
-        if (!itemStack.isSuitableFor(blockState) && (!(itemStack.getItem() instanceof SwordItem) || (!(blockState.method_26204() instanceof BambooBlock) && !(blockState.method_26204() instanceof BambooShootBlock))) && (!(itemStack.getItem() instanceof ShearsItem) || !(blockState.method_26204() instanceof LeavesBlock)) && !blockState.method_26164(BlockTags.WOOL)) {
+        if (!itemStack.isSuitableFor(blockState) && (!(itemStack.getItem() instanceof SwordItem) || (!(blockState.getBlock() instanceof BambooBlock) && !(blockState.getBlock() instanceof BambooShootBlock))) && (!(itemStack.getItem() instanceof ShearsItem) || !(blockState.getBlock() instanceof LeavesBlock)) && !blockState.isIn(BlockTags.WOOL)) {
             return -1.0;
         }
         return 0.0 + itemStack.getMiningSpeedMultiplier(blockState) * 1000.0f;

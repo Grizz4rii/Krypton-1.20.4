@@ -4,15 +4,13 @@
 
 package skid.krypton.module.modules;
 
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
-import skid.krypton.events.*;
+import skid.krypton.event.EventListener;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BooleanSetting;
@@ -80,24 +78,24 @@ public final class AutoInventoryTotem extends Module {
         if (this.c > 0) {
             --this.c;
         }
-        final PlayerInventory method_31548 = this.b.player.method_31548();
+        final PlayerInventory getInventory = this.b.player.getInventory();
         if (this.h.c()) {
-            method_31548.selectedSlot = this.g.f() - 1;
+            getInventory.selectedSlot = this.g.f() - 1;
         }
         if (this.c <= 0) {
-            if (method_31548.offHand.get(0).getItem() != Items.TOTEM_OF_UNDYING) {
+            if (getInventory.offHand.get(0).getItem() != Items.TOTEM_OF_UNDYING) {
                 final int l = this.l();
                 if (l != -1) {
-                    this.b.interactionManager.clickSlot(((PlayerScreenHandler) ((InventoryScreen) this.b.currentScreen).method_17577()).field_7763, l, 40, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+                    this.b.interactionManager.clickSlot(((InventoryScreen) this.b.currentScreen).getScreenHandler().syncId, l, 40, SlotActionType.SWAP, this.b.player);
                     return;
                 }
             }
             if (this.f.c()) {
-                final ItemStack method_31549 = this.b.player.method_6047();
-                if (method_31549.isEmpty() || (this.i.c() && method_31549.getItem() != Items.TOTEM_OF_UNDYING)) {
+                final ItemStack getAbilities = this.b.player.getMainHandStack();
+                if (getAbilities.isEmpty() || (this.i.c() && getAbilities.getItem() != Items.TOTEM_OF_UNDYING)) {
                     final int i = this.l();
                     if (i != -1) {
-                        this.b.interactionManager.clickSlot(((PlayerScreenHandler) ((InventoryScreen) this.b.currentScreen).method_17577()).field_7763, i, method_31548.selectedSlot, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+                        this.b.interactionManager.clickSlot(((InventoryScreen) this.b.currentScreen).getScreenHandler().syncId, i, getInventory.selectedSlot, SlotActionType.SWAP, this.b.player);
                         return;
                     }
                 }
@@ -115,24 +113,24 @@ public final class AutoInventoryTotem extends Module {
 
     public boolean j() {
         if (this.f.c()) {
-            return this.b.player.method_31548().method_5438(this.g.f() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.b.player.method_6079().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
+            return this.b.player.getInventory().getStack(this.g.f() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.b.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
         }
-        return this.b.player.method_6079().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
+        return this.b.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.b.currentScreen instanceof CustomInventoryScreen;
     }
 
     public boolean k() {
         if (this.f.c()) {
-            return (this.b.player.method_6079().getItem() != Items.TOTEM_OF_UNDYING || this.b.player.method_31548().method_5438(this.g.f() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item -> item == Items.TOTEM_OF_UNDYING) != 0;
+            return (this.b.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING || this.b.player.getInventory().getStack(this.g.f() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item -> item == Items.TOTEM_OF_UNDYING) != 0;
         }
-        return this.b.player.method_6079().getItem() != Items.TOTEM_OF_UNDYING && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
+        return this.b.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING && !(this.b.currentScreen instanceof CustomInventoryScreen) && this.a(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
     }
 
     private int l() {
-        final PlayerInventory method_31548 = this.b.player.method_31548();
+        final PlayerInventory getInventory = this.b.player.getInventory();
         new Random();
         final ArrayList list = new ArrayList();
         while (true) {
-            if (method_31548.main.get(9).getItem() == Items.TOTEM_OF_UNDYING) {
+            if (getInventory.main.get(9).getItem() == Items.TOTEM_OF_UNDYING) {
                 list.add(9);
             }
         }
@@ -141,9 +139,9 @@ public final class AutoInventoryTotem extends Module {
     private int a(final Predicate predicate) {
         int n = 0;
         while (true) {
-            final ItemStack method_5438 = this.b.player.method_31548().method_5438(9);
-            if (predicate.test(method_5438.getItem())) {
-                n += method_5438.getCount();
+            final ItemStack getStack = this.b.player.getInventory().getStack(9);
+            if (predicate.test(getStack.getItem())) {
+                n += getStack.getCount();
             }
         }
     }

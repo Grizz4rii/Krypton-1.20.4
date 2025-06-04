@@ -8,13 +8,8 @@ import net.minecraft.client.option.Perspective;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3d;
-import skid.krypton.event.events.ChunkMarkClosedEvent;
 import skid.krypton.event.EventListener;
-import skid.krypton.event.events.KeyEvent;
-import skid.krypton.event.events.MouseButtenEvent;
-import skid.krypton.event.events.MouseScrolledEvent;
-import skid.krypton.event.events.SetScreenEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.*;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
@@ -56,8 +51,8 @@ public final class Freecam extends Module {
         }
         this.b.options.getFovEffectScale().setValue(0.0);
         this.b.options.getBobView().setValue(false);
-        this.e = this.b.player.method_36454();
-        this.f = this.b.player.method_36455();
+        this.e = this.b.player.getYaw();
+        this.f = this.b.player.getPitch();
         this.j = this.b.options.getPerspective();
         this.k = this.i.a();
         KryptonUtil.a(this.c, this.b.gameRenderer.getCamera().getPos());

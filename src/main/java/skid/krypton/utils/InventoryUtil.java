@@ -6,6 +6,7 @@ package skid.krypton.utils;
 
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import skid.krypton.Krypton;
@@ -22,7 +23,7 @@ public final class InventoryUtil {
         ((ClientPlayerInteractionManagerAccessor) Krypton.e.interactionManager).syncSlot();
     }
 
-    public static boolean a(final Predicate predicate) {
+    public static boolean a(final Predicate<ItemStack> predicate) {
         final PlayerInventory getInventory = Krypton.e.player.getInventory();
         for (int i = 0; i < 9; ++i) {
             if (predicate.test(getInventory.getStack(i))) {

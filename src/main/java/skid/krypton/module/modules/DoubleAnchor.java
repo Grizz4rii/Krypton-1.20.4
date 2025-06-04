@@ -10,7 +10,7 @@ import net.minecraft.item.Items;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -107,11 +107,11 @@ public final class DoubleAnchor extends Module {
         boolean b = false;
         boolean b2 = false;
         for (int i = 0; i < 9; ++i) {
-            final ItemStack method_5438 = this.b.player.method_31548().method_5438(i);
-            if (method_5438.getItem().equals(Items.RESPAWN_ANCHOR)) {
+            final ItemStack getStack = this.b.player.getInventory().getStack(i);
+            if (getStack.getItem().equals(Items.RESPAWN_ANCHOR)) {
                 b = true;
             }
-            if (method_5438.getItem().equals(Items.GLOWSTONE)) {
+            if (getStack.getItem().equals(Items.GLOWSTONE)) {
                 b2 = true;
             }
         }

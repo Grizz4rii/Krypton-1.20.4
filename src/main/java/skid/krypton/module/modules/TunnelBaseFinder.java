@@ -4,17 +4,14 @@
 
 package skid.krypton.module.modules;
 
-import skid.krypton.auth.bn;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.InfestedBlock;
 import net.minecraft.block.entity.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.enchantment.Enchantments;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.s2c.common.DisconnectS2CPacket;
 import net.minecraft.screen.GenericContainerScreenHandler;
@@ -29,11 +26,13 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
+import skid.krypton.Krypton;
 import skid.krypton.auth.EmbedSender;
+import skid.krypton.auth.bn;
 import skid.krypton.enums.Enum4;
-import skid.krypton.events.*;
+import skid.krypton.event.EventListener;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -121,11 +120,11 @@ public final class TunnelBaseFinder extends Module {
             return;
         }
         final int n = (this.a(this.n) + 90 * this.q) % 360;
-        if (this.b.player.method_36454() != n) {
-            this.b.player.method_36456((float) n);
+        if (this.b.player.getYaw() != n) {
+            this.b.player.setYaw((float) n);
         }
-        if (this.b.player.method_36455() != 2.0f) {
-            this.b.player.method_36457(2.0f);
+        if (this.b.player.getPitch() != 2.0f) {
+            this.b.player.setPitch(2.0f);
         }
         this.b(this.k());
         if (this.o > 0) {
@@ -136,35 +135,35 @@ public final class TunnelBaseFinder extends Module {
         this.l();
         if (this.e.c()) {
             final int n2 = this.f.f() - 1;
-            if (!this.b.player.method_31548().method_5438(n2).isOf(Items.TOTEM_OF_UNDYING)) {
+            if (!this.b.player.getInventory().getStack(n2).isOf(Items.TOTEM_OF_UNDYING)) {
                 if (this.v < 30 && !this.t) {
                     ++this.v;
                     return;
                 }
                 this.v = 0;
                 this.t = true;
-                if (this.b.player.method_31548().selectedSlot != n2) {
+                if (this.b.player.getInventory().selectedSlot != n2) {
                     InventoryUtil.a(n2);
                 }
-                final ScreenHandler field_7512 = this.b.player.field_7512;
-                if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) field_7512).getRows() != 3) {
+                final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
+                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
                     this.b.getNetworkHandler().sendChatCommand("shop");
                     this.o = 10;
                     return;
                 }
-                if (((GenericContainerScreenHandler) field_7512).method_7611(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 13, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                if (currentScreenHandler.getSlot(11).getStack().isOf(Items.END_STONE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
-                if (((GenericContainerScreenHandler) field_7512).method_7611(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 13, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                if (currentScreenHandler.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.method_52787((Packet) new PlayerActionC2SPacket(PlayerActionC2SPacket$Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
-                if (((GenericContainerScreenHandler) field_7512).method_7611(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 23, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                if (currentScreenHandler.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
@@ -173,7 +172,7 @@ public final class TunnelBaseFinder extends Module {
                 return;
             } else if (this.t) {
                 if (this.b.currentScreen != null) {
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     this.o = 20;
                 }
                 this.t = false;
@@ -182,35 +181,35 @@ public final class TunnelBaseFinder extends Module {
         }
         if (this.s) {
             final int n3 = this.h.f() - 1;
-            final ItemStack method_5438 = this.b.player.method_31548().method_5438(n3);
-            if (this.b.player.method_31548().selectedSlot != n3) {
+            final ItemStack getStack = this.b.player.getInventory().getStack(n3);
+            if (this.b.player.getInventory().selectedSlot != n3) {
                 InventoryUtil.a(n3);
             }
-            if (!method_5438.isOf(Items.EXPERIENCE_BOTTLE)) {
-                final ScreenHandler field_7513 = this.b.player.field_7512;
-                if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) field_7513).getRows() != 3) {
+            if (!getStack.isOf(Items.EXPERIENCE_BOTTLE)) {
+                final ScreenHandler fishHook = this.b.player.currentScreenHandler;
+                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) fishHook).getRows() != 3) {
                     this.b.getNetworkHandler().sendChatCommand("shop");
                     this.o = 10;
                     return;
                 }
-                if (((GenericContainerScreenHandler) field_7513).method_7611(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 13, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                if (fishHook.getSlot(11).getStack().isOf(Items.END_STONE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
-                if (((GenericContainerScreenHandler) field_7513).method_7611(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 16, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                if (fishHook.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 16, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
-                if (((GenericContainerScreenHandler) field_7513).method_7611(17).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 17, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                if (fishHook.getSlot(17).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.method_52787((Packet) new PlayerActionC2SPacket(PlayerActionC2SPacket$Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
-                if (((GenericContainerScreenHandler) field_7513).method_7611(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 23, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                if (fishHook.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
                     return;
                 }
@@ -218,36 +217,36 @@ public final class TunnelBaseFinder extends Module {
                 this.o = 10;
             } else {
                 if (this.b.currentScreen != null) {
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     this.o = 20;
                     return;
                 }
-                if (!EnchantmentUtil.a(this.b.player.method_6079(), Enchantments.MENDING)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 36 + this.u, 40, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+                if (!EnchantmentUtil.a(this.b.player.getOffHandStack(), Enchantments.MENDING)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.b.player);
                     this.o = 20;
                     return;
                 }
-                if (this.b.player.method_6079().getDamage() > 0) {
+                if (this.b.player.getOffHandStack().getDamage() > 0) {
                     final ActionResult interactItem = this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
                     if (interactItem.isAccepted() && interactItem.shouldSwingHand()) {
-                        this.b.player.method_6104(Hand.MAIN_HAND);
+                        this.b.player.swingHand(Hand.MAIN_HAND);
                     }
                     this.o = 1;
                     return;
                 }
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 36 + this.u, 40, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.b.player);
                 this.s = false;
             }
         } else {
             if (this.g.c()) {
-                final ItemStack method_5439 = this.b.player.method_6047();
-                if (EnchantmentUtil.a(method_5439, Enchantments.MENDING) && method_5439.getMaxDamage() - method_5439.getDamage() < 100) {
+                final ItemStack size = this.b.player.getMainHandStack();
+                if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                     this.s = true;
-                    this.u = this.b.player.method_31548().selectedSlot;
+                    this.u = this.b.player.getInventory().selectedSlot;
                 }
             }
             if (this.k.c()) {
-                final boolean equals = this.b.player.method_6079().getItem().equals(Items.TOTEM_OF_UNDYING);
+                final boolean equals = this.b.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
                 final Module moduleByClass2 = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoTotem.class);
                 if (equals) {
                     this.w = 0.0;
@@ -257,7 +256,7 @@ public final class TunnelBaseFinder extends Module {
                     ++this.w;
                 }
                 if (this.w > this.l.a()) {
-                    this.a("Your totem exploded", (int) this.b.player.method_23317(), (int) this.b.player.method_23318(), (int) this.b.player.method_23321());
+                    this.a("Your totem exploded", (int) this.b.player.getX(), (int) this.b.player.getY(), (int) this.b.player.getZ());
                     return;
                 }
             }
@@ -266,32 +265,32 @@ public final class TunnelBaseFinder extends Module {
             if (this.b.crosshairTarget instanceof BlockHitResult) {
                 final BlockPos blockPos = ((BlockHitResult) crosshairTarget).getBlockPos();
                 if (!BlockUtil.a(blockPos, Blocks.AIR)) {
-                    a = this.a(blockPos, this.b.player.method_5735());
+                    a = this.a(blockPos, this.b.player.getHorizontalFacing());
                 }
             }
             if (a) {
                 this.c(true);
             }
-            final boolean a2 = this.a(this.b.player.method_5735(), 3);
+            final boolean a2 = this.a(this.b.player.getHorizontalFacing(), 3);
             boolean b = false;
             final HitResult crosshairTarget2 = this.b.crosshairTarget;
             if (this.b.crosshairTarget instanceof BlockHitResult) {
-                b = (this.b.player.method_5836(1.0f).distanceTo(Vec3d.ofCenter(((BlockHitResult) crosshairTarget2).getBlockPos())) > 3.0);
+                b = (this.b.player.getCameraPosVec(1.0f).distanceTo(Vec3d.ofCenter(((BlockHitResult) crosshairTarget2).getBlockPos())) > 3.0);
             }
             if (!a && (!b || !a2)) {
                 ++this.q;
-                this.r = this.b.player.method_19538();
+                this.r = this.b.player.getPos();
                 this.o = 5;
                 return;
             }
             this.b.options.forwardKey.setPressed(a2 && b);
-            if (this.q > 0 && this.r != null && this.b.player.method_19538().distanceTo(this.r) > 1.0) {
-                this.r = this.b.player.method_19538();
-                final Direction rotateYCounterclockwise = this.b.player.method_5735().rotateYCounterclockwise();
-                BlockPos blockPos2 = this.b.player.method_24515().up().offset(rotateYCounterclockwise);
+            if (this.q > 0 && this.r != null && this.b.player.getPos().distanceTo(this.r) > 1.0) {
+                this.r = this.b.player.getPos();
+                final Direction rotateYCounterclockwise = this.b.player.getHorizontalFacing().rotateYCounterclockwise();
+                BlockPos blockPos2 = this.b.player.getBlockPos().up().offset(rotateYCounterclockwise);
                 for (int i = 0; i < 5; ++i) {
                     blockPos2 = blockPos2.offset(rotateYCounterclockwise);
-                    if (!this.b.world.method_8320(blockPos2).method_26204().equals(Blocks.AIR)) {
+                    if (!this.b.world.getBlockState(blockPos2).getBlock().equals(Blocks.AIR)) {
                         if (this.a(blockPos2, rotateYCounterclockwise) && this.a(blockPos2.offset(rotateYCounterclockwise), rotateYCounterclockwise)) {
                             --this.q;
                             this.o = 5;
@@ -299,7 +298,6 @@ public final class TunnelBaseFinder extends Module {
                         return;
                     }
                 }
-                throw new IllegalAccessException();
             }
         }
     }
@@ -317,19 +315,19 @@ public final class TunnelBaseFinder extends Module {
         if (enum4 == Enum4.d) {
             return 90;
         }
-        return Math.round(this.b.player.method_36454());
+        return Math.round(this.b.player.getYaw());
     }
 
     private boolean a(final Direction direction, final int n) {
-        final BlockPos down = this.b.player.method_24515().down();
-        final BlockPos method_24515 = this.b.player.method_24515();
+        final BlockPos down = this.b.player.getBlockPos().down();
+        final BlockPos getBlockPos = this.b.player.getBlockPos();
         for (int i = 0; i < n; ++i) {
             final BlockPos offset = down.offset(direction, i);
-            final BlockPos offset2 = method_24515.offset(direction, i);
-            if (this.b.world.method_8320(offset).method_26215() || !this.a(offset)) {
+            final BlockPos offset2 = getBlockPos.offset(direction, i);
+            if (this.b.world.getBlockState(offset).isAir() || !this.a(offset)) {
                 return false;
             }
-            if (!this.b.world.method_8320(offset2).method_26215()) {
+            if (!this.b.world.getBlockState(offset2).isAir()) {
                 return false;
             }
         }
@@ -343,7 +341,7 @@ public final class TunnelBaseFinder extends Module {
         final BlockPos offset2 = blockPos.offset(Direction.UP, 2);
         final BlockPos offset3 = blockPos.offset(Direction.DOWN, -2);
         final BlockPos offset4 = offset2.offset(rotateYClockwise, -1);
-        if (!this.a(offset4) || this.b.world.method_8320(offset4).method_26204() == Blocks.GRAVEL) {
+        if (!this.a(offset4) || this.b.world.getBlockState(offset4).getBlock() == Blocks.GRAVEL) {
             return false;
         }
         if (!this.a(offset3.offset(rotateYClockwise, -1))) {
@@ -363,7 +361,7 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private boolean a(final BlockPos blockPos) {
-        return this.a(this.b.world.method_8320(blockPos).method_26204());
+        return this.a(this.b.world.getBlockState(blockPos).getBlock());
     }
 
     private boolean a(final Block block) {
@@ -371,15 +369,15 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private boolean b(final BlockPos blockPos) {
-        return this.b.world.method_8320(blockPos).method_26204() instanceof InfestedBlock;
+        return this.b.world.getBlockState(blockPos).getBlock() instanceof InfestedBlock;
     }
 
     private void b(final Enum4 enum4) {
-        final double method_23317 = this.b.player.method_23317();
-        final double method_23318 = this.b.player.method_23321();
-        final double floor = Math.floor(method_23318);
-        final double n = Math.floor(method_23317) + 0.5 - method_23317;
-        final double n2 = floor + 0.5 - method_23318;
+        final double getX = this.b.player.getX();
+        final double getY = this.b.player.getZ();
+        final double floor = Math.floor(getY);
+        final double n = Math.floor(getX) + 0.5 - getX;
+        final double n2 = floor + 0.5 - getY;
         this.b.options.leftKey.setPressed(false);
         this.b.options.rightKey.setPressed(false);
         boolean b = false;
@@ -421,15 +419,15 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private void c(final boolean b) {
-        if (!this.b.player.method_6115()) {
-            if (b && this.b.crosshairTarget != null && this.b.crosshairTarget.getType() == HitResult$Type.BLOCK) {
+        if (!this.b.player.isUsingItem()) {
+            if (b && this.b.crosshairTarget != null && this.b.crosshairTarget.getType() == HitResult.Type.BLOCK) {
                 final BlockHitResult blockHitResult = (BlockHitResult) this.b.crosshairTarget;
                 final BlockPos blockPos = ((BlockHitResult) this.b.crosshairTarget).getBlockPos();
-                if (!this.b.world.method_8320(blockPos).method_26215()) {
+                if (!this.b.world.getBlockState(blockPos).isAir()) {
                     final Direction side = blockHitResult.getSide();
                     if (this.b.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
                         this.b.particleManager.addBlockBreakingParticles(blockPos, side);
-                        this.b.player.method_6104(Hand.MAIN_HAND);
+                        this.b.player.swingHand(Hand.MAIN_HAND);
                     }
                 }
             } else {
@@ -439,7 +437,7 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private Enum4 k() {
-        float n = this.b.player.method_36454() % 360.0f;
+        float n = this.b.player.getYaw() % 360.0f;
         if (n < 0.0f) {
             n += 360.0f;
         }
@@ -461,20 +459,20 @@ public final class TunnelBaseFinder extends Module {
         BlockPos blockPos = null;
         final Iterator iterator = BlockUtil.a().iterator();
         while (iterator.hasNext()) {
-            for (final Object next : ((WorldChunk) iterator.next()).method_12021()) {
-                final BlockEntity method_8321 = this.b.world.method_8321((BlockPos) next);
-                if (this.d.c() && method_8321 instanceof MobSpawnerBlockEntity) {
-                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) method_8321).getLogic()).getSpawnEntry((World) this.b.world, this.b.world.method_8409(), (BlockPos) next).getNbt().getString("id");
+            for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
+                final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
+                if (this.d.c() && getBlockEntity instanceof MobSpawnerBlockEntity) {
+                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.b.world, this.b.world.getRandom(), (BlockPos) next).getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
                         blockPos = (BlockPos) next;
                     }
                 }
-                if (!(method_8321 instanceof ChestBlockEntity) && !(method_8321 instanceof EnderChestBlockEntity)) {
-                    if (method_8321 instanceof ShulkerBoxBlockEntity) {
+                if (!(getBlockEntity instanceof ChestBlockEntity) && !(getBlockEntity instanceof EnderChestBlockEntity)) {
+                    if (getBlockEntity instanceof ShulkerBoxBlockEntity) {
                         throw new RuntimeException();
                     }
-                    if (!(method_8321 instanceof FurnaceBlockEntity) && !(method_8321 instanceof BarrelBlockEntity) && !(method_8321 instanceof EnchantingTableBlockEntity)) {
+                    if (!(getBlockEntity instanceof FurnaceBlockEntity) && !(getBlockEntity instanceof BarrelBlockEntity) && !(getBlockEntity instanceof EnchantingTableBlockEntity)) {
                         continue;
                     }
                 }
@@ -487,11 +485,11 @@ public final class TunnelBaseFinder extends Module {
             this.p = 0;
         }
         if (this.p > 10) {
-            this.a("YOU FOUND SPAWNER", blockPos.method_10263(), blockPos.method_10264(), blockPos.method_10260(), false);
+            this.a("YOU FOUND SPAWNER", blockPos.getX(), blockPos.getY(), blockPos.getZ(), false);
             this.p = 0;
         }
         if (n > this.c.f()) {
-            this.a("YOU FOUND BASE", (int) this.b.player.method_19538().x, (int) this.b.player.method_19538().y, (int) this.b.player.method_19538().z, true);
+            this.a("YOU FOUND BASE", (int) this.b.player.getPos().x, (int) this.b.player.getPos().y, (int) this.b.player.getPos().z, true);
         }
     }
 
@@ -508,7 +506,7 @@ public final class TunnelBaseFinder extends Module {
             embedSender.a(bn);
             try {
                 embedSender.a();
-            } catch (final Exception ex) {
+            } catch (final Throwable ex) {
             }
         }
         this.a(Text.of(s));
@@ -533,7 +531,7 @@ public final class TunnelBaseFinder extends Module {
             embedSender.a(bn);
             try {
                 embedSender.a();
-            } catch (final Exception ex) {
+            } catch (final Throwable ex) {
             }
         }
         this.toggle();
@@ -544,7 +542,7 @@ public final class TunnelBaseFinder extends Module {
         final MutableText literal = Text.literal("[TunnelBaseFinder] ");
         literal.append(text);
         this.toggle();
-        this.b.player.networkHandler.method_52781(new DisconnectS2CPacket(literal));
+        this.b.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
     }
 
     public boolean j() {

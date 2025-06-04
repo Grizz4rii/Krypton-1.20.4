@@ -4,12 +4,12 @@
 
 package skid.krypton.module.modules;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.SlotActionType;
+import skid.krypton.Krypton;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
@@ -50,7 +50,7 @@ public final class AutoTotem extends Module {
         if (moduleByClass2.isEnabled() && ((TunnelBaseFinder) moduleByClass2).j()) {
             return;
         }
-        if (this.b.player.method_31548().method_5438(40).getItem() == Items.TOTEM_OF_UNDYING) {
+        if (this.b.player.getInventory().getStack(40).getItem() == Items.TOTEM_OF_UNDYING) {
             this.e = this.c.f();
             return;
         }
@@ -62,7 +62,7 @@ public final class AutoTotem extends Module {
         if (a == -1) {
             return;
         }
-        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, b(a), 40, SlotActionType.SWAP, (PlayerEntity) this.b.player);
+        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, b(a), 40, SlotActionType.SWAP, this.b.player);
         this.e = this.c.f();
     }
 
@@ -71,7 +71,7 @@ public final class AutoTotem extends Module {
             return -1;
         }
         for (int i = 0; i < 36; ++i) {
-            if (this.b.player.method_31548().method_5438(i).isOf(item)) {
+            if (this.b.player.getInventory().getStack(i).isOf(item)) {
                 return i;
             }
         }

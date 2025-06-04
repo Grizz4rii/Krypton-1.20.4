@@ -7,7 +7,7 @@ package skid.krypton.module.modules;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.FoodComponent;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MinecraftClientAccessor;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -43,7 +43,7 @@ public final class AutoEat extends Module {
     public void a(final TickEvent tickEvent) {
         if (this.c) {
             if (this.j()) {
-                if (this.b.player.method_31548().method_5438(this.f).method_57824(DataComponentTypes.FOOD) != null) {
+                if (this.b.player.getInventory().getStack(this.f).get(DataComponentTypes.FOOD) != null) {
                     final int k = this.k();
                     if (k == -1) {
                         this.n();
@@ -64,8 +64,8 @@ public final class AutoEat extends Module {
     }
 
     public boolean j() {
-        final boolean b = this.b.player.method_6032() <= this.d.f();
-        final boolean b2 = this.b.player.method_7344().getFoodLevel() <= this.e.f();
+        final boolean b = this.b.player.getHealth() <= this.d.f();
+        final boolean b2 = this.b.player.getHungerManager().getFoodLevel() <= this.e.f();
         return this.k() != -1 && (b || b2);
     }
 
@@ -73,7 +73,7 @@ public final class AutoEat extends Module {
         int n = -1;
         int n2 = -1;
         for (int i = 0; i < 9; ++i) {
-            final Object value = this.b.player.method_31548().method_5438(i).getItem().getComponents().get(DataComponentTypes.FOOD);
+            final Object value = this.b.player.getInventory().getStack(i).getItem().getComponents().get(DataComponentTypes.FOOD);
             if (value != null) {
                 final int nutrition = ((FoodComponent) value).nutrition();
                 if (nutrition > n2) {
@@ -86,14 +86,14 @@ public final class AutoEat extends Module {
     }
 
     private void l() {
-        this.keybind = this.b.player.method_31548().selectedSlot;
+        this.keybind = this.b.player.getInventory().selectedSlot;
         this.m();
     }
 
     private void m() {
         this.b(this.f);
         this.c(true);
-        if (!this.b.player.method_6115()) {
+        if (!this.b.player.isUsingItem()) {
             ((MinecraftClientAccessor) this.b).invokeDoItemUse();
         }
         this.c = true;

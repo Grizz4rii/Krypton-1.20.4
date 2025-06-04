@@ -5,11 +5,10 @@
 package skid.krypton.module.modules;
 
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.PreItemUseEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.utils.EncryptedString;
@@ -46,15 +45,15 @@ public final class ElytraGlide extends Module {
         }
         if (this.c) {
             if (this.d) {
-                final int selectedSlot = this.b.player.method_31548().selectedSlot;
-                if (!this.b.player.method_6047().isOf(Items.FIREWORK_ROCKET) && !InventoryUtil.a(Items.FIREWORK_ROCKET)) {
+                final int selectedSlot = this.b.player.getInventory().selectedSlot;
+                if (!this.b.player.getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !InventoryUtil.a(Items.FIREWORK_ROCKET)) {
                     return;
                 }
-                this.b.interactionManager.interactItem((PlayerEntity) this.b.player, this.b.player.method_6058());
-                this.b.player.method_31548().selectedSlot = selectedSlot;
+                this.b.interactionManager.interactItem(this.b.player, this.b.player.getActiveHand());
+                this.b.player.getInventory().selectedSlot = selectedSlot;
                 this.d = false;
                 this.c = false;
-            } else if (this.b.player.method_24828()) {
+            } else if (this.b.player.isOnGround()) {
                 KeyBinding.setKeyPressed(this.b.options.jumpKey.getDefaultKey(), true);
                 this.e = true;
             } else {
@@ -67,7 +66,7 @@ public final class ElytraGlide extends Module {
 
     @EventListener
     public void a(final PreItemUseEvent preItemUseEvent) {
-        if (this.b.player.method_6047().getItem().equals(Items.FIREWORK_ROCKET) && this.b.player.method_31548().getArmorStack(2).isOf(Items.ELYTRA) && !this.b.player.method_6128()) {
+        if (this.b.player.getMainHandStack().getItem().equals(Items.FIREWORK_ROCKET) && this.b.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA) && !this.b.player.isFallFlying()) {
             this.c = true;
         }
     }

@@ -11,7 +11,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.SwordItem;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.AttackEvent;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BooleanSetting;
@@ -79,7 +79,7 @@ public final class MaceSwap extends Module {
             return;
         }
         if (this.j == -1) {
-            this.j = this.b.player.method_31548().selectedSlot;
+            this.j = this.b.player.getInventory().selectedSlot;
         }
         if ((this.c.c() && this.d.c()) || (!this.c.c() && !this.d.c())) {
             InventoryUtil.a(Items.MACE);
@@ -95,7 +95,7 @@ public final class MaceSwap extends Module {
     }
 
     private boolean j() {
-        final Item item = this.b.player.method_6047().getItem();
+        final Item item = this.b.player.getMainHandStack().getItem();
         if (this.e.c() && this.f.c()) {
             return item instanceof SwordItem || item instanceof AxeItem;
         }

@@ -11,7 +11,7 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.util.hit.BlockHitResult;
 import org.lwjgl.glfw.GLFW;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.NumberSetting;
@@ -66,8 +66,8 @@ public final class AnchorMacro extends Module {
     }
 
     private boolean j() {
-        final boolean b = this.b.player.method_6047().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.b.player.method_6079().getItem().getComponents().contains(DataComponentTypes.FOOD);
-        final boolean b2 = this.b.player.method_6047().getItem() instanceof ShieldItem || this.b.player.method_6079().getItem() instanceof ShieldItem;
+        final boolean b = this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.b.player.getOffHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD);
+        final boolean b2 = this.b.player.getMainHandStack().getItem() instanceof ShieldItem || this.b.player.getOffHandStack().getItem() instanceof ShieldItem;
         final boolean b3 = GLFW.glfwGetMouseButton(this.b.getWindow().getHandle(), 1) == 1;
         return (b || b2) && b3;
     }
@@ -88,7 +88,7 @@ public final class AnchorMacro extends Module {
     }
 
     private void a(final BlockHitResult blockHitResult) {
-        if (!this.b.player.method_6047().isOf(Items.GLOWSTONE)) {
+        if (!this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
             if (this.keybind < this.c.f()) {
                 ++this.keybind;
                 return;
@@ -96,7 +96,7 @@ public final class AnchorMacro extends Module {
             this.keybind = 0;
             InventoryUtil.a(Items.GLOWSTONE);
         }
-        if (this.b.player.method_6047().isOf(Items.GLOWSTONE)) {
+        if (this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
             if (this.h < this.d.f()) {
                 ++this.h;
                 return;
@@ -108,15 +108,15 @@ public final class AnchorMacro extends Module {
 
     private void b(final BlockHitResult blockHitResult) {
         final int selectedSlot = this.f.f() - 1;
-        if (this.b.player.method_31548().selectedSlot != selectedSlot) {
+        if (this.b.player.getInventory().selectedSlot != selectedSlot) {
             if (this.keybind < this.c.f()) {
                 ++this.keybind;
                 return;
             }
             this.keybind = 0;
-            this.b.player.method_31548().selectedSlot = selectedSlot;
+            this.b.player.getInventory().selectedSlot = selectedSlot;
         }
-        if (this.b.player.method_31548().selectedSlot == selectedSlot) {
+        if (this.b.player.getInventory().selectedSlot == selectedSlot) {
             if (this.i < this.e.f()) {
                 ++this.i;
                 return;

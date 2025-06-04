@@ -5,14 +5,14 @@
 package skid.krypton.module.modules;
 
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.item.Items;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import skid.krypton.enums.Enum1;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.EnumSetting;
@@ -56,62 +56,62 @@ public final class BoneDropper extends Module {
             return;
         }
         if (this.c.b(Enum1.a)) {
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
-                KeyBinding.onKeyPressed(InputUtil$Type.MOUSE.createFromCode(1));
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
+                KeyBinding.onKeyPressed(InputUtil.Type.MOUSE.createFromCode(1));
                 this.f = 20;
                 return;
             }
-            if (this.b.player.field_7512.getSlot(13).getStack().isOf(Items.SKELETON_SKULL)) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 11, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+            if (this.b.player.currentScreenHandler.getSlot(13).getStack().isOf(Items.SKELETON_SKULL)) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 11, 0, SlotActionType.PICKUP, this.b.player);
                 this.f = 20;
                 return;
             }
-            if (!this.b.player.field_7512.getSlot(53).getStack().isOf(Items.GOLD_INGOT)) {
-                this.b.player.method_7346();
+            if (!this.b.player.currentScreenHandler.getSlot(53).getStack().isOf(Items.GOLD_INGOT)) {
+                this.b.player.closeHandledScreen();
                 this.f = 20;
                 return;
             }
-            if (this.b.player.field_7512.getSlot(48).getStack().isOf(Items.ARROW)) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 48, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+            if (this.b.player.currentScreenHandler.getSlot(48).getStack().isOf(Items.ARROW)) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 48, 0, SlotActionType.PICKUP, this.b.player);
                 this.f = 20;
                 return;
             }
             boolean b = true;
             for (int i = 0; i < 45; ++i) {
-                if (!this.b.player.field_7512.getSlot(i).getStack().isOf(Items.BONE)) {
+                if (!this.b.player.currentScreenHandler.getSlot(i).getStack().isOf(Items.BONE)) {
                     b = false;
                     break;
                 }
             }
             if (b) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 52, 1, SlotActionType.THROW, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 52, 1, SlotActionType.THROW, this.b.player);
                 this.g = true;
                 this.f = this.e.f() * 20;
             } else if (this.g) {
                 this.g = false;
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 50, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 50, 0, SlotActionType.PICKUP, this.b.player);
                 this.f = 20;
             } else {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 45, 1, SlotActionType.THROW, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 45, 1, SlotActionType.THROW, this.b.player);
                 this.g = false;
                 this.f = 1200 * this.d.f();
             }
         } else {
-            final ScreenHandler field_7512 = this.b.player.field_7512;
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
+            final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
                 this.b.getNetworkHandler().sendChatCommand("order");
                 this.f = 20;
                 return;
             }
-            if (((GenericContainerScreenHandler) field_7512).getRows() == 6) {
-                if (((GenericContainerScreenHandler) field_7512).method_7611(49).getStack().isOf(Items.MAP)) {
-                    this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 51, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+            if (((GenericContainerScreenHandler) currentScreenHandler).getRows() == 6) {
+                if (currentScreenHandler.getSlot(49).getStack().isOf(Items.MAP)) {
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 51, 0, SlotActionType.PICKUP, this.b.player);
                     this.f = 20;
                     return;
                 }
                 for (int j = 0; j < 45; ++j) {
-                    if (((GenericContainerScreenHandler) field_7512).method_7611(j).getStack().isOf(Items.BONE)) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, j, 1, SlotActionType.THROW, (PlayerEntity) this.b.player);
+                    if (currentScreenHandler.getSlot(j).getStack().isOf(Items.BONE)) {
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, j, 1, SlotActionType.THROW, this.b.player);
                         this.f = this.d.f();
                         return;
                     }
@@ -122,17 +122,17 @@ public final class BoneDropper extends Module {
                 } else {
                     n = 53;
                 }
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, n, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 0, SlotActionType.PICKUP, this.b.player);
                 this.g = !this.g;
                 this.f = this.e.f();
-            } else if (((GenericContainerScreenHandler) field_7512).getRows() == 3) {
+            } else if (((GenericContainerScreenHandler) currentScreenHandler).getRows() == 3) {
                 if (this.b.currentScreen == null) {
                     return;
                 }
                 if (this.b.currentScreen.getTitle().getString().contains("Your Orders")) {
                     for (int k = 0; k < 26; ++k) {
-                        if (((GenericContainerScreenHandler) field_7512).method_7611(k).getStack().isOf(Items.BONE)) {
-                            this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, k, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                        if (currentScreenHandler.getSlot(k).getStack().isOf(Items.BONE)) {
+                            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, k, 0, SlotActionType.PICKUP, this.b.player);
                             this.f = 20;
                             return;
                         }
@@ -141,13 +141,13 @@ public final class BoneDropper extends Module {
                     return;
                 }
                 if (this.b.currentScreen.getTitle().getString().contains("Edit Order")) {
-                    if (((GenericContainerScreenHandler) field_7512).method_7611(13).getStack().isOf(Items.CHEST)) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 13, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                    if (currentScreenHandler.getSlot(13).getStack().isOf(Items.CHEST)) {
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
                         this.f = 20;
                         return;
                     }
-                    if (((GenericContainerScreenHandler) field_7512).method_7611(15).getStack().isOf(Items.CHEST)) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 15, 0, SlotActionType.PICKUP, (PlayerEntity) this.b.player);
+                    if (currentScreenHandler.getSlot(15).getStack().isOf(Items.CHEST)) {
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 0, SlotActionType.PICKUP, this.b.player);
                         this.f = 20;
                         return;
                     }

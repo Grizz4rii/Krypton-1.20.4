@@ -4,12 +4,11 @@
 
 package skid.krypton.module.modules;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Items;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -60,7 +59,7 @@ public final class KeyPearl extends Module {
         }
         if (this.g) {
             if (this.j == -1) {
-                this.j = this.b.player.method_31548().selectedSlot;
+                this.j = this.b.player.getInventory().selectedSlot;
             }
             InventoryUtil.a(Items.ENDER_PEARL);
             if (this.i < this.d.f()) {
@@ -70,7 +69,7 @@ public final class KeyPearl extends Module {
             if (!this.h) {
                 final ActionResult interactItem = this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
                 if (interactItem.isAccepted() && interactItem.shouldSwingHand()) {
-                    this.b.player.method_6104(Hand.MAIN_HAND);
+                    this.b.player.swingHand(Hand.MAIN_HAND);
                 }
                 this.h = true;
             }

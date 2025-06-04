@@ -46,7 +46,7 @@ public class Ore {
     public Color i;
     public boolean j;
 
-    public static Map register() {
+    public static Map<RegistryKey<Biome>, List<Ore>> register() {
         RegistryWrapper.WrapperLookup wrapperLookup = BuiltinRegistries.createWrapperLookup();
         RegistryWrapper.Impl<PlacedFeature> impl = wrapperLookup.getWrapperOrThrow(RegistryKeys.PLACED_FEATURE);
         var l = ((WorldPreset)wrapperLookup.getWrapperOrThrow(RegistryKeys.WORLD_PRESET).getOrThrow(WorldPresets.DEFAULT).value()).createDimensionsRegistryHolder().dimensions().get(DimensionOptions.NETHER).chunkGenerator().getBiomeSource().getBiomes().stream().toList();

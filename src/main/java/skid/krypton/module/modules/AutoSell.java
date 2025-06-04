@@ -4,7 +4,6 @@
 
 package skid.krypton.module.modules;
 
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,10 +13,10 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-import net.minecraft.world.World;
 import skid.krypton.enums.Enum8;
 import skid.krypton.enums.Enum9;
-import skid.krypton.events.*;
+import skid.krypton.event.EventListener;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.EnumSetting;
@@ -61,8 +60,8 @@ public final class AutoSell extends Module {
             return;
         }
         if (this.c.a().equals(Enum9.a)) {
-            final ScreenHandler field_7512 = this.b.player.field_7512;
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) field_7512).getRows() != 5) {
+            final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 5) {
                 this.b.getNetworkHandler().sendChatCommand("sell");
                 this.f = 20;
                 return;
@@ -72,62 +71,62 @@ public final class AutoSell extends Module {
                 Item item;
                 do {
                     n = 45;
-                    item = ((ItemStack) this.b.player.field_7512.getStacks().get(n)).getItem();
+                    item = this.b.player.currentScreenHandler.getStacks().get(n).getItem();
                 } while (item == Items.AIR || (!this.d.a().equals(Enum8.f) && !item.equals(this.j())));
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, n, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.b.player);
                 this.f = this.e.f();
                 return;
             }
-            this.b.player.method_7346();
+            this.b.player.closeHandledScreen();
         } else {
-            final ScreenHandler field_7513 = this.b.player.field_7512;
-            if (!(this.b.player.field_7512 instanceof GenericContainerScreenHandler)) {
+            final ScreenHandler fishHook = this.b.player.currentScreenHandler;
+            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
                 this.b.getNetworkHandler().sendChatCommand("order " + this.k());
                 this.f = 20;
                 return;
             }
-            if (((GenericContainerScreenHandler) field_7513).getRows() == 6) {
-                final ItemStack stack = ((GenericContainerScreenHandler) field_7513).method_7611(47).getStack();
+            if (((GenericContainerScreenHandler) fishHook).getRows() == 6) {
+                final ItemStack stack = fishHook.getSlot(47).getStack();
                 if (stack.isOf(Items.AIR)) {
                     this.f = 2;
                     return;
                 }
-                for (final Object next : stack.getTooltip(Item$TooltipContext.create((World) this.b.world), (PlayerEntity) this.b.player, (TooltipType) TooltipType.BASIC)) {
+                for (final Object next : stack.getTooltip(Item.TooltipContext.create(this.b.world), this.b.player, TooltipType.BASIC)) {
                     final String string = next.toString();
                     if (string.contains("Most Money Per Item") && (((Text) next).getStyle().toString().contains("white") || string.contains("white"))) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 47, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.f = 5;
                         return;
                     }
                 }
                 for (int i = 0; i < 44; ++i) {
-                    if (((GenericContainerScreenHandler) field_7513).method_7611(i).getStack().isOf(this.j())) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, i, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                    if (fishHook.getSlot(i).getStack().isOf(this.j())) {
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.f = 10;
                         return;
                     }
                 }
                 this.f = 40;
-                this.b.player.method_7346();
+                this.b.player.closeHandledScreen();
                 return;
-            } else if (((GenericContainerScreenHandler) field_7513).getRows() == 4) {
+            } else if (((GenericContainerScreenHandler) fishHook).getRows() == 4) {
                 final int b = InventoryUtil.b(Items.AIR);
                 if (b <= 0) {
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     this.f = 10;
                     return;
                 }
                 if (this.g && b == 36) {
                     this.g = false;
-                    this.b.player.method_7346();
+                    this.b.player.closeHandledScreen();
                     return;
                 }
                 final Item j = this.j();
                 while (true) {
                     final int n2 = 36;
-                    final Item item2 = ((ItemStack) this.b.player.field_7512.getStacks().get(n2)).getItem();
+                    final Item item2 = this.b.player.currentScreenHandler.getStacks().get(n2).getItem();
                     if (item2 != Items.AIR && item2 == j) {
-                        this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, n2, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n2, 1, SlotActionType.QUICK_MOVE, this.b.player);
                         this.f = this.e.f();
                         if (this.e.f() != 0) {
                             break;
@@ -136,8 +135,8 @@ public final class AutoSell extends Module {
                     }
                 }
                 return;
-            } else if (((GenericContainerScreenHandler) field_7513).getRows() == 3) {
-                this.b.interactionManager.clickSlot(this.b.player.field_7512.syncId, 15, 1, SlotActionType.QUICK_MOVE, (PlayerEntity) this.b.player);
+            } else if (((GenericContainerScreenHandler) fishHook).getRows() == 3) {
+                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.b.player);
                 this.f = 10;
                 return;
             }
@@ -149,7 +148,7 @@ public final class AutoSell extends Module {
         final Enum a = this.d.a();
         if (a == Enum8.f) {
             for (int i = 0; i < 35; ++i) {
-                final ItemStack stack = ((Inventory) this.b.player.method_31548()).getStack(i);
+                final ItemStack stack = ((Inventory) this.b.player.getInventory()).getStack(i);
                 if (!stack.isOf(Items.AIR)) {
                     return stack.getItem();
                 }

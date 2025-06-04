@@ -6,7 +6,7 @@ package skid.krypton.module.modules;
 
 import skid.krypton.auth.EmbedSender;
 import skid.krypton.event.EventListener;
-import skid.krypton.events.*;
+import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.setting.settings.BindSetting;
@@ -49,8 +49,15 @@ public final class CordSnapper extends Module {
             return;
         }
         if (KeyUtils.b(this.c.d())) {
-            new EmbedSender(this.d.a).a("Coordinates: x: " + this.b.player.method_23317() + " y: " + this.b.player.method_23318() + " z: " + this.b.player.method_23321());
-            CompletableFuture.runAsync(() -> embedSender.a());
+            EmbedSender embedSender = new EmbedSender(this.d.a);
+            embedSender.a("Coordinates: x: " + this.b.player.getX() + " y: " + this.b.player.getY() + " z: " + this.b.player.getZ());
+            CompletableFuture.runAsync(() -> {
+                try {
+                    embedSender.a();
+                } catch (Throwable _t) {
+                    _t.printStackTrace(System.err);
+                }
+            });
             this.e = 40;
         }
     }

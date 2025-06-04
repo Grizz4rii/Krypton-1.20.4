@@ -4,7 +4,7 @@
 
 package skid.krypton.enums;
 
-enum Enum7 {
+public enum Enum7 {
     a("API", 0),
     b("MANUAL", 1);
 

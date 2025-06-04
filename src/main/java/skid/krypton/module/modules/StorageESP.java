@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.WorldChunk;
+import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -21,7 +22,6 @@ import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.RenderUtils;
 
 import java.awt.*;
-import java.util.EventListener;
 import java.util.Iterator;
 
 public final class StorageESP extends Module {
@@ -109,11 +109,11 @@ public final class StorageESP extends Module {
         }
         final Iterator iterator = BlockUtil.a().iterator();
         while (iterator.hasNext()) {
-            for (final Object next : ((WorldChunk) iterator.next()).method_12021()) {
-                final BlockEntity method_8321 = this.b.world.method_8321((BlockPos) next);
-                RenderUtils.a(render3DEvent.a, ((BlockPos) next).method_10263() + 0.1f, ((BlockPos) next).method_10264() + 0.05f, ((BlockPos) next).method_10260() + 0.1f, ((BlockPos) next).method_10263() + 0.9f, ((BlockPos) next).method_10264() + 0.85f, ((BlockPos) next).method_10260() + 0.9f, this.a(method_8321, this.c.f()));
+            for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
+                final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
+                RenderUtils.a(render3DEvent.a, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.a(getBlockEntity, this.c.f()));
                 if (this.d.c()) {
-                    RenderUtils.a(render3DEvent.a, this.a(method_8321, 255), this.b.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).method_10263() + 0.5, ((BlockPos) next).method_10264() + 0.5, ((BlockPos) next).method_10260() + 0.5));
+                    RenderUtils.a(render3DEvent.a, this.a(getBlockEntity, 255), this.b.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
                 }
             }
         }

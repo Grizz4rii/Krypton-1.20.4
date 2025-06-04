@@ -145,7 +145,7 @@ public final class ClickGUI extends Screen {
     }
 
     public void close() {
-        Krypton.INSTANCE.b().getModuleByClass(skid.krypton.module.modules.Krypton.class).setEnabled(false);
+        Krypton.INSTANCE.getModuleManager().getModuleByClass(skid.krypton.module.modules.Krypton.class).setEnabled(false);
         this.onGuiClose();
     }
 

@@ -3,14 +3,11 @@ package skid.krypton.module.modules;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-import skid.krypton.enums.Enum8;
-import skid.krypton.enums.Enum9;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
@@ -21,16 +18,16 @@ import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 
 public final class AutoSell extends Module {
-    private final ModeSetting<Enum9> c;
-    private final ModeSetting<Enum8> d;
+    private final ModeSetting<Mode> c;
+    private final ModeSetting<Items> d;
     private final NumberSetting e;
     private int f;
     private boolean g;
 
     public AutoSell() {
         super(EncryptedString.of("Auto Sell"), EncryptedString.of("Automatically sells pickles"), -1, Category.DONUT);
-        this.c = new ModeSetting<Enum9>(EncryptedString.of("Mode"), Enum9.a, Enum9.class);
-        this.d = new ModeSetting<Enum8>(EncryptedString.of("Item"), Enum8.a, Enum8.class);
+        this.c = new ModeSetting<Mode>(EncryptedString.of("Mode"), Mode.SELL, Mode.class);
+        this.d = new ModeSetting<Items>(EncryptedString.of("Item"), Items.SEAPICKLE, Items.class);
         this.e = new NumberSetting(EncryptedString.of("delay"), 0.0, 20.0, 2.0, 1.0).getValue(EncryptedString.of("What should be delay in ticks"));
         this.addSettings(this.c, this.d, this.e);
     }
@@ -55,20 +52,20 @@ public final class AutoSell extends Module {
             --this.f;
             return;
         }
-        if (this.c.getValue().equals(Enum9.a)) {
+        if (this.c.getValue().equals(Mode.SELL)) {
             final ScreenHandler currentScreenHandler = this.mc.player.currentScreenHandler;
             if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 5) {
                 this.mc.getNetworkHandler().sendChatCommand("sell");
                 this.f = 20;
                 return;
             }
-            if (InventoryUtil.b(Items.AIR) > 0) {
+            if (InventoryUtil.b(net.minecraft.item.Items.AIR) > 0) {
                 int n;
                 Item item;
                 do {
                     n = 45;
                     item = this.mc.player.currentScreenHandler.getStacks().get(n).getItem();
-                } while (item == Items.AIR || (!this.d.getValue().equals(Enum8.f) && !item.equals(this.j())));
+                } while (item == net.minecraft.item.Items.AIR || (!this.d.getValue().equals(Items.ALL) && !item.equals(this.j())));
                 this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                 this.f = this.e.getIntValue();
                 return;
@@ -83,7 +80,7 @@ public final class AutoSell extends Module {
             }
             if (((GenericContainerScreenHandler) fishHook).getRows() == 6) {
                 final ItemStack stack = fishHook.getSlot(47).getStack();
-                if (stack.isOf(Items.AIR)) {
+                if (stack.isOf(net.minecraft.item.Items.AIR)) {
                     this.f = 2;
                     return;
                 }
@@ -106,7 +103,7 @@ public final class AutoSell extends Module {
                 this.mc.player.closeHandledScreen();
                 return;
             } else if (((GenericContainerScreenHandler) fishHook).getRows() == 4) {
-                final int b = InventoryUtil.b(Items.AIR);
+                final int b = InventoryUtil.b(net.minecraft.item.Items.AIR);
                 if (b <= 0) {
                     this.mc.player.closeHandledScreen();
                     this.f = 10;
@@ -121,7 +118,7 @@ public final class AutoSell extends Module {
                 while (true) {
                     final int n2 = 36;
                     final Item item2 = this.mc.player.currentScreenHandler.getStacks().get(n2).getItem();
-                    if (item2 != Items.AIR && item2 == j) {
+                    if (item2 != net.minecraft.item.Items.AIR && item2 == j) {
                         this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, n2, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                         this.f = this.e.getIntValue();
                         if (this.e.getIntValue() != 0) {
@@ -142,14 +139,14 @@ public final class AutoSell extends Module {
 
     private Item j() {
         final Enum a = this.d.getValue();
-        if (a == Enum8.f) {
+        if (a == Items.ALL) {
             for (int i = 0; i < 35; ++i) {
                 final ItemStack stack = ((Inventory) this.mc.player.getInventory()).getStack(i);
-                if (!stack.isOf(Items.AIR)) {
+                if (!stack.isOf(net.minecraft.item.Items.AIR)) {
                     return stack.getItem();
                 }
             }
-            return Items.AIR;
+            return net.minecraft.item.Items.AIR;
         }
         final int n = a.ordinal() ^ 0x7F1F7668;
         int n2;
@@ -161,27 +158,27 @@ public final class AutoSell extends Module {
         Item item = null;
         switch (n2) {
             case 105679472: {
-                item = Items.PUMPKIN;
+                item = net.minecraft.item.Items.PUMPKIN;
                 break;
             }
             case 105679476: {
-                item = Items.SWEET_BERRIES;
+                item = net.minecraft.item.Items.SWEET_BERRIES;
                 break;
             }
             case 105679474: {
-                item = Items.BAMBOO;
+                item = net.minecraft.item.Items.BAMBOO;
                 break;
             }
             default: {
-                item = Items.AIR;
+                item = net.minecraft.item.Items.AIR;
                 break;
             }
             case 105679470: {
-                item = Items.BONE;
+                item = net.minecraft.item.Items.BONE;
                 break;
             }
             case 105679478: {
-                item = Items.SEA_PICKLE;
+                item = net.minecraft.item.Items.SEA_PICKLE;
                 break;
             }
         }
@@ -190,9 +187,31 @@ public final class AutoSell extends Module {
 
     private String k() {
         final Item j = this.j();
-        if (j.equals(Items.BONE)) {
+        if (j.equals(net.minecraft.item.Items.BONE)) {
             return "Bones";
         }
         return j.getName().getString();
     }
+
+    enum Items {
+        SEAPICKLE("Sea_Pickle", 0),
+        SWEETBERRIES("Sweet_Berries", 1),
+        BAMBOO("Bamboo", 2),
+        PUMPKIN("Pumpkin", 3),
+        BONE("Bone", 4),
+        ALL("All", 5);
+
+        Items(final String name, final int ordinal) {
+        }
+    }
+
+    public enum Mode {
+        SELL("Sell", 0),
+        ORDER("Order", 1);
+
+        Mode(final String name, final int ordinal) {
+        }
+    }
+
+
 }

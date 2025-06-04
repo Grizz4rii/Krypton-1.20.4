@@ -133,7 +133,7 @@ public final class ModuleButton {
     private void renderIndicator(final DrawContext drawContext, final int n, final int n2, final int n3) {
         Color color;
         if (this.module.isEnabled()) {
-            color = KryptonUtil.getMainColor(255, Krypton.INSTANCE.b().getModulesByCategory(this.module.getCategory()).indexOf(this.module));
+            color = KryptonUtil.getMainColor(255, Krypton.INSTANCE.getModuleManager().a(this.module.getCategory()).indexOf(this.module));
         } else {
             color = this.ACCENT_COLOR;
         }

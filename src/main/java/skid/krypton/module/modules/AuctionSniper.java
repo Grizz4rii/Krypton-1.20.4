@@ -13,7 +13,6 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-import skid.krypton.enums.Enum7;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
@@ -38,7 +37,7 @@ public final class AuctionSniper
         extends Module {
     private final ItemSetting c = new ItemSetting(EncryptedString.of("Sniping Item"), Items.AIR);
     private final StringSetting d = new StringSetting(EncryptedString.of("Price"), "1k");
-    private final ModeSetting<Enum7> e = new ModeSetting(EncryptedString.of("Mode"), Enum7.b, Enum7.class).setDescription(EncryptedString.of("Manual is faster but api doesnt require auction gui opened all the time"));
+    private final ModeSetting<Mode> e = new ModeSetting(EncryptedString.of("Mode"), Mode.MANUAL, Mode.class).setDescription(EncryptedString.of("Manual is faster but api doesnt require auction gui opened all the time"));
     private final StringSetting f = new StringSetting(EncryptedString.of("Api Key"), "").setDescription(EncryptedString.of("You can get it by typing /api in chat"));
     private final NumberSetting g = new NumberSetting(EncryptedString.of("Refresh Delay"), 0.0, 100.0, 2.0, 1.0);
     private final NumberSetting h = new NumberSetting(EncryptedString.of("Buy Delay"), 0.0, 100.0, 2.0, 1.0);
@@ -102,11 +101,11 @@ public final class AuctionSniper
                     --this.k;
                     return;
                 }
-                if (this.e.isMode(Enum7.a)) {
+                if (this.e.isMode(Mode.API)) {
                     this.j();
                     return;
                 }
-                if (!this.e.isMode(Enum7.b)) break block9;
+                if (!this.e.isMode(Mode.MANUAL)) break block9;
                 ScreenHandler screenHandler = this.mc.player.currentScreenHandler;
                 if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block10;
                 if (((GenericContainerScreenHandler)screenHandler).getRows() == 6) {
@@ -385,4 +384,13 @@ public final class AuctionSniper
         Object[] objectArray = new Object[]{d};
         return String.format("%.2f", objectArray);
     }
+
+    public enum Mode {
+        API("API", 0),
+        MANUAL("MANUAL", 1);
+
+        Mode(final String name, final int ordinal) {
+        }
+    }
+
 }

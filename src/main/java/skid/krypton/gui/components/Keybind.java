@@ -110,7 +110,7 @@ public final class Keybind extends Component {
                 }
             } else {
                 if (this.keybind.isModuleKey()) {
-                    this.parent.module.a(n3);
+                    this.parent.module.setKeybind(n3);
                 }
                 this.keybind.setValue(n3);
                 this.keybind.setListening(false);
@@ -126,13 +126,13 @@ public final class Keybind extends Component {
                 this.keybind.setListening(false);
             } else if (n == 259) {
                 if (this.keybind.isModuleKey()) {
-                    this.parent.module.a(-1);
+                    this.parent.module.setKeybind(-1);
                 }
                 this.keybind.setValue(-1);
                 this.keybind.setListening(false);
             } else {
                 if (this.keybind.isModuleKey()) {
-                    this.parent.module.a(n);
+                    this.parent.module.setKeybind(n);
                 }
                 this.keybind.setValue(n);
                 this.keybind.setListening(false);

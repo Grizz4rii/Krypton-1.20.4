@@ -1,9 +1,9 @@
-package skid.krypton.auth;
+package skid.krypton.utils.embed;
 
-public class br {
+public class bs {
     private final String a;
 
-    br(final bn bn, final String a) {
+    bs(final bn bn, final String a) {
         this.a = a;
     }
 

@@ -1,33 +1,32 @@
 package skid.krypton.utils;
 
-import skid.krypton.enums.Enum6;
 import skid.krypton.module.modules.Krypton;
 
 public final class Animation {
-    private double a;
+    private double value;
     private final double b;
 
     public Animation(final double n) {
-        this.a = n;
+        this.value = n;
         this.b = n;
     }
 
-    public double a(final double n, final double a) {
-        if (Krypton.l.isMode(Enum6.a)) {
-            this.a = MathUtil.a((float) n, this.a, a);
-        } else if (Krypton.l.isMode(Enum6.b)) {
-            this.a = MathUtil.a(n, this.a, a);
-        } else if (Krypton.l.isMode(Enum6.c)) {
-            this.a = a;
+    public double animate(final double n, final double a) {
+        if (Krypton.l.isMode(Krypton.AnimationMode.NORMAL)) {
+            this.value = MathUtil.a((float) n, this.value, a);
+        } else if (Krypton.l.isMode(Krypton.AnimationMode.POSITIVE)) {
+            this.value = MathUtil.a(n, this.value, a);
+        } else if (Krypton.l.isMode(Krypton.AnimationMode.OFF)) {
+            this.value = a;
         }
-        return this.a;
+        return this.value;
     }
 
     public double getAnimation() {
-        return this.a;
+        return this.value;
     }
 
     public void a(final double n) {
-        this.a = MathUtil.a(n, this.a, this.b);
+        this.value = MathUtil.a(n, this.value, this.b);
     }
 }

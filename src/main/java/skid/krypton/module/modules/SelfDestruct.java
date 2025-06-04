@@ -22,43 +22,43 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public final class SelfDestruct extends Module {
-    private static final AtomicLong COUNT;
-    private static final Path TEMP;
-    public static boolean DESTRUCTED;
-    private final BooleanSetting replace;
-    private final BooleanSetting lastModified;
-    private final BooleanSetting journal;
-    private final StringSetting replaceURL;
+    public static boolean c;
+    private final BooleanSetting d;
+    private final BooleanSetting e;
+    private final BooleanSetting f;
+    private final StringSetting g;
+    private static final Path h;
+    private static final AtomicLong j;
 
     public SelfDestruct() {
         super(EncryptedString.of("Self Destruct"), EncryptedString.of("Removes the client from your game |Credits to Argon for deletion|"), -1, Category.CLIENT);
-        this.replace = new BooleanSetting(EncryptedString.of("Replace Mod"), true).setDescription(EncryptedString.of("Repalces the mod with the original JAR file of the ImmediatelyFast mod"));
-        this.lastModified = new BooleanSetting(EncryptedString.of("Save Last Modified"), true).setDescription(EncryptedString.of("Saves the last modified date after self destruct"));
-        this.journal = new BooleanSetting(EncryptedString.of("USN Journal Cleaner"), true);
-        this.replaceURL = new StringSetting(EncryptedString.of("Replace URL"), "https://cdn.modrinth.com/data/8shC1gFX/versions/sXO3idkS/BetterF3-11.0.1-Fabric-1.21.jar");
-        this.addSettings(this.replace, this.lastModified, this.journal, this.replaceURL);
+        this.d = new BooleanSetting(EncryptedString.of("Replace Mod"), true).setDescription(EncryptedString.of("Repalces the mod with the original JAR file of the ImmediatelyFast mod"));
+        this.e = new BooleanSetting(EncryptedString.of("Save Last Modified"), true).setDescription(EncryptedString.of("Saves the last modified date after self destruct"));
+        this.f = new BooleanSetting(EncryptedString.of("USN Journal Cleaner"), true);
+        this.g = new StringSetting(EncryptedString.of("Replace URL"), "https://cdn.modrinth.com/data/8shC1gFX/versions/sXO3idkS/BetterF3-11.0.1-Fabric-1.21.jar");
+        this.addSettings(this.d, this.e, this.f, this.g);
     }
 
     @Override
     public void onEnable() {
-        DESTRUCTED = true;
-        skid.krypton.Krypton.INSTANCE.b().getModuleByClass(Krypton.class).toggle(false);
+        c = true;
+        skid.krypton.Krypton.INSTANCE.getModuleManager().getModuleByClass(Krypton.class).toggle(false);
         this.toggle(false);
-        skid.krypton.Krypton.INSTANCE.a().shutdown();
+        skid.krypton.Krypton.INSTANCE.getConfigManager().shutdown();
         if (this.mc.currentScreen instanceof ClickGUI) {
             skid.krypton.Krypton.INSTANCE.shouldPreventClose = false;
             this.mc.currentScreen.close();
         }
-        if (this.replace.getValue()) {
+        if (this.d.getValue()) {
             try {
-                String string = this.replaceURL.getValue();
+                String string = this.g.getValue();
                 if (KryptonUtil.getFile().exists()) {
                     KryptonUtil.a(string, KryptonUtil.getFile());
                 }
             }
             catch (Exception exception) {}
         }
-        for (Module module : skid.krypton.Krypton.INSTANCE.b().c()) {
+        for (Module module : skid.krypton.Krypton.INSTANCE.getModuleManager().c()) {
             ((Module)module).toggle(false);
             ((Module)module).setName(null);
             ((Module)module).setDescription(null);
@@ -71,8 +71,8 @@ public final class SelfDestruct extends Module {
             ((Module)module).getSettings().clear();
         }
         Runtime runtime = Runtime.getRuntime();
-        if (this.lastModified.getValue()) {
-            skid.krypton.Krypton.INSTANCE.e();
+        if (this.e.getValue()) {
+            skid.krypton.Krypton.INSTANCE.resetModifiedDate();
         }
         for (int i = 0; i <= 10; ++i) {
             runtime.gc();
@@ -81,11 +81,11 @@ public final class SelfDestruct extends Module {
                 Thread.sleep(100 * i);
                 Memory.purge();
                 Memory.disposeAll();
-            } catch (InterruptedException ex) {
-                ex.printStackTrace(System.err);
+                continue;
             }
+            catch (InterruptedException interruptedException) {}
         }
-        if (this.journal.getValue()) {
+        if (this.f.getValue()) {
             try {
                 Path[] pathArray = new Path[20];
                 ExecutorService executorService = Executors.newWorkStealingPool(20);
@@ -94,7 +94,7 @@ public final class SelfDestruct extends Module {
                     final int n = i;
                     executorService.submit(() -> {
                         try {
-                            pathArray[n] = Files.createTempFile(TEMP, "meta", ".tmp");
+                            pathArray[n] = Files.createTempFile(h, "meta", ".tmp");
                             countDownLatch.countDown();
                         } catch (Throwable _t) {
                             _t.printStackTrace(System.err);
@@ -106,14 +106,14 @@ public final class SelfDestruct extends Module {
                 for (int i = 0; i < 20; ++i) {
                     Path path = pathArray[i];
                     executorService.submit(() -> {
-                        while (COUNT.get() < 500000L) {
+                        while (j.get() < 500000L) {
                             try {
                                 Files.setLastModifiedTime(path, FileTime.fromMillis(System.currentTimeMillis()));
                                 boolean bl = !((Boolean) Files.getAttribute(path, "dos:archive"));
                                 Files.setAttribute(path, "dos:archive", bl);
                             }
                             catch (IOException iOException) {}
-                            COUNT.addAndGet(2L);
+                            j.addAndGet(2L);
                         }
                     });
                 }
@@ -127,8 +127,8 @@ public final class SelfDestruct extends Module {
     }
 
     static {
-        SelfDestruct.DESTRUCTED = false;
-        TEMP = Paths.get(System.getProperty("java.io.tmpdir"));
-        COUNT = new AtomicLong();
+        SelfDestruct.c = false;
+        h = Paths.get(System.getProperty("java.io.tmpdir"));
+        j = new AtomicLong();
     }
 }

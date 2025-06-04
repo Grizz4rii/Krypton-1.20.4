@@ -5,11 +5,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skid.krypton.event.CancellableEvent;
 
 public class TargetMarginEvent extends CancellableEvent {
-    public Entity a;
-    public CallbackInfoReturnable<Float> b;
+    public Entity entity;
+    public CallbackInfoReturnable<Float> floatCallbackInfoReturnable;
 
-    public TargetMarginEvent(final Entity a, final CallbackInfoReturnable b) {
-        this.a = a;
-        this.b = (CallbackInfoReturnable<Float>) b;
+    public TargetMarginEvent(final Entity a, final CallbackInfoReturnable<Float> b) {
+        this.entity = a;
+        this.floatCallbackInfoReturnable = b;
     }
 }

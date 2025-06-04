@@ -65,7 +65,7 @@ public final class Krypton extends Module {
 
     @EventListener
     public void a(final PacketReceiveEvent packetReceiveEvent) {
-        if (shouldPreventClose && packetReceiveEvent.a instanceof OpenScreenS2CPacket && this.n.getValue()) {
+        if (shouldPreventClose && packetReceiveEvent.packet instanceof OpenScreenS2CPacket && this.n.getValue()) {
             packetReceiveEvent.cancel();
         }
     }

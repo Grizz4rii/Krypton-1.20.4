@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import skid.krypton.event.events.MouseButtenEvent;
+import skid.krypton.event.events.MouseButtonEvent;
 import skid.krypton.event.events.MouseScrolledEvent;
 import skid.krypton.manager.EventManager;
 
@@ -16,7 +16,7 @@ public abstract class MouseMixin {
         if (n2 == -1) {
             return;
         }
-        final MouseButtenEvent mouseButtenEvent = new MouseButtenEvent(n2, n, n3);
+        final MouseButtonEvent mouseButtenEvent = new MouseButtonEvent(n2, n, n3);
         EventManager.b(mouseButtenEvent);
         if (mouseButtenEvent.isCancelled()) {
             callbackInfo.cancel();

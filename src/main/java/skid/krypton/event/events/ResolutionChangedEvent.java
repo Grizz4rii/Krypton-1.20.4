@@ -4,9 +4,9 @@ import net.minecraft.client.util.Window;
 import skid.krypton.event.CancellableEvent;
 
 public class ResolutionChangedEvent extends CancellableEvent {
-    public Window a;
+    public Window window;
 
-    public ResolutionChangedEvent(final Window a) {
-        this.a = a;
+    public ResolutionChangedEvent(final Window window) {
+        this.window = window;
     }
 }

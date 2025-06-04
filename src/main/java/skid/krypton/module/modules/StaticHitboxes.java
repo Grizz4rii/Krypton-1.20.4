@@ -25,8 +25,8 @@ public final class StaticHitboxes extends Module {
 
     @EventListener
     public void a(final TargetPoseEvent targetPoseEvent) {
-        if (this.isEnabled() && targetPoseEvent.a instanceof PlayerEntity && !((PlayerEntity) targetPoseEvent.a).isMainPlayer()) {
-            targetPoseEvent.b.setReturnValue(EntityPose.STANDING);
+        if (this.isEnabled() && targetPoseEvent.entity instanceof PlayerEntity && !((PlayerEntity) targetPoseEvent.entity).isMainPlayer()) {
+            targetPoseEvent.entityPoseCallbackInfoReturnable.setReturnValue(EntityPose.STANDING);
         }
     }
 }

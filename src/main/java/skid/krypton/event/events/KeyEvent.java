@@ -5,11 +5,11 @@ import skid.krypton.event.CancellableEvent;
 public class KeyEvent extends CancellableEvent {
     public int key;
     public int mode;
-    public long c;
+    public long window;
 
-    public KeyEvent(final int key, final long c, final int mode) {
+    public KeyEvent(final int key, final long window, final int mode) {
         this.key = key;
-        this.c = c;
+        this.window = window;
         this.mode = mode;
     }
 }

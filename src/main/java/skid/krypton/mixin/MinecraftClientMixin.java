@@ -46,7 +46,7 @@ public class MinecraftClientMixin {
         if (postItemUseEvent.isCancelled()) {
             callbackInfo.cancel();
         }
-        this.itemUseCooldown = postItemUseEvent.a;
+        this.itemUseCooldown = postItemUseEvent.cooldown;
     }
 
     @Inject(method = {"doItemUse"}, at = {@At("HEAD")}, cancellable = true)
@@ -56,7 +56,7 @@ public class MinecraftClientMixin {
         if (preItemUseEvent.isCancelled()) {
             callbackInfo.cancel();
         }
-        this.itemUseCooldown = preItemUseEvent.a;
+        this.itemUseCooldown = preItemUseEvent.cooldown;
     }
 
     @Inject(method = {"doAttack"}, at = {@At("HEAD")}, cancellable = true)

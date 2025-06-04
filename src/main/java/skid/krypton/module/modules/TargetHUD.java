@@ -59,7 +59,7 @@ public final class TargetHUD extends Module {
 
     @EventListener
     public void a(final Render2DEvent render2DEvent) {
-        final DrawContext a = render2DEvent.a;
+        final DrawContext a = render2DEvent.context;
         final int f = this.d.getIntValue();
         final int f2 = this.e.getIntValue();
         final float g = this.g.getFloatValue();
@@ -184,7 +184,7 @@ public final class TargetHUD extends Module {
 
     @EventListener
     public void a(final PacketEvent packetEvent) {
-        if (packetEvent.a instanceof final PlayerInteractEntityC2SPacket playerInteractEntityC2SPacket) {
+        if (packetEvent.packet instanceof final PlayerInteractEntityC2SPacket playerInteractEntityC2SPacket) {
             if (this.m == null) {
                 this.m = new TargetHUDHandler(this);
             }

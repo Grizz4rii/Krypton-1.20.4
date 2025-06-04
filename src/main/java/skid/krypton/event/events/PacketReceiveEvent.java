@@ -6,7 +6,7 @@ import skid.krypton.event.CancellableEvent;
 public class PacketReceiveEvent extends CancellableEvent {
     public Packet<?> packet;
 
-    public PacketReceiveEvent(final Packet<?> a) {
-        this.packet = a;
+    public PacketReceiveEvent(final Packet<?> packet) {
+        this.packet = packet;
     }
 }

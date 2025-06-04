@@ -7,10 +7,10 @@ import skid.krypton.event.CancellableEvent;
 
 public class TargetPoseEvent extends CancellableEvent {
     public Entity entity;
-    public CallbackInfoReturnable<EntityPose> entityPoseCallbackInfoReturnable;
+    public CallbackInfoReturnable<EntityPose> cir;
 
-    public TargetPoseEvent(final Entity a, final CallbackInfoReturnable<EntityPose> b) {
-        this.entity = a;
-        this.entityPoseCallbackInfoReturnable = b;
+    public TargetPoseEvent(final Entity entity, final CallbackInfoReturnable<EntityPose> cir) {
+        this.entity = entity;
+        this.cir = cir;
     }
 }

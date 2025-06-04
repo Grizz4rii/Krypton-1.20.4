@@ -33,7 +33,7 @@ public final class Hitbox extends Module {
     @EventListener
     public void a(final TargetMarginEvent targetMarginEvent) {
         if (targetMarginEvent.entity instanceof PlayerEntity) {
-            targetMarginEvent.floatCallbackInfoReturnable.setReturnValue((float) this.c.getValue());
+            targetMarginEvent.cir.setReturnValue((float) this.c.getValue());
         }
     }
 

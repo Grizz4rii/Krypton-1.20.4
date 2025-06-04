@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import skid.krypton.event.events.PacketEvent;
+import skid.krypton.event.events.PacketSendEvent;
 import skid.krypton.event.events.PacketReceiveEvent;
 import skid.krypton.manager.EventManager;
 
@@ -22,7 +22,7 @@ public class ClientConnectionMixin {
 
     @Inject(method = {"send(Lnet/minecraft/network/packet/Packet;)V"}, at = {@At("HEAD")}, cancellable = true)
     private void onPacketSend(final Packet<?> packet, final CallbackInfo ci) {
-        final PacketEvent event = new PacketEvent(packet);
+        final PacketSendEvent event = new PacketSendEvent(packet);
         EventManager.b(event);
         if (event.isCancelled()) ci.cancel();
     }

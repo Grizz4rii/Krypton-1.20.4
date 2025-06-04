@@ -6,10 +6,10 @@ import skid.krypton.event.CancellableEvent;
 
 public class TargetMarginEvent extends CancellableEvent {
     public Entity entity;
-    public CallbackInfoReturnable<Float> floatCallbackInfoReturnable;
+    public CallbackInfoReturnable<Float> cir;
 
-    public TargetMarginEvent(final Entity a, final CallbackInfoReturnable<Float> b) {
-        this.entity = a;
-        this.floatCallbackInfoReturnable = b;
+    public TargetMarginEvent(final Entity entity, final CallbackInfoReturnable<Float> cir) {
+        this.entity = entity;
+        this.cir = cir;
     }
 }

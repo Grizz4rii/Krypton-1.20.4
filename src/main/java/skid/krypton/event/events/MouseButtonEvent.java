@@ -7,9 +7,9 @@ public class MouseButtonEvent extends CancellableEvent {
     public int actions;
     public long window;
 
-    public MouseButtonEvent(final int a, final long c, final int b) {
-        this.button = a;
-        this.window = c;
-        this.actions = b;
+    public MouseButtonEvent(final int button, final long window, final int actions) {
+        this.button = button;
+        this.window = window;
+        this.actions = actions;
     }
 }

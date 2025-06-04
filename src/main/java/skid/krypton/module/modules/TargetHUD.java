@@ -8,7 +8,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
 import skid.krypton.event.EventListener;
-import skid.krypton.event.events.PacketEvent;
+import skid.krypton.event.events.PacketSendEvent;
 import skid.krypton.event.events.Render2DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
@@ -183,7 +183,7 @@ public final class TargetHUD extends Module {
     }
 
     @EventListener
-    public void a(final PacketEvent packetEvent) {
+    public void a(final PacketSendEvent packetEvent) {
         if (packetEvent.packet instanceof final PlayerInteractEntityC2SPacket playerInteractEntityC2SPacket) {
             if (this.m == null) {
                 this.m = new TargetHUDHandler(this);

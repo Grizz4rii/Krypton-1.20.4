@@ -67,7 +67,7 @@ public final class ConfigManager {
                     final int asInt2 = jsonElement.getAsInt();
                     bindSetting.setValue(asInt2);
                     if (bindSetting.isModuleKey()) {
-                        module.a(asInt2);
+                        module.setKeybind(asInt2);
                     }
                 }
             } else if (setting instanceof final StringSetting stringSetting) {

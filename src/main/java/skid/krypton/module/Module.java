@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class Module implements Serializable {
     private final List<Setting> settings;
     protected final EventManager EVENT_BUS;
-    protected MinecraftClient b;
+    protected MinecraftClient mc;
     private CharSequence name;
     private CharSequence description;
     private boolean enabled;
@@ -24,7 +24,7 @@ public abstract class Module implements Serializable {
     public Module(final CharSequence name, final CharSequence description, final int keybind, final Category category) {
         this.settings = new ArrayList<Setting>();
         this.EVENT_BUS = Krypton.INSTANCE.getEventBus();
-        this.b = MinecraftClient.getInstance();
+        this.mc = MinecraftClient.getInstance();
         this.i = false;
         this.name = name;
         this.description = description;
@@ -74,7 +74,7 @@ public abstract class Module implements Serializable {
         this.description = description;
     }
 
-    public void a(final int keybind) {
+    public void setKeybind(final int keybind) {
         this.keybind = keybind;
     }
 
@@ -88,11 +88,11 @@ public abstract class Module implements Serializable {
     public void onDisable() {
     }
 
-    public void a(final Setting setting) {
+    public void addSetting(final Setting setting) {
         this.settings.add(setting);
     }
 
-    public void a(final Setting... a) {
+    public void addSettings(final Setting... a) {
         this.settings.addAll(Arrays.asList(a));
     }
 

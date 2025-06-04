@@ -70,7 +70,7 @@ public final class ModuleManager {
     public void d() {
         skid.krypton.Krypton.INSTANCE.getEventBus().register(this);
         for (final Module next : this.modules) {
-            next.a(new BindSetting(EncryptedString.a("Keybind"), next.getKeybind(), true).setDescription(EncryptedString.a("Key to enabled the module")));
+            next.addSetting(new BindSetting(EncryptedString.of("Keybind"), next.getKeybind(), true).setDescription(EncryptedString.of("Key to enabled the module")));
         }
     }
 
@@ -96,7 +96,7 @@ public final class ModuleManager {
 
         if (!SelfDestruct.c) {
             this.modules.forEach(module -> {
-                if (module.getKeybind() == keyEvent.a && keyEvent.b == 1) {
+                if (module.getKeybind() == keyEvent.key && keyEvent.mode == 1) {
                     module.toggle();
                 }
             });

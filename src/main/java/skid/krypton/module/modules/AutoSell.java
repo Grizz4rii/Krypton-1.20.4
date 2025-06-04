@@ -25,11 +25,11 @@ public final class AutoSell extends Module {
     private boolean g;
 
     public AutoSell() {
-        super(EncryptedString.a("Auto Sell"), EncryptedString.a("Automatically sells pickles"), -1, Category.c);
-        this.c = new ModeSetting<Mode>(EncryptedString.a("Mode"), Mode.SELL, Mode.class);
-        this.d = new ModeSetting<Items>(EncryptedString.a("Item"), Items.SEAPICKLE, Items.class);
-        this.e = new NumberSetting(EncryptedString.a("delay"), 0.0, 20.0, 2.0, 1.0).getValue(EncryptedString.a("What should be delay in ticks"));
-        this.a(this.c, this.d, this.e);
+        super(EncryptedString.of("Auto Sell"), EncryptedString.of("Automatically sells pickles"), -1, Category.DONUT);
+        this.c = new ModeSetting<Mode>(EncryptedString.of("Mode"), Mode.SELL, Mode.class);
+        this.d = new ModeSetting<Items>(EncryptedString.of("Item"), Items.SEAPICKLE, Items.class);
+        this.e = new NumberSetting(EncryptedString.of("delay"), 0.0, 20.0, 2.0, 1.0).getValue(EncryptedString.of("What should be delay in ticks"));
+        this.addSettings(this.c, this.d, this.e);
     }
 
     @Override
@@ -45,7 +45,7 @@ public final class AutoSell extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.f > 0) {
@@ -53,9 +53,9 @@ public final class AutoSell extends Module {
             return;
         }
         if (this.c.getValue().equals(Mode.SELL)) {
-            final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
-            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 5) {
-                this.b.getNetworkHandler().sendChatCommand("sell");
+            final ScreenHandler currentScreenHandler = this.mc.player.currentScreenHandler;
+            if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 5) {
+                this.mc.getNetworkHandler().sendChatCommand("sell");
                 this.f = 20;
                 return;
             }
@@ -64,17 +64,17 @@ public final class AutoSell extends Module {
                 Item item;
                 do {
                     n = 45;
-                    item = this.b.player.currentScreenHandler.getStacks().get(n).getItem();
+                    item = this.mc.player.currentScreenHandler.getStacks().get(n).getItem();
                 } while (item == net.minecraft.item.Items.AIR || (!this.d.getValue().equals(Items.ALL) && !item.equals(this.j())));
-                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                 this.f = this.e.getIntValue();
                 return;
             }
-            this.b.player.closeHandledScreen();
+            this.mc.player.closeHandledScreen();
         } else {
-            final ScreenHandler fishHook = this.b.player.currentScreenHandler;
-            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
-                this.b.getNetworkHandler().sendChatCommand("order " + this.k());
+            final ScreenHandler fishHook = this.mc.player.currentScreenHandler;
+            if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
+                this.mc.getNetworkHandler().sendChatCommand("order " + this.k());
                 this.f = 20;
                 return;
             }
@@ -84,42 +84,42 @@ public final class AutoSell extends Module {
                     this.f = 2;
                     return;
                 }
-                for (final Object next : stack.getTooltip(Item.TooltipContext.create(this.b.world), this.b.player, TooltipType.BASIC)) {
+                for (final Object next : stack.getTooltip(Item.TooltipContext.create(this.mc.world), this.mc.player, TooltipType.BASIC)) {
                     final String string = next.toString();
                     if (string.contains("Most Money Per Item") && (((Text) next).getStyle().toString().contains("white") || string.contains("white"))) {
-                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                        this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                         this.f = 5;
                         return;
                     }
                 }
                 for (int i = 0; i < 44; ++i) {
                     if (fishHook.getSlot(i).getStack().isOf(this.j())) {
-                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                        this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                         this.f = 10;
                         return;
                     }
                 }
                 this.f = 40;
-                this.b.player.closeHandledScreen();
+                this.mc.player.closeHandledScreen();
                 return;
             } else if (((GenericContainerScreenHandler) fishHook).getRows() == 4) {
                 final int b = InventoryUtil.b(net.minecraft.item.Items.AIR);
                 if (b <= 0) {
-                    this.b.player.closeHandledScreen();
+                    this.mc.player.closeHandledScreen();
                     this.f = 10;
                     return;
                 }
                 if (this.g && b == 36) {
                     this.g = false;
-                    this.b.player.closeHandledScreen();
+                    this.mc.player.closeHandledScreen();
                     return;
                 }
                 final Item j = this.j();
                 while (true) {
                     final int n2 = 36;
-                    final Item item2 = this.b.player.currentScreenHandler.getStacks().get(n2).getItem();
+                    final Item item2 = this.mc.player.currentScreenHandler.getStacks().get(n2).getItem();
                     if (item2 != net.minecraft.item.Items.AIR && item2 == j) {
-                        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n2, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                        this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, n2, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                         this.f = this.e.getIntValue();
                         if (this.e.getIntValue() != 0) {
                             break;
@@ -129,7 +129,7 @@ public final class AutoSell extends Module {
                 }
                 return;
             } else if (((GenericContainerScreenHandler) fishHook).getRows() == 3) {
-                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                 this.f = 10;
                 return;
             }
@@ -141,7 +141,7 @@ public final class AutoSell extends Module {
         final Enum a = this.d.getValue();
         if (a == Items.ALL) {
             for (int i = 0; i < 35; ++i) {
-                final ItemStack stack = ((Inventory) this.b.player.getInventory()).getStack(i);
+                final ItemStack stack = ((Inventory) this.mc.player.getInventory()).getStack(i);
                 if (!stack.isOf(net.minecraft.item.Items.AIR)) {
                     return stack.getItem();
                 }

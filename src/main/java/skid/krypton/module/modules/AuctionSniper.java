@@ -35,14 +35,14 @@ import java.util.stream.Collectors;
 
 public final class AuctionSniper
         extends Module {
-    private final ItemSetting c = new ItemSetting(EncryptedString.a("Sniping Item"), Items.AIR);
-    private final StringSetting d = new StringSetting(EncryptedString.a("Price"), "1k");
-    private final ModeSetting<Mode> e = new ModeSetting(EncryptedString.a("Mode"), Mode.MANUAL, Mode.class).setDescription(EncryptedString.a("Manual is faster but api doesnt require auction gui opened all the time"));
-    private final StringSetting f = new StringSetting(EncryptedString.a("Api Key"), "").setDescription(EncryptedString.a("You can get it by typing /api in chat"));
-    private final NumberSetting g = new NumberSetting(EncryptedString.a("Refresh Delay"), 0.0, 100.0, 2.0, 1.0);
-    private final NumberSetting h = new NumberSetting(EncryptedString.a("Buy Delay"), 0.0, 100.0, 2.0, 1.0);
-    private final NumberSetting i = new NumberSetting(EncryptedString.a("API Refresh Rate"), 10.0, 5000.0, 250.0, 10.0).getValue(EncryptedString.a("How often to query the API (in milliseconds)"));
-    private final BooleanSetting j = new BooleanSetting(EncryptedString.a("Show API Notifications"), true).setDescription(EncryptedString.a("Show chat notifications for API actions"));
+    private final ItemSetting c = new ItemSetting(EncryptedString.of("Sniping Item"), Items.AIR);
+    private final StringSetting d = new StringSetting(EncryptedString.of("Price"), "1k");
+    private final ModeSetting<Mode> e = new ModeSetting(EncryptedString.of("Mode"), Mode.MANUAL, Mode.class).setDescription(EncryptedString.of("Manual is faster but api doesnt require auction gui opened all the time"));
+    private final StringSetting f = new StringSetting(EncryptedString.of("Api Key"), "").setDescription(EncryptedString.of("You can get it by typing /api in chat"));
+    private final NumberSetting g = new NumberSetting(EncryptedString.of("Refresh Delay"), 0.0, 100.0, 2.0, 1.0);
+    private final NumberSetting h = new NumberSetting(EncryptedString.of("Buy Delay"), 0.0, 100.0, 2.0, 1.0);
+    private final NumberSetting i = new NumberSetting(EncryptedString.of("API Refresh Rate"), 10.0, 5000.0, 250.0, 10.0).getValue(EncryptedString.of("How often to query the API (in milliseconds)"));
+    private final BooleanSetting j = new BooleanSetting(EncryptedString.of("Show API Notifications"), true).setDescription(EncryptedString.of("Show chat notifications for API actions"));
     private int k;
     private boolean l;
     private final HttpClient m;
@@ -55,11 +55,11 @@ public final class AuctionSniper
     private String t = "";
 
     public AuctionSniper() {
-        super(EncryptedString.a("Auction Sniper"), EncryptedString.a("Snipes items on auction house for cheap"), -1, Category.c);
+        super(EncryptedString.of("Auction Sniper"), EncryptedString.of("Snipes items on auction house for cheap"), -1, Category.DONUT);
         this.m = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(5L)).build();
         this.n = new Gson();
         Setting[] settingArray = new Setting[]{this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j};
-        this.a(settingArray);
+        this.addSettings(settingArray);
     }
 
     @Override
@@ -67,16 +67,16 @@ public final class AuctionSniper
         super.onEnable();
         double d = this.a(this.d.getValue());
         if (d == -1.0) {
-            if (this.b.player != null) {
-                ClientPlayerEntity clientPlayerEntity = this.b.player;
+            if (this.mc.player != null) {
+                ClientPlayerEntity clientPlayerEntity = this.mc.player;
                 clientPlayerEntity.sendMessage(Text.of("Invalid Price"), true);
             }
             this.toggle();
             return;
         }
-        if (this.c.a() != Items.AIR) {
+        if (this.c.getItem() != Items.AIR) {
             Map<String, Double> map = this.p;
-            map.put(this.c.a().toString(), d);
+            map.put(this.c.getItem().toString(), d);
         }
         this.o = 0L;
         this.q = false;
@@ -94,7 +94,7 @@ public final class AuctionSniper
     public void a(TickEvent tickEvent) {
         block10: {
             block9: {
-                if (this.b.player == null) {
+                if (this.mc.player == null) {
                     return;
                 }
                 if (this.k > 0) {
@@ -106,8 +106,8 @@ public final class AuctionSniper
                     return;
                 }
                 if (!this.e.isMode(Mode.MANUAL)) break block9;
-                ScreenHandler screenHandler = this.b.player.currentScreenHandler;
-                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block10;
+                ScreenHandler screenHandler = this.mc.player.currentScreenHandler;
+                if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block10;
                 if (((GenericContainerScreenHandler)screenHandler).getRows() == 6) {
                     this.a((GenericContainerScreenHandler)screenHandler);
                 } else if (((GenericContainerScreenHandler)screenHandler).getRows() == 3) {
@@ -116,10 +116,10 @@ public final class AuctionSniper
             }
             return;
         }
-        String[] stringArray = this.c.a().getTranslationKey().split("\\.");
+        String[] stringArray = this.c.getItem().getTranslationKey().split("\\.");
         String string2 = stringArray[stringArray.length - 1];
         String string3 = Arrays.stream(string2.replace("_", " ").split(" ")).map(string -> string.substring(0, 1).toUpperCase() + string.substring(1)).collect(Collectors.joining(" "));
-        this.b.getNetworkHandler().sendChatCommand("ah " + string3);
+        this.mc.getNetworkHandler().sendChatCommand("ah " + string3);
         this.k = 20;
     }
 
@@ -130,8 +130,8 @@ public final class AuctionSniper
                     block11: {
                         block9: {
                             if (!this.r) break block8;
-                            ScreenHandler screenHandler = this.b.player.currentScreenHandler;
-                            if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block9;
+                            ScreenHandler screenHandler = this.mc.player.currentScreenHandler;
+                            if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block9;
                             this.s = -1;
                             if (((GenericContainerScreenHandler)screenHandler).getRows() == 6) {
                                 this.a((GenericContainerScreenHandler)screenHandler);
@@ -141,7 +141,7 @@ public final class AuctionSniper
                             break block10;
                         }
                         if (this.s != -1) break block11;
-                        this.b.getNetworkHandler().sendChatCommand("ah " + this.t);
+                        this.mc.getNetworkHandler().sendChatCommand("ah " + this.t);
                         this.s = 0;
                         break block10;
                     }
@@ -150,8 +150,8 @@ public final class AuctionSniper
                     this.t = "";
                     break block10;
                 }
-                if (this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler && this.b.currentScreen.getTitle().getString().contains("Page")) {
-                    this.b.player.closeHandledScreen();
+                if (this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler && this.mc.currentScreen.getTitle().getString().contains("Page")) {
+                    this.mc.player.closeHandledScreen();
                     this.k = 20;
                     return;
                 }
@@ -164,7 +164,7 @@ public final class AuctionSniper
                     this.o = l;
                     if (this.f.getValue().isEmpty()) {
                         if (this.j.getValue()) {
-                            ClientPlayerEntity clientPlayerEntity = this.b.player;
+                            ClientPlayerEntity clientPlayerEntity = this.mc.player;
                             clientPlayerEntity.sendMessage(Text.of("\u00a7cAPI key is not set. Set it using /api in-game."), false);
                         }
                         return;
@@ -184,8 +184,8 @@ public final class AuctionSniper
                 String string = "https://api.donutsmp.net/v1/auction/list/" + 1;
                 HttpResponse<String> httpResponse = this.m.send(HttpRequest.newBuilder().uri(URI.create(string)).header("Authorization", "Bearer " + this.f.getValue()).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString("{\"sort\": \"recently_listed\"}")).build(), HttpResponse.BodyHandlers.ofString());
                 if (httpResponse.statusCode() != 200) {
-                    if (this.j.getValue() && this.b.player != null) {
-                        ClientPlayerEntity clientPlayerEntity = this.b.player;
+                    if (this.j.getValue() && this.mc.player != null) {
+                        ClientPlayerEntity clientPlayerEntity = this.mc.player;
                         clientPlayerEntity.sendMessage(Text.of("\u00a7cAPI Error: " + httpResponse.statusCode()), false);
                     }
                     ArrayList<?> arrayList = new ArrayList<>();
@@ -226,8 +226,8 @@ public final class AuctionSniper
                     string = entry.getKey();
                     d = entry.getValue();
                 } while (!string2.contains(string) || !((double)l <= d));
-                if (this.j.getValue() && this.b.player != null) {
-                    ClientPlayerEntity clientPlayerEntity = this.b.player;
+                if (this.j.getValue() && this.mc.player != null) {
+                    ClientPlayerEntity clientPlayerEntity = this.mc.player;
                     clientPlayerEntity.sendMessage(Text.of("\u00a7aFound " + string2 + " for " + this.a(l) + " \u00a7r(threshold: " + this.a(d) + ") \u00a7afrom seller: " + string3), false);
                 }
                 this.r = true;
@@ -235,8 +235,8 @@ public final class AuctionSniper
                 return;
             }
             catch (Exception exception) {
-                if (!this.j.getValue() || this.b.player == null) continue;
-                ClientPlayerEntity clientPlayerEntity = this.b.player;
+                if (!this.j.getValue() || this.mc.player == null) continue;
+                ClientPlayerEntity clientPlayerEntity = this.mc.player;
                 clientPlayerEntity.sendMessage(Text.of("\u00a7cError processing auction: " + exception.getMessage()), false);
             }
         }
@@ -248,18 +248,18 @@ public final class AuctionSniper
             this.k = 2;
             return;
         }
-        for (Object e : itemStack.getTooltip(Item.TooltipContext.DEFAULT, this.b.player, TooltipType.BASIC)) {
+        for (Object e : itemStack.getTooltip(Item.TooltipContext.DEFAULT, this.mc.player, TooltipType.BASIC)) {
             String string = e.toString();
             if (!string.contains("Recently Listed") || !((Text)e).getStyle().toString().contains("white") && !string.contains("white")) continue;
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 47, 1, SlotActionType.QUICK_MOVE, this.mc.player);
             this.k = 5;
             return;
         }
         for (int i = 0; i < 44; ++i) {
             ItemStack itemStack2 = genericContainerScreenHandler.getSlot(i).getStack();
-            if (!itemStack2.isOf(this.c.a()) || !this.a(itemStack2)) continue;
+            if (!itemStack2.isOf(this.c.getItem()) || !this.a(itemStack2)) continue;
             if (this.l) {
-                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.b.player);
+                this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, i, 1, SlotActionType.QUICK_MOVE, this.mc.player);
                 this.l = false;
                 return;
             }
@@ -270,16 +270,16 @@ public final class AuctionSniper
         if (this.r) {
             this.r = false;
             this.t = "";
-            this.b.player.closeHandledScreen();
+            this.mc.player.closeHandledScreen();
         } else {
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 49, 1, SlotActionType.QUICK_MOVE, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 49, 1, SlotActionType.QUICK_MOVE, this.mc.player);
             this.k = this.g.getIntValue();
         }
     }
 
     private void b(GenericContainerScreenHandler genericContainerScreenHandler) {
         if (this.a(genericContainerScreenHandler.getSlot(13).getStack())) {
-            this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.b.player);
+            this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 15, 1, SlotActionType.QUICK_MOVE, this.mc.player);
             this.k = 20;
         }
         if (this.r) {
@@ -312,20 +312,20 @@ public final class AuctionSniper
     }
 
     private boolean a(ItemStack itemStack) {
-        List list = itemStack.getTooltip(Item.TooltipContext.DEFAULT, this.b.player, TooltipType.BASIC);
+        List list = itemStack.getTooltip(Item.TooltipContext.DEFAULT, this.mc.player, TooltipType.BASIC);
         double d = this.b(list) / (double)itemStack.getCount();
         double d2 = this.a(this.d.getValue());
         if (d2 == -1.0) {
-            if (this.b.player != null) {
-                ClientPlayerEntity clientPlayerEntity = this.b.player;
+            if (this.mc.player != null) {
+                ClientPlayerEntity clientPlayerEntity = this.mc.player;
                 clientPlayerEntity.sendMessage(Text.of("Invalid Price"), true);
             }
             this.toggle();
             return false;
         }
         if (d == -1.0) {
-            if (this.b.player != null) {
-                ClientPlayerEntity clientPlayerEntity = this.b.player;
+            if (this.mc.player != null) {
+                ClientPlayerEntity clientPlayerEntity = this.mc.player;
                 clientPlayerEntity.sendMessage(Text.of("Invalid Auction Item Price"), true);
                 for (int i = 0; i < list.size() - 1; ++i) {
                     PrintStream printStream = System.out;

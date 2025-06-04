@@ -31,12 +31,12 @@ public final class SelfDestruct extends Module {
     private static final AtomicLong j;
 
     public SelfDestruct() {
-        super(EncryptedString.a("Self Destruct"), EncryptedString.a("Removes the client from your game |Credits to Argon for deletion|"), -1, Category.e);
-        this.d = new BooleanSetting(EncryptedString.a("Replace Mod"), true).setDescription(EncryptedString.a("Repalces the mod with the original JAR file of the ImmediatelyFast mod"));
-        this.e = new BooleanSetting(EncryptedString.a("Save Last Modified"), true).setDescription(EncryptedString.a("Saves the last modified date after self destruct"));
-        this.f = new BooleanSetting(EncryptedString.a("USN Journal Cleaner"), true);
-        this.g = new StringSetting(EncryptedString.a("Replace URL"), "https://cdn.modrinth.com/data/8shC1gFX/versions/sXO3idkS/BetterF3-11.0.1-Fabric-1.21.jar");
-        this.a(this.d, this.e, this.f, this.g);
+        super(EncryptedString.of("Self Destruct"), EncryptedString.of("Removes the client from your game |Credits to Argon for deletion|"), -1, Category.CLIENT);
+        this.d = new BooleanSetting(EncryptedString.of("Replace Mod"), true).setDescription(EncryptedString.of("Repalces the mod with the original JAR file of the ImmediatelyFast mod"));
+        this.e = new BooleanSetting(EncryptedString.of("Save Last Modified"), true).setDescription(EncryptedString.of("Saves the last modified date after self destruct"));
+        this.f = new BooleanSetting(EncryptedString.of("USN Journal Cleaner"), true);
+        this.g = new StringSetting(EncryptedString.of("Replace URL"), "https://cdn.modrinth.com/data/8shC1gFX/versions/sXO3idkS/BetterF3-11.0.1-Fabric-1.21.jar");
+        this.addSettings(this.d, this.e, this.f, this.g);
     }
 
     @Override
@@ -45,9 +45,9 @@ public final class SelfDestruct extends Module {
         skid.krypton.Krypton.INSTANCE.getModuleManager().getModuleByClass(Krypton.class).toggle(false);
         this.toggle(false);
         skid.krypton.Krypton.INSTANCE.getConfigManager().shutdown();
-        if (this.b.currentScreen instanceof ClickGUI) {
+        if (this.mc.currentScreen instanceof ClickGUI) {
             skid.krypton.Krypton.INSTANCE.shouldPreventClose = false;
-            this.b.currentScreen.close();
+            this.mc.currentScreen.close();
         }
         if (this.d.getValue()) {
             try {

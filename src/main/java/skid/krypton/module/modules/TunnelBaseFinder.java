@@ -67,23 +67,23 @@ public final class TunnelBaseFinder extends Module {
     private double w;
 
     public TunnelBaseFinder() {
-        super(EncryptedString.a("Tunnel Base Finder"), EncryptedString.a("Finds bases digging tunnel"), -1, Category.c);
-        this.c = new NumberSetting(EncryptedString.a("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
-        this.d = new BooleanSetting(EncryptedString.a("Spawners"), true);
-        this.e = new BooleanSetting(EncryptedString.a("Auto Totem Buy"), true);
-        this.f = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
-        this.g = new BooleanSetting(EncryptedString.a("Auto Mend"), true).setDescription(EncryptedString.a("Automatically repairs pickaxe."));
-        this.h = new NumberSetting(EncryptedString.a("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
-        this.i = new BooleanSetting(EncryptedString.a("Discord Notification"), false);
-        this.j = new StringSetting(EncryptedString.a("Webhook"), "");
-        this.k = new BooleanSetting(EncryptedString.a("Totem Check"), true);
-        this.l = new NumberSetting(EncryptedString.a("Totem Check Time"), 1.0, 120.0, 20.0, 1.0);
+        super(EncryptedString.of("Tunnel Base Finder"), EncryptedString.of("Finds bases digging tunnel"), -1, Category.DONUT);
+        this.c = new NumberSetting(EncryptedString.of("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
+        this.d = new BooleanSetting(EncryptedString.of("Spawners"), true);
+        this.e = new BooleanSetting(EncryptedString.of("Auto Totem Buy"), true);
+        this.f = new NumberSetting(EncryptedString.of("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
+        this.g = new BooleanSetting(EncryptedString.of("Auto Mend"), true).setDescription(EncryptedString.of("Automatically repairs pickaxe."));
+        this.h = new NumberSetting(EncryptedString.of("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
+        this.i = new BooleanSetting(EncryptedString.of("Discord Notification"), false);
+        this.j = new StringSetting(EncryptedString.of("Webhook"), "");
+        this.k = new BooleanSetting(EncryptedString.of("Totem Check"), true);
+        this.l = new NumberSetting(EncryptedString.of("Totem Check Time"), 1.0, 120.0, 20.0, 1.0);
         this.s = false;
         this.t = false;
         this.u = 0;
         this.v = 0;
         this.w = 0.0;
-        this.a(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l);
+        this.addSettings(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l);
     }
 
     @Override
@@ -99,9 +99,9 @@ public final class TunnelBaseFinder extends Module {
     @Override
     public void onDisable() {
         super.onDisable();
-        this.b.options.leftKey.setPressed(false);
-        this.b.options.rightKey.setPressed(false);
-        this.b.options.forwardKey.setPressed(false);
+        this.mc.options.leftKey.setPressed(false);
+        this.mc.options.rightKey.setPressed(false);
+        this.mc.options.forwardKey.setPressed(false);
     }
 
     @EventListener
@@ -114,59 +114,59 @@ public final class TunnelBaseFinder extends Module {
             return;
         }
         final int n = (this.a(this.n) + 90 * this.q) % 360;
-        if (this.b.player.getYaw() != n) {
-            this.b.player.setYaw((float) n);
+        if (this.mc.player.getYaw() != n) {
+            this.mc.player.setYaw((float) n);
         }
-        if (this.b.player.getPitch() != 2.0f) {
-            this.b.player.setPitch(2.0f);
+        if (this.mc.player.getPitch() != 2.0f) {
+            this.mc.player.setPitch(2.0f);
         }
         this.b(this.k());
         if (this.o > 0) {
-            this.b.options.forwardKey.setPressed(false);
+            this.mc.options.forwardKey.setPressed(false);
             --this.o;
             return;
         }
         this.l();
         if (this.e.getValue()) {
             final int n2 = this.f.getIntValue() - 1;
-            if (!this.b.player.getInventory().getStack(n2).isOf(Items.TOTEM_OF_UNDYING)) {
+            if (!this.mc.player.getInventory().getStack(n2).isOf(Items.TOTEM_OF_UNDYING)) {
                 if (this.v < 30 && !this.t) {
                     ++this.v;
                     return;
                 }
                 this.v = 0;
                 this.t = true;
-                if (this.b.player.getInventory().selectedSlot != n2) {
+                if (this.mc.player.getInventory().selectedSlot != n2) {
                     InventoryUtil.a(n2);
                 }
-                final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
-                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
-                    this.b.getNetworkHandler().sendChatCommand("shop");
+                final ScreenHandler currentScreenHandler = this.mc.player.currentScreenHandler;
+                if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
+                    this.mc.getNetworkHandler().sendChatCommand("shop");
                     this.o = 10;
                     return;
                 }
                 if (currentScreenHandler.getSlot(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
                 if (currentScreenHandler.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
+                this.mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
                 if (currentScreenHandler.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
-                this.b.getNetworkHandler().sendChatCommand("shop");
+                this.mc.getNetworkHandler().sendChatCommand("shop");
                 this.o = 10;
                 return;
             } else if (this.t) {
-                if (this.b.currentScreen != null) {
-                    this.b.player.closeHandledScreen();
+                if (this.mc.currentScreen != null) {
+                    this.mc.player.closeHandledScreen();
                     this.o = 20;
                 }
                 this.t = false;
@@ -175,72 +175,72 @@ public final class TunnelBaseFinder extends Module {
         }
         if (this.s) {
             final int n3 = this.h.getIntValue() - 1;
-            final ItemStack getStack = this.b.player.getInventory().getStack(n3);
-            if (this.b.player.getInventory().selectedSlot != n3) {
+            final ItemStack getStack = this.mc.player.getInventory().getStack(n3);
+            if (this.mc.player.getInventory().selectedSlot != n3) {
                 InventoryUtil.a(n3);
             }
             if (!getStack.isOf(Items.EXPERIENCE_BOTTLE)) {
-                final ScreenHandler fishHook = this.b.player.currentScreenHandler;
-                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) fishHook).getRows() != 3) {
-                    this.b.getNetworkHandler().sendChatCommand("shop");
+                final ScreenHandler fishHook = this.mc.player.currentScreenHandler;
+                if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) fishHook).getRows() != 3) {
+                    this.mc.getNetworkHandler().sendChatCommand("shop");
                     this.o = 10;
                     return;
                 }
                 if (fishHook.getSlot(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
                 if (fishHook.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 16, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 16, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
                 if (fishHook.getSlot(17).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
+                this.mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
                 if (fishHook.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.mc.player);
                     this.o = 10;
                     return;
                 }
-                this.b.getNetworkHandler().sendChatCommand("shop");
+                this.mc.getNetworkHandler().sendChatCommand("shop");
                 this.o = 10;
             } else {
-                if (this.b.currentScreen != null) {
-                    this.b.player.closeHandledScreen();
+                if (this.mc.currentScreen != null) {
+                    this.mc.player.closeHandledScreen();
                     this.o = 20;
                     return;
                 }
-                if (!EnchantmentUtil.a(this.b.player.getOffHandStack(), Enchantments.MENDING)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.b.player);
+                if (!EnchantmentUtil.a(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.mc.player);
                     this.o = 20;
                     return;
                 }
-                if (this.b.player.getOffHandStack().getDamage() > 0) {
-                    final ActionResult interactItem = this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
+                if (this.mc.player.getOffHandStack().getDamage() > 0) {
+                    final ActionResult interactItem = this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
                     if (interactItem.isAccepted() && interactItem.shouldSwingHand()) {
-                        this.b.player.swingHand(Hand.MAIN_HAND);
+                        this.mc.player.swingHand(Hand.MAIN_HAND);
                     }
                     this.o = 1;
                     return;
                 }
-                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.b.player);
+                this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.u, 40, SlotActionType.SWAP, this.mc.player);
                 this.s = false;
             }
         } else {
             if (this.g.getValue()) {
-                final ItemStack size = this.b.player.getMainHandStack();
+                final ItemStack size = this.mc.player.getMainHandStack();
                 if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                     this.s = true;
-                    this.u = this.b.player.getInventory().selectedSlot;
+                    this.u = this.mc.player.getInventory().selectedSlot;
                 }
             }
             if (this.k.getValue()) {
-                final boolean equals = this.b.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
+                final boolean equals = this.mc.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
                 final Module moduleByClass2 = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoTotem.class);
                 if (equals) {
                     this.w = 0.0;
@@ -250,41 +250,41 @@ public final class TunnelBaseFinder extends Module {
                     ++this.w;
                 }
                 if (this.w > this.l.getValue()) {
-                    this.a("Your totem exploded", (int) this.b.player.getX(), (int) this.b.player.getY(), (int) this.b.player.getZ());
+                    this.a("Your totem exploded", (int) this.mc.player.getX(), (int) this.mc.player.getY(), (int) this.mc.player.getZ());
                     return;
                 }
             }
             boolean a = false;
-            final HitResult crosshairTarget = this.b.crosshairTarget;
-            if (this.b.crosshairTarget instanceof BlockHitResult) {
+            final HitResult crosshairTarget = this.mc.crosshairTarget;
+            if (this.mc.crosshairTarget instanceof BlockHitResult) {
                 final BlockPos blockPos = ((BlockHitResult) crosshairTarget).getBlockPos();
                 if (!BlockUtil.a(blockPos, Blocks.AIR)) {
-                    a = this.a(blockPos, this.b.player.getHorizontalFacing());
+                    a = this.a(blockPos, this.mc.player.getHorizontalFacing());
                 }
             }
             if (a) {
                 this.c(true);
             }
-            final boolean a2 = this.a(this.b.player.getHorizontalFacing(), 3);
+            final boolean a2 = this.a(this.mc.player.getHorizontalFacing(), 3);
             boolean b = false;
-            final HitResult crosshairTarget2 = this.b.crosshairTarget;
-            if (this.b.crosshairTarget instanceof BlockHitResult) {
-                b = (this.b.player.getCameraPosVec(1.0f).distanceTo(Vec3d.ofCenter(((BlockHitResult) crosshairTarget2).getBlockPos())) > 3.0);
+            final HitResult crosshairTarget2 = this.mc.crosshairTarget;
+            if (this.mc.crosshairTarget instanceof BlockHitResult) {
+                b = (this.mc.player.getCameraPosVec(1.0f).distanceTo(Vec3d.ofCenter(((BlockHitResult) crosshairTarget2).getBlockPos())) > 3.0);
             }
             if (!a && (!b || !a2)) {
                 ++this.q;
-                this.r = this.b.player.getPos();
+                this.r = this.mc.player.getPos();
                 this.o = 5;
                 return;
             }
-            this.b.options.forwardKey.setPressed(a2 && b);
-            if (this.q > 0 && this.r != null && this.b.player.getPos().distanceTo(this.r) > 1.0) {
-                this.r = this.b.player.getPos();
-                final net.minecraft.util.math.Direction rotateYCounterclockwise = this.b.player.getHorizontalFacing().rotateYCounterclockwise();
-                BlockPos blockPos2 = this.b.player.getBlockPos().up().offset(rotateYCounterclockwise);
+            this.mc.options.forwardKey.setPressed(a2 && b);
+            if (this.q > 0 && this.r != null && this.mc.player.getPos().distanceTo(this.r) > 1.0) {
+                this.r = this.mc.player.getPos();
+                final net.minecraft.util.math.Direction rotateYCounterclockwise = this.mc.player.getHorizontalFacing().rotateYCounterclockwise();
+                BlockPos blockPos2 = this.mc.player.getBlockPos().up().offset(rotateYCounterclockwise);
                 for (int i = 0; i < 5; ++i) {
                     blockPos2 = blockPos2.offset(rotateYCounterclockwise);
-                    if (!this.b.world.getBlockState(blockPos2).getBlock().equals(Blocks.AIR)) {
+                    if (!this.mc.world.getBlockState(blockPos2).getBlock().equals(Blocks.AIR)) {
                         if (this.a(blockPos2, rotateYCounterclockwise) && this.a(blockPos2.offset(rotateYCounterclockwise), rotateYCounterclockwise)) {
                             --this.q;
                             this.o = 5;
@@ -309,19 +309,19 @@ public final class TunnelBaseFinder extends Module {
         if (enum4 == Direction.WEST) {
             return 90;
         }
-        return Math.round(this.b.player.getYaw());
+        return Math.round(this.mc.player.getYaw());
     }
 
     private boolean a(final net.minecraft.util.math.Direction direction, final int n) {
-        final BlockPos down = this.b.player.getBlockPos().down();
-        final BlockPos getBlockPos = this.b.player.getBlockPos();
+        final BlockPos down = this.mc.player.getBlockPos().down();
+        final BlockPos getBlockPos = this.mc.player.getBlockPos();
         for (int i = 0; i < n; ++i) {
             final BlockPos offset = down.offset(direction, i);
             final BlockPos offset2 = getBlockPos.offset(direction, i);
-            if (this.b.world.getBlockState(offset).isAir() || !this.a(offset)) {
+            if (this.mc.world.getBlockState(offset).isAir() || !this.a(offset)) {
                 return false;
             }
-            if (!this.b.world.getBlockState(offset2).isAir()) {
+            if (!this.mc.world.getBlockState(offset2).isAir()) {
                 return false;
             }
         }
@@ -335,7 +335,7 @@ public final class TunnelBaseFinder extends Module {
         final BlockPos offset2 = blockPos.offset(net.minecraft.util.math.Direction.UP, 2);
         final BlockPos offset3 = blockPos.offset(net.minecraft.util.math.Direction.DOWN, -2);
         final BlockPos offset4 = offset2.offset(rotateYClockwise, -1);
-        if (!this.a(offset4) || this.b.world.getBlockState(offset4).getBlock() == Blocks.GRAVEL) {
+        if (!this.a(offset4) || this.mc.world.getBlockState(offset4).getBlock() == Blocks.GRAVEL) {
             return false;
         }
         if (!this.a(offset3.offset(rotateYClockwise, -1))) {
@@ -355,7 +355,7 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private boolean a(final BlockPos blockPos) {
-        return this.a(this.b.world.getBlockState(blockPos).getBlock());
+        return this.a(this.mc.world.getBlockState(blockPos).getBlock());
     }
 
     private boolean a(final Block block) {
@@ -363,17 +363,17 @@ public final class TunnelBaseFinder extends Module {
     }
 
     private boolean b(final BlockPos blockPos) {
-        return this.b.world.getBlockState(blockPos).getBlock() instanceof InfestedBlock;
+        return this.mc.world.getBlockState(blockPos).getBlock() instanceof InfestedBlock;
     }
 
     private void b(final Direction enum4) {
-        final double getX = this.b.player.getX();
-        final double getY = this.b.player.getZ();
+        final double getX = this.mc.player.getX();
+        final double getY = this.mc.player.getZ();
         final double floor = Math.floor(getY);
         final double n = Math.floor(getX) + 0.5 - getX;
         final double n2 = floor + 0.5 - getY;
-        this.b.options.leftKey.setPressed(false);
-        this.b.options.rightKey.setPressed(false);
+        this.mc.options.leftKey.setPressed(false);
+        this.mc.options.rightKey.setPressed(false);
         boolean b = false;
         boolean b2 = false;
         if (enum4 == Direction.SOUTH) {
@@ -405,33 +405,33 @@ public final class TunnelBaseFinder extends Module {
             }
         }
         if (b) {
-            this.b.options.rightKey.setPressed(true);
+            this.mc.options.rightKey.setPressed(true);
         }
         if (b2) {
-            this.b.options.leftKey.setPressed(true);
+            this.mc.options.leftKey.setPressed(true);
         }
     }
 
     private void c(final boolean b) {
-        if (!this.b.player.isUsingItem()) {
-            if (b && this.b.crosshairTarget != null && this.b.crosshairTarget.getType() == HitResult.Type.BLOCK) {
-                final BlockHitResult blockHitResult = (BlockHitResult) this.b.crosshairTarget;
-                final BlockPos blockPos = ((BlockHitResult) this.b.crosshairTarget).getBlockPos();
-                if (!this.b.world.getBlockState(blockPos).isAir()) {
+        if (!this.mc.player.isUsingItem()) {
+            if (b && this.mc.crosshairTarget != null && this.mc.crosshairTarget.getType() == HitResult.Type.BLOCK) {
+                final BlockHitResult blockHitResult = (BlockHitResult) this.mc.crosshairTarget;
+                final BlockPos blockPos = ((BlockHitResult) this.mc.crosshairTarget).getBlockPos();
+                if (!this.mc.world.getBlockState(blockPos).isAir()) {
                     final net.minecraft.util.math.Direction side = blockHitResult.getSide();
-                    if (this.b.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
-                        this.b.particleManager.addBlockBreakingParticles(blockPos, side);
-                        this.b.player.swingHand(Hand.MAIN_HAND);
+                    if (this.mc.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
+                        this.mc.particleManager.addBlockBreakingParticles(blockPos, side);
+                        this.mc.player.swingHand(Hand.MAIN_HAND);
                     }
                 }
             } else {
-                this.b.interactionManager.cancelBlockBreaking();
+                this.mc.interactionManager.cancelBlockBreaking();
             }
         }
     }
 
     private Direction k() {
-        float n = this.b.player.getYaw() % 360.0f;
+        float n = this.mc.player.getYaw() % 360.0f;
         if (n < 0.0f) {
             n += 360.0f;
         }
@@ -454,9 +454,9 @@ public final class TunnelBaseFinder extends Module {
         final Iterator iterator = BlockUtil.a().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
-                final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
+                final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
                 if (this.d.getValue() && getBlockEntity instanceof MobSpawnerBlockEntity) {
-                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.b.world, this.b.world.getRandom(), (BlockPos) next).getNbt().getString("id");
+                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.mc.world, this.mc.world.getRandom(), (BlockPos) next).getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
                         blockPos = (BlockPos) next;
@@ -483,7 +483,7 @@ public final class TunnelBaseFinder extends Module {
             this.p = 0;
         }
         if (n > this.c.getIntValue()) {
-            this.a("YOU FOUND BASE", (int) this.b.player.getPos().x, (int) this.b.player.getPos().y, (int) this.b.player.getPos().z, true);
+            this.a("YOU FOUND BASE", (int) this.mc.player.getPos().x, (int) this.mc.player.getPos().y, (int) this.mc.player.getPos().z, true);
         }
     }
 
@@ -536,7 +536,7 @@ public final class TunnelBaseFinder extends Module {
         final MutableText literal = Text.literal("[TunnelBaseFinder] ");
         literal.append(text);
         this.toggle();
-        this.b.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
+        this.mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
     }
 
     public boolean j() {

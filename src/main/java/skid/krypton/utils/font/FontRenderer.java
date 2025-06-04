@@ -108,55 +108,22 @@ public final class FontRenderer {
             glyphPage3 = (glyphPage4 = glyphPage2);
             glyphPage2 = (glyphPage3 = glyphPage4);
             if (b) {
-                glyphPage2 = glyphPage;
-                glyphPage3 = (glyphPage4 = glyphPage2);
-                glyphPage2 = (glyphPage3 = glyphPage4);
                 final GlyphPage glyphPage5 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(1, (float) n), true, true);
-                glyphPage2 = (glyphPage3 = glyphPage);
-                glyphPage4 = (glyphPage2 = glyphPage3);
-                glyphPage3 = (glyphPage4 = glyphPage2);
                 glyphPage5.a(array);
                 glyphPage5.a();
                 glyphPage2 = glyphPage5;
-                glyphPage3 = (glyphPage4 = glyphPage);
-                glyphPage3 = (glyphPage4 = glyphPage4);
-                glyphPage2 = glyphPage5;
-                glyphPage3 = glyphPage;
-                glyphPage4 = (glyphPage3 = glyphPage3);
-                glyphPage2 = glyphPage5;
-            } else {
-                glyphPage2 = glyphPage;
             }
-            glyphPage3 = glyphPage;
-            glyphPage4 = (glyphPage3 = glyphPage3);
             if (b2) {
-                glyphPage3 = glyphPage;
-                glyphPage4 = (glyphPage3 = glyphPage3);
                 final GlyphPage glyphPage6 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(2, (float) n), true, true);
-                glyphPage3 = (glyphPage4 = glyphPage);
-                glyphPage3 = (glyphPage4 = glyphPage4);
                 glyphPage6.a(array);
                 glyphPage6.a();
                 glyphPage3 = glyphPage6;
-                glyphPage4 = glyphPage;
-                glyphPage3 = glyphPage6;
-                glyphPage4 = glyphPage;
-                glyphPage3 = glyphPage6;
-            } else {
-                glyphPage3 = glyphPage;
             }
-            glyphPage4 = glyphPage;
             if (b3) {
-                glyphPage4 = glyphPage;
                 final GlyphPage glyphPage7 = new GlyphPage(Font.createFont(0, FontRenderer.class.getResourceAsStream(charSequence.toString())).deriveFont(3, (float) n), true, true);
-                glyphPage4 = glyphPage;
                 glyphPage7.a(array);
                 glyphPage7.a();
                 glyphPage4 = glyphPage7;
-                glyphPage4 = glyphPage7;
-                glyphPage4 = glyphPage7;
-            } else {
-                glyphPage4 = glyphPage;
             }
         } catch (final Exception ex2) {
             ex2.printStackTrace();

@@ -96,9 +96,10 @@ public final class ModuleManager {
 
     @EventListener
     public void a(final KeyEvent keyEvent) {
-        if (skid.krypton.Krypton.e.player != null && skid.krypton.Krypton.e.currentScreen instanceof ChatScreen) {
+        if (skid.krypton.Krypton.e.player == null || skid.krypton.Krypton.e.currentScreen instanceof ChatScreen) {
             return;
         }
+
         if (!SelfDestruct.c) {
             this.modules.forEach(module -> {
                 if (module.getKeybind() == keyEvent.a && keyEvent.b == 1) {

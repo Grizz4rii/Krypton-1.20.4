@@ -81,14 +81,13 @@ public final class ModuleManager {
         }
     }
 
-    public List a(final Category category) {
-        return this.modules.stream().filter(module -> module.getCategory() == category2).toList();
+    public List<Module> a(final Category category) {
+        return this.modules.stream().filter(module -> module.getCategory() == category).toList();
     }
 
     public Module getModuleByClass(final Class<? extends Module> obj) {
-        final Stream<Object> stream = this.modules.stream();
         Objects.requireNonNull(obj);
-        return stream.filter(obj::isInstance).findFirst().orElse(null);
+        return this.modules.stream().filter(obj::isInstance).findFirst().orElse(null);
     }
 
     public void a(final Module module) {
@@ -103,7 +102,7 @@ public final class ModuleManager {
         }
         if (!SelfDestruct.c) {
             this.modules.forEach(module -> {
-                if (module.getKeybind() == keyEvent2.a && keyEvent2.b == 1) {
+                if (module.getKeybind() == keyEvent.a && keyEvent.b == 1) {
                     module.toggle();
                 }
             });

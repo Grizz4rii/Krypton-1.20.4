@@ -8,6 +8,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import skid.krypton.Krypton;
+import skid.krypton.gui.Component;
+import skid.krypton.gui.Window;
+import skid.krypton.module.Module;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.*;
 import skid.krypton.utils.*;
@@ -40,7 +43,7 @@ public final class ModuleButton {
     private final float expandAnimation;
 
     public ModuleButton(final Window parent, final Module module, final int offset) {
-        this.settings = new ArrayList<Component>();
+        this.settings = new ArrayList<>();
         this.animation = new Animation(0.0);
         this.ACCENT_COLOR = new Color(65, 105, 225);
         this.HOVER_COLOR = new Color(255, 255, 255, 20);
@@ -239,11 +242,9 @@ public final class ModuleButton {
             }
         }
         if (this.extended) {
-            final Iterator<Component> iterator = this.settings.iterator();
-            while (iterator.hasNext()) {
-                iterator.next().mouseClicked(n, n2, n3);
+            for (Component setting : this.settings) {
+                setting.mouseClicked(n, n2, n3);
             }
-            throw new IOException();
         }
     }
 

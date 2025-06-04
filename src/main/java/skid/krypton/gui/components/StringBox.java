@@ -30,8 +30,8 @@ class StringBox extends Screen {
     final /* synthetic */ TextBox this$0;
 
     public StringBox(final TextBox this$0, final StringSetting setting) {
-        this.this$0 = this$0;
         super(Text.empty());
+        this.this$0 = this$0;
         this.selectionStart = -1;
         this.selecting = false;
         this.lastCursorBlink = 0L;
@@ -41,9 +41,9 @@ class StringBox extends Screen {
         this.cursorPosition = this.content.length();
     }
 
-    public void method_25394(final DrawContext drawContext, final int n, final int n2, final float n3) {
+    public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
         RenderUtils.c();
-        super.method_25394(drawContext, n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n3);
+        super.render(drawContext, n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n3);
         final long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - this.lastCursorBlink > 530L) {
             this.cursorVisible = !this.cursorVisible;
@@ -107,13 +107,13 @@ class StringBox extends Screen {
         RenderUtils.d();
     }
 
-    public void method_16014(final double n, final double n2) {
-        super.method_16014(n, n2);
+    public void mouseMoved(final double n, final double n2) {
+        super.mouseMoved(n, n2);
         this.cursorVisible = true;
         this.lastCursorBlink = System.currentTimeMillis();
     }
 
-    public boolean method_25402(final double n, final double n2, final int n3) {
+    public boolean mouseClicked(final double n, final double n2, final int n3) {
         final double n4 = n * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n5 = n2 * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int width = this.this$0.mc.getWindow().getWidth();
@@ -130,14 +130,14 @@ class StringBox extends Screen {
             this.this$0.mc.setScreen((Screen) skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
-        return super.method_25402(n4, n5, n3);
+        return super.mouseClicked(n4, n5, n3);
     }
 
     private boolean isHovered(final double n, final double n2, final int n3, final int n4, final int n5, final int n6) {
         return n >= n3 && n <= n3 + n5 && n2 >= n4 && n2 <= n4 + n6;
     }
 
-    public boolean method_25404(final int n, final int n2, final int n3) {
+    public boolean keyPressed(final int n, final int n2, final int n3) {
         this.cursorVisible = true;
         this.lastCursorBlink = System.currentTimeMillis();
         if (n == 256) {
@@ -251,10 +251,10 @@ class StringBox extends Screen {
             this.cursorPosition = this.content.length();
             return true;
         }
-        return super.method_25404(n, n2, n3);
+        return super.keyPressed(n, n2, n3);
     }
 
-    public boolean method_25400(final char c, final int n) {
+    public boolean charTyped(final char c, final int n) {
         if (this.selectionStart != -1 && this.selectionStart != this.cursorPosition) {
             final int min = Math.min(this.selectionStart, this.cursorPosition);
             this.content = this.content.substring(0, min) + c + this.content.substring(Math.max(this.selectionStart, this.cursorPosition));
@@ -291,10 +291,10 @@ class StringBox extends Screen {
         return n == 1;
     }
 
-    public void method_25420(final DrawContext drawContext, final int n, final int n2, final float n3) {
+    public void renderBackground(final DrawContext drawContext, final int n, final int n2, final float n3) {
     }
 
-    public boolean method_25422() {
+    public boolean shouldCloseOnEsc() {
         return false;
     }
 }

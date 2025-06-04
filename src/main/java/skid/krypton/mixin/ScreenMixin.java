@@ -19,11 +19,11 @@ import skid.krypton.gui.ClickGUI;
 public class ScreenMixin {
     @Shadow
     @Nullable
-    protected MinecraftClient field_22787;
+    protected MinecraftClient client;
 
     @Inject(method = {"renderBackground"}, at = {@At("HEAD")}, cancellable = true)
     private void dontRenderBackground(final DrawContext drawContext, final int n, final int n2, final float n3, final CallbackInfo callbackInfo) {
-        if (this.field_22787.currentScreen instanceof ClickGUI) {
+        if (this.client.currentScreen instanceof ClickGUI) {
             callbackInfo.cancel();
         }
     }

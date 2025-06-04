@@ -21,6 +21,7 @@ import skid.krypton.utils.font.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -38,8 +39,8 @@ class ItemFilter extends Screen {
     final /* synthetic */ ItemBox this$0;
 
     public ItemFilter(final ItemBox this$0, final ItemSetting setting) {
-        this.this$0 = this$0;
         super(Text.empty());
+        this.this$0 = this$0;
         this.searchQuery = "";
         this.scrollOffset = 0;
         this.selectedIndex = -1;
@@ -61,11 +62,11 @@ class ItemFilter extends Screen {
         }
     }
 
-    public void method_25394(final DrawContext drawContext, final int n, final int n2, final float n3) {
+    public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
         RenderUtils.c();
         final int n4 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int n5 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
-        super.method_25394(drawContext, n4, n5, n3);
+        super.render(drawContext, n4, n5, n3);
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
         int a;
@@ -142,7 +143,7 @@ class ItemFilter extends Screen {
         RenderUtils.d();
     }
 
-    public boolean method_25402(final double n, final double n2, final int n3) {
+    public boolean mouseClicked(final double n, final double n2, final int n3) {
         final double n4 = n * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n5 = n2 * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int n6 = (this.this$0.mc.getWindow().getWidth() - 600) / 2;
@@ -185,10 +186,10 @@ class ItemFilter extends Screen {
                 }
             }
         }
-        return super.method_25402(n4, n5, n3);
+        return super.mouseClicked(n4, n5, n3);
     }
 
-    public boolean method_25401(final double n, final double n2, final double n3, final double n4) {
+    public boolean mouseScrolled(final double n, final double n2, final double n3, final double n4) {
         final double n5 = n * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final double n6 = n2 * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int width = this.this$0.mc.getWindow().getWidth();
@@ -203,10 +204,10 @@ class ItemFilter extends Screen {
             }
             return true;
         }
-        return super.method_25401(n5, n6, n3, n4);
+        return super.mouseScrolled(n5, n6, n3, n4);
     }
 
-    public boolean method_25404(final int n, final int n2, final int n3) {
+    public boolean keyPressed(final int n, final int n2, final int n3) {
         if (n == 256) {
             if (this.selectedIndex >= 0 && this.selectedIndex < this.filteredItems.size()) {
                 this.setting.a(this.filteredItems.get(this.selectedIndex));
@@ -256,10 +257,10 @@ class ItemFilter extends Screen {
             }
             return true;
         }
-        return super.method_25404(n, n2, n3);
+        return super.keyPressed(n, n2, n3);
     }
 
-    public boolean method_25400(final char c, final int n) {
+    public boolean charTyped(final char c, final int n) {
         this.searchQuery += c;
         this.updateFilteredItems();
         return true;
@@ -267,12 +268,9 @@ class ItemFilter extends Screen {
 
     private void updateFilteredItems() {
         if (this.searchQuery.isEmpty()) {
-            this.filteredItems = new ArrayList<Item>(this.allItems);
+            this.filteredItems = new ArrayList<>(this.allItems);
         } else {
-            this.filteredItems = this.allItems.stream().filter(item -> {
-                this.searchQuery.toLowerCase();
-                return item.getName().getString().toLowerCase().contains(s);
-            }).collect((Collector<? super Object, ?, List<Item>>) Collectors.toList());
+            this.filteredItems = this.allItems.stream().filter(item -> item.getName().getString().toLowerCase().contains(this.searchQuery.toLowerCase())).collect(Collectors.toList());
         }
         this.scrollOffset = 0;
         this.selectedIndex = -1;
@@ -303,10 +301,10 @@ class ItemFilter extends Screen {
         return n >= n3 && n <= n3 + n5 && n2 >= n4 && n2 <= n4 + n6;
     }
 
-    public void method_25420(final DrawContext drawContext, final int n, final int n2, final float n3) {
+    public void renderBackground(final DrawContext drawContext, final int n, final int n2, final float n3) {
     }
 
-    public boolean method_25422() {
+    public boolean shouldCloseOnEsc() {
         return false;
     }
 }

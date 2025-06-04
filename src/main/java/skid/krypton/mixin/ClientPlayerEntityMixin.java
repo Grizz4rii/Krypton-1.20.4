@@ -23,7 +23,7 @@ import skid.krypton.manager.EventManager;
 public class ClientPlayerEntityMixin extends AbstractClientPlayerEntity {
     @Shadow
     @Final
-    protected MinecraftClient field_3937;
+    protected MinecraftClient client;
 
     public ClientPlayerEntityMixin(final ClientWorld clientWorld, final GameProfile gameProfile) {
         super(clientWorld, gameProfile);

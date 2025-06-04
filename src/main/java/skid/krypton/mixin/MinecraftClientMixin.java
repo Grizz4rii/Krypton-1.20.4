@@ -24,43 +24,43 @@ import skid.krypton.manager.EventManager;
 public class MinecraftClientMixin {
     @Shadow
     @Nullable
-    public ClientWorld field_1687;
+    public ClientWorld world;
     @Shadow
     @Final
-    private Window field_1704;
+    private Window window;
     @Shadow
-    private int field_1752;
+    private int itemUseCooldown;
 
     @Inject(method = {"tick"}, at = {@At("HEAD")})
     private void onTick(final CallbackInfo callbackInfo) {
-        if (this.field_1687 != null) {
+        if (this.world != null) {
             EventManager.b(new TickEvent());
         }
     }
 
     @Inject(method = {"onResolutionChanged"}, at = {@At("HEAD")})
     private void onResolutionChanged(final CallbackInfo callbackInfo) {
-        EventManager.b(new ResolutionChangedEvent(this.field_1704));
+        EventManager.b(new ResolutionChangedEvent(this.window));
     }
 
     @Inject(method = {"doItemUse"}, at = {@At("RETURN")}, cancellable = true)
     private void onItemUseReturn(final CallbackInfo callbackInfo) {
-        final PostItemUseEvent postItemUseEvent = new PostItemUseEvent(this.field_1752);
+        final PostItemUseEvent postItemUseEvent = new PostItemUseEvent(this.itemUseCooldown);
         EventManager.b(postItemUseEvent);
         if (postItemUseEvent.isCancelled()) {
             callbackInfo.cancel();
         }
-        this.field_1752 = postItemUseEvent.a;
+        this.itemUseCooldown = postItemUseEvent.a;
     }
 
     @Inject(method = {"doItemUse"}, at = {@At("HEAD")}, cancellable = true)
     private void onItemUseHead(final CallbackInfo callbackInfo) {
-        final PreItemUseEvent preItemUseEvent = new PreItemUseEvent(this.field_1752);
+        final PreItemUseEvent preItemUseEvent = new PreItemUseEvent(this.itemUseCooldown);
         EventManager.b(preItemUseEvent);
         if (preItemUseEvent.isCancelled()) {
             callbackInfo.cancel();
         }
-        this.field_1752 = preItemUseEvent.a;
+        this.itemUseCooldown = preItemUseEvent.a;
     }
 
     @Inject(method = {"doAttack"}, at = {@At("HEAD")}, cancellable = true)

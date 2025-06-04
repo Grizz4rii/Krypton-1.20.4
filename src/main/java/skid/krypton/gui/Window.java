@@ -8,6 +8,7 @@ import net.minecraft.client.gui.DrawContext;
 import skid.krypton.Krypton;
 import skid.krypton.gui.components.ModuleButton;
 import skid.krypton.module.Category;
+import skid.krypton.module.Module;
 import skid.krypton.utils.*;
 import skid.krypton.utils.font.TextRenderer;
 
@@ -47,10 +48,10 @@ public final class Window {
         this.parent = parent;
         this.prevX = n;
         this.prevY = n2;
-        final Iterator iterator = new ArrayList(Krypton.INSTANCE.b().a(category)).iterator();
+        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.b().a(category)).iterator();
         int n3 = height;
         while (iterator.hasNext()) {
-            this.moduleButtons.add(new ModuleButton(this, (Module) iterator.next(), n3));
+            this.moduleButtons.add(new ModuleButton(this, iterator.next(), n3));
             n3 += height;
         }
     }

@@ -6,6 +6,7 @@ package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
+import skid.krypton.gui.Component;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.StringSetting;
 import skid.krypton.utils.ColorUtil;

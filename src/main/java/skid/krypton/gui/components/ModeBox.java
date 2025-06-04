@@ -5,6 +5,7 @@
 package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
+import skid.krypton.gui.Component;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.EnumSetting;
 import skid.krypton.utils.ColorUtil;

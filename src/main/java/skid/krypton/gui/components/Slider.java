@@ -7,6 +7,7 @@ package skid.krypton.gui.components;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import skid.krypton.gui.Component;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.MinMaxSetting;
 import skid.krypton.utils.ColorUtil;

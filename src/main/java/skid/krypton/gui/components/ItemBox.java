@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import skid.krypton.gui.Component;
 import skid.krypton.setting.Setting;
 import skid.krypton.setting.settings.ItemSetting;
 import skid.krypton.utils.ColorUtil;

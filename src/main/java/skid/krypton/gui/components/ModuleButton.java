@@ -14,7 +14,6 @@ import skid.krypton.utils.font.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public final class ModuleButton {
@@ -53,21 +52,21 @@ public final class ModuleButton {
         this.offset = offset;
         this.extended = false;
         this.settingOffset = parent.getHeight();
-        for (final Object next : module.getSettings()) {
+        for (final Setting next : module.getSettings()) {
             if (next instanceof BooleanSetting) {
-                this.settings.add(new Checkbox(this, (Setting) next, this.settingOffset));
+                this.settings.add(new Checkbox(this, next, this.settingOffset));
             } else if (next instanceof NumberSetting) {
-                this.settings.add(new NumberBox(this, (Setting) next, this.settingOffset));
+                this.settings.add(new NumberBox(this, next, this.settingOffset));
             } else if (next instanceof EnumSetting) {
-                this.settings.add(new ModeBox(this, (Setting) next, this.settingOffset));
+                this.settings.add(new ModeBox(this, next, this.settingOffset));
             } else if (next instanceof BindSetting) {
-                this.settings.add(new Keybind(this, (Setting) next, this.settingOffset));
+                this.settings.add(new Keybind(this, next, this.settingOffset));
             } else if (next instanceof StringSetting) {
-                this.settings.add(new TextBox(this, (Setting) next, this.settingOffset));
+                this.settings.add(new TextBox(this, next, this.settingOffset));
             } else if (next instanceof MinMaxSetting) {
-                this.settings.add(new Slider(this, (Setting) next, this.settingOffset));
+                this.settings.add(new Slider(this, next, this.settingOffset));
             } else if (next instanceof ItemSetting) {
-                this.settings.add(new ItemBox(this, (Setting) next, this.settingOffset));
+                this.settings.add(new ItemBox(this, next, this.settingOffset));
             }
             this.settingOffset += parent.getHeight();
         }
@@ -77,9 +76,8 @@ public final class ModuleButton {
         if (this.parent.getY() + this.offset > MinecraftClient.getInstance().getWindow().getHeight()) {
             return;
         }
-        final Iterator<Component> iterator = this.settings.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().onUpdate();
+        for (Component setting : this.settings) {
+            setting.onUpdate();
         }
         this.updateAnimations(n, n2, n3);
         final int x = this.parent.getX();
@@ -118,10 +116,10 @@ public final class ModuleButton {
 
     private void renderButtonBackground(final DrawContext drawContext, final int n, final int n2, final int n3, final int n4) {
         final Color a = ColorUtil.a(new Color(25, 25, 30, 230), this.HOVER_COLOR, this.hoverAnimation);
-        final boolean b = this.parent.moduleButtons.get(this.parent.moduleButtons.size() - 1) == this;
+        final boolean b = this.parent.moduleButtons.getLast() == this;
         if (b && !this.extended) {
             RenderUtils.a(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 6.0, 6.0, 50.0);
-        } else if (b && this.extended) {
+        } else if (b) {
             RenderUtils.a(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 0.0, 0.0, 50.0);
         } else {
             drawContext.fill(n, n2, n + n3, n2 + n4, a.getRGB());
@@ -160,9 +158,8 @@ public final class ModuleButton {
         final int n4 = this.parent.getY() + this.offset + this.parent.getHeight();
         final double animation = this.animation.getAnimation();
         RenderSystem.enableScissor(this.parent.getX(), Krypton.mc.getWindow().getHeight() - (n4 + (int) animation), this.parent.getWidth(), (int) animation);
-        final Iterator<Component> iterator = this.settings.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().render(drawContext, n, n2 - n4, n3);
+        for (Component setting : this.settings) {
+            setting.render(drawContext, n, n2 - n4, n3);
         }
         this.renderSliderControls(drawContext);
         RenderSystem.disableScissor();
@@ -189,65 +186,52 @@ public final class ModuleButton {
     }
 
     public void onExtend() {
-        final Iterator<ModuleButton> iterator = this.parent.moduleButtons.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().extended = false;
+        for (ModuleButton moduleButton : this.parent.moduleButtons) {
+            moduleButton.extended = false;
         }
     }
 
     public void keyPressed(final int n, final int n2, final int n3) {
-        final Iterator<Component> iterator = this.settings.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().keyPressed(n, n2, n3);
+        for (Component setting : this.settings) {
+            setting.keyPressed(n, n2, n3);
         }
     }
 
     public void mouseDragged(final double n, final double n2, final int n3, final double n4, final double n5) {
         if (this.extended) {
-            final Iterator<Component> iterator = this.settings.iterator();
-            while (iterator.hasNext()) {
-                iterator.next().mouseDragged(n, n2, n3, n4, n5);
+            for (Component setting : this.settings) {
+                setting.mouseDragged(n, n2, n3, n4, n5);
             }
         }
     }
 
     public void mouseClicked(final double n, final double n2, final int button) {
-        System.out.println(module.getName() + ": " + button);
         if (this.isHovered(n, n2)) {
-            System.out.println(module.getName() + ": " + button);
             if (button == 0) {
                 final int n4 = this.parent.getX() + this.parent.getWidth() - 30;
                 final int n5 = this.parent.getY() + this.offset + this.parent.getHeight() / 2 - 3;
 
                 if (n >= n4 && n <= n4 + 12 && n2 >= n5 && n2 <= n5 + 6) {
-                    System.out.println("Toggle");
                     this.module.toggle();
                 } else if (!this.module.getSettings().isEmpty() && n > this.parent.getX() + this.parent.getWidth() - 25) {
-                    System.out.println("yo");
                     if (!this.extended) {
-                        System.out.println("yo2");
                         this.onExtend();
                     }
                     this.extended = !this.extended;
                 } else {
-                    System.out.println("yo3");
                     this.module.toggle();
                 }
             } else if (button == 1) {
-                System.out.println("yo4");
                 if (this.module.getSettings().isEmpty()) {
                     return;
                 }
                 if (!this.extended) {
-                    System.out.println("yo5");
                     this.onExtend();
                 }
-                System.out.println("yo6");
                 this.extended = !this.extended;
             }
         }
         if (this.extended) {
-            System.out.println("yo7");
             for (Component setting : this.settings) {
                 setting.mouseClicked(n, n2, button);
             }
@@ -265,22 +249,18 @@ public final class ModuleButton {
             enabledAnimation = 0.0f;
         }
         this.enabledAnimation = enabledAnimation;
-        final Iterator<Component> iterator = this.settings.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().onGuiClose();
+        for (Component setting : this.settings) {
+            setting.onGuiClose();
         }
     }
 
     public void mouseReleased(final double n, final double n2, final int n3) {
-        final Iterator<Component> iterator = this.settings.iterator();
-        while (iterator.hasNext()) {
-            iterator.next().mouseReleased(n, n2, n3);
+        for (Component setting : this.settings) {
+            setting.mouseReleased(n, n2, n3);
         }
     }
 
     public boolean isHovered(final double n, final double n2) {
-        //if (module.getName().equals("Self Destruct"))
-        //    System.out.println(module.getName() + ": " + (n > parent.getX()) + " && " + (n < parent.getX() + parent.getWidth()) + " && " + (n2 > parent.getY() + offset) + " && " + (n2 < parent.getY() + offset + parent.getHeight()));
         return n > this.parent.getX() && n < this.parent.getX() + this.parent.getWidth() && n2 > this.parent.getY() + this.offset && n2 < this.parent.getY() + this.offset + this.parent.getHeight();
     }
 }

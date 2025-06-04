@@ -3,11 +3,11 @@ package skid.krypton.utils;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import skid.krypton.font.Fonts;
-import skid.krypton.module.modules.Krypton;
+import skid.krypton.module.modules.client.Krypton;
 
 public final class TextRenderer {
     public static void a(final CharSequence charSequence, final DrawContext drawContext, final int n, final int n2, final int n3) {
-        if (Krypton.j.getValue()) {
+        if (Krypton.useCustomFont.getValue()) {
             Fonts.fontRenderer.b(drawContext.getMatrices(), charSequence, (float) n, (float) n2, n3);
         } else {
             c(charSequence, drawContext, n, n2, n3);
@@ -15,14 +15,14 @@ public final class TextRenderer {
     }
 
     public static int a(final CharSequence charSequence) {
-        if (Krypton.j.getValue()) {
+        if (Krypton.useCustomFont.getValue()) {
             return Fonts.fontRenderer.a(charSequence);
         }
         return skid.krypton.Krypton.mc.textRenderer.getWidth(charSequence.toString()) * 2;
     }
 
     public static void b(final CharSequence charSequence, final DrawContext drawContext, final int n, final int n2, final int n3) {
-        if (Krypton.j.getValue()) {
+        if (Krypton.useCustomFont.getValue()) {
             Fonts.fontRenderer.b(drawContext.getMatrices(), charSequence, (float) (n - Fonts.fontRenderer.a(charSequence) / 2), (float) n2, n3);
         } else {
             d(charSequence, drawContext, n, n2, n3);

@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import skid.krypton.Krypton;
 import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.manager.EventManager;
-import skid.krypton.module.modules.Freecam;
+import skid.krypton.module.modules.misc.Freecam;
 
 @Mixin({GameRenderer.class})
 public abstract class GameRendererMixin {

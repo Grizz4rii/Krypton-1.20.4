@@ -70,14 +70,14 @@ public final class ClickGUI extends Screen {
             }
             final int alpha = this.currentColor.getAlpha();
             int n4;
-            if (skid.krypton.module.modules.Krypton.i.getValue()) {
+            if (skid.krypton.module.modules.client.Krypton.renderBackground.getValue()) {
                 n4 = 200;
             } else {
                 n4 = 0;
             }
             if (alpha != n4) {
                 int n5;
-                if (skid.krypton.module.modules.Krypton.i.getValue()) {
+                if (skid.krypton.module.modules.client.Krypton.renderBackground.getValue()) {
                     n5 = 200;
                 } else {
                     n5 = 0;
@@ -145,7 +145,7 @@ public final class ClickGUI extends Screen {
     }
 
     public void close() {
-        Krypton.INSTANCE.getModuleManager().getModuleByClass(skid.krypton.module.modules.Krypton.class).setEnabled(false);
+        Krypton.INSTANCE.getModuleManager().getModuleByClass(skid.krypton.module.modules.client.Krypton.class).setEnabled(false);
         this.onGuiClose();
     }
 

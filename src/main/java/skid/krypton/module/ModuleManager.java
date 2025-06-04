@@ -3,7 +3,15 @@ package skid.krypton.module;
 import net.minecraft.client.gui.screen.ChatScreen;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.KeyEvent;
-import skid.krypton.module.modules.*;
+import skid.krypton.module.modules.client.Krypton;
+import skid.krypton.module.modules.client.SelfDestruct;
+import skid.krypton.module.modules.combat.*;
+import skid.krypton.module.modules.donut.*;
+import skid.krypton.module.modules.misc.*;
+import skid.krypton.module.modules.render.HUD;
+import skid.krypton.module.modules.render.PlayerESP;
+import skid.krypton.module.modules.render.StorageESP;
+import skid.krypton.module.modules.render.TargetHUD;
 import skid.krypton.module.setting.BindSetting;
 import skid.krypton.utils.EncryptedString;
 
@@ -94,7 +102,7 @@ public final class ModuleManager {
             return;
         }
 
-        if (!SelfDestruct.c) {
+        if (!SelfDestruct.isActive) {
             this.modules.forEach(module -> {
                 if (module.getKeybind() == keyEvent.key && keyEvent.mode == 1) {
                     module.toggle();

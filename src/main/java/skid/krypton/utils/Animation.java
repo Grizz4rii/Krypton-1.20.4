@@ -1,6 +1,6 @@
 package skid.krypton.utils;
 
-import skid.krypton.module.modules.Krypton;
+import skid.krypton.module.modules.client.Krypton;
 
 public final class Animation {
     private double value;
@@ -12,11 +12,11 @@ public final class Animation {
     }
 
     public double animate(final double n, final double a) {
-        if (Krypton.l.isMode(Krypton.AnimationMode.NORMAL)) {
+        if (Krypton.animationMode.isMode(Krypton.AnimationMode.NORMAL)) {
             this.value = MathUtil.a((float) n, this.value, a);
-        } else if (Krypton.l.isMode(Krypton.AnimationMode.POSITIVE)) {
+        } else if (Krypton.animationMode.isMode(Krypton.AnimationMode.POSITIVE)) {
             this.value = MathUtil.a(n, this.value, a);
-        } else if (Krypton.l.isMode(Krypton.AnimationMode.OFF)) {
+        } else if (Krypton.animationMode.isMode(Krypton.AnimationMode.OFF)) {
             this.value = a;
         }
         return this.value;

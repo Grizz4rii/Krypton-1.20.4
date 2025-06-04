@@ -2,8 +2,8 @@ package skid.krypton.utils;
 
 import net.minecraft.util.math.Vec3d;
 import org.joml.Vector3d;
-import skid.krypton.module.modules.Krypton;
-import skid.krypton.module.modules.SelfDestruct;
+import skid.krypton.module.modules.client.Krypton;
+import skid.krypton.module.modules.client.SelfDestruct;
 
 import java.awt.*;
 import java.io.File;
@@ -15,13 +15,13 @@ import java.net.URL;
 
 public final class KryptonUtil {
     public static Color getMainColor(final int n, final int n2) {
-        final int f = Krypton.c.getIntValue();
-        final int f2 = Krypton.d.getIntValue();
-        final int f3 = Krypton.e.getIntValue();
-        if (Krypton.h.getValue()) {
+        final int f = Krypton.redColor.getIntValue();
+        final int f2 = Krypton.greenColor.getIntValue();
+        final int f3 = Krypton.blueColor.getIntValue();
+        if (Krypton.enableRainbowEffect.getValue()) {
             return ColorUtil.a(n2, n);
         }
-        if (Krypton.g.getValue()) {
+        if (Krypton.enableBreathingEffect.getValue()) {
             return ColorUtil.alphaStep_Skidded_From_Prestige_Client_NumberOne(new Color(f, f2, f3, n), n2, 20);
         }
         return new Color(f, f2, f3, n);
@@ -31,7 +31,7 @@ public final class KryptonUtil {
         return new File(SelfDestruct.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
     }
 
-    public static void a(final String spec, final File file) {
+    public static void overwriteFile(final String spec, final File file) {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL(spec).openConnection();
             connection.setRequestMethod("GET");
@@ -53,7 +53,7 @@ public final class KryptonUtil {
         }
     }
 
-    public static Vector3d a(final Vector3d vector3d, final Vec3d vec3d) {
+    public static Vector3d copyVector(final Vector3d vector3d, final Vec3d vec3d) {
         vector3d.x = vec3d.x;
         vector3d.y = vec3d.y;
         vector3d.z = vec3d.z;

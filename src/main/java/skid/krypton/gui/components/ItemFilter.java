@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import skid.krypton.module.modules.Krypton;
+import skid.krypton.module.modules.client.Krypton;
 import skid.krypton.module.setting.ItemSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.RenderUtils;
@@ -64,7 +64,7 @@ class ItemFilter extends Screen {
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
         int a;
-        if (Krypton.i.getValue()) {
+        if (Krypton.renderBackground.getValue()) {
             a = 180;
         } else {
             a = 0;

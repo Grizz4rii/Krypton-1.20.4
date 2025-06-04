@@ -11,7 +11,7 @@ import skid.krypton.mixin.ClientPlayerInteractionManagerAccessor;
 import java.util.function.Predicate;
 
 public final class InventoryUtil {
-    public static void a(final int selectedSlot) {
+    public static void swap(final int selectedSlot) {
         if (selectedSlot < 0 || selectedSlot > 8) {
             return;
         }
@@ -19,7 +19,7 @@ public final class InventoryUtil {
         ((ClientPlayerInteractionManagerAccessor) Krypton.mc.interactionManager).syncSlot();
     }
 
-    public static boolean a(final Predicate<ItemStack> predicate) {
+    public static boolean swapStack(final Predicate<ItemStack> predicate) {
         final PlayerInventory getInventory = Krypton.mc.player.getInventory();
         for (int i = 0; i < 9; ++i) {
             if (predicate.test(getInventory.getStack(i))) {
@@ -30,7 +30,7 @@ public final class InventoryUtil {
         return false;
     }
 
-    public static boolean b(final Predicate<Item> predicate) {
+    public static boolean swapItem(final Predicate<Item> predicate) {
         final PlayerInventory getInventory = Krypton.mc.player.getInventory();
         for (int i = 0; i < 9; ++i) {
             if (predicate.test(getInventory.getStack(i).getItem())) {
@@ -41,11 +41,11 @@ public final class InventoryUtil {
         return false;
     }
 
-    public static boolean a(Item item) {
-        return InventoryUtil.b((Item item2) -> item2 == item);
+    public static boolean swap(Item item) {
+        return InventoryUtil.swapItem((Item item2) -> item2 == item);
     }
 
-    public static int b(final Item obj) {
+    public static int getSlot(final Item obj) {
         final ScreenHandler currentScreenHandler = Krypton.mc.player.currentScreenHandler;
         if (Krypton.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) {
             int n = 0;

@@ -5,7 +5,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-import skid.krypton.module.modules.Krypton;
+import skid.krypton.module.modules.client.Krypton;
 import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -48,7 +48,7 @@ class StringBox extends Screen {
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
         int a;
-        if (Krypton.i.getValue()) {
+        if (Krypton.renderBackground.getValue()) {
             a = 180;
         } else {
             a = 0;

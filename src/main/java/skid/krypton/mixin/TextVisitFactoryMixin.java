@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import skid.krypton.Krypton;
-import skid.krypton.module.modules.NameProtect;
+import skid.krypton.module.modules.misc.NameProtect;
 
 @Mixin({TextVisitFactory.class})
 public class TextVisitFactoryMixin {

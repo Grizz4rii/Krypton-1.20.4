@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import skid.krypton.Krypton;
-import skid.krypton.module.modules.Freecam;
+import skid.krypton.module.modules.misc.Freecam;
 
 @Mixin({Camera.class})
 public class CameraMixin {
@@ -27,9 +27,9 @@ public class CameraMixin {
     private void update(final Args args) {
         final Freecam freecam = (Freecam) Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(Freecam.class);
         if (freecam.isEnabled()) {
-            args.set(0, (Object) freecam.a(this.tickDelta));
-            args.set(1, (Object) freecam.b(this.tickDelta));
-            args.set(2, (Object) freecam.c(this.tickDelta));
+            args.set(0, (Object) freecam.getInterpolatedX(this.tickDelta));
+            args.set(1, (Object) freecam.getInterpolatedY(this.tickDelta));
+            args.set(2, (Object) freecam.getInterpolatedZ(this.tickDelta));
         }
     }
 
@@ -37,8 +37,8 @@ public class CameraMixin {
     private void onUpdateSetRotationArgs(final Args args) {
         final Freecam freecam = (Freecam) Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(Freecam.class);
         if (freecam.isEnabled()) {
-            args.set(0, (Object) (float) freecam.d(this.tickDelta));
-            args.set(1, (Object) (float) freecam.e(this.tickDelta));
+            args.set(0, (Object) (float) freecam.getInterpolatedYaw(this.tickDelta));
+            args.set(1, (Object) (float) freecam.getInterpolatedPitch(this.tickDelta));
         }
     }
 }

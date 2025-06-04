@@ -231,7 +231,7 @@ public final class KeyUtils {
         }
     }
 
-    public static boolean b(final int n) {
+    public static boolean isKeyPressed(final int n) {
         if (n <= 8) {
             return GLFW.glfwGetMouseButton(Krypton.mc.getWindow().getHandle(), n) == 1;
         }

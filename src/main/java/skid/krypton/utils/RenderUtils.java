@@ -263,10 +263,10 @@ public final class RenderUtils {
         RenderSystem.disableBlend();
     }
 
-    public static void a(final MatrixStack matrixStack, final Color color, final Vec3d vec3d, final Vec3d vec3d2) {
+    public static void drawTracer(final MatrixStack matrixStack, final Color color, final Vec3d vec3d, final Vec3d vec3d2) {
         matrixStack.push();
         final Matrix4f positionMatrix = matrixStack.peek().getPositionMatrix();
-        if (skid.krypton.module.modules.Krypton.m.getValue()) {
+        if (skid.krypton.module.modules.client.Krypton.enableMSAA.getValue()) {
             GL11.glEnable(32925);
             GL11.glEnable(2848);
             GL11.glHint(3154, 4354);
@@ -281,7 +281,7 @@ public final class RenderUtils {
         });
         GL11.glDepthFunc(515);
         RenderSystem.disableBlend();
-        if (skid.krypton.module.modules.Krypton.m.getValue()) {
+        if (skid.krypton.module.modules.client.Krypton.enableMSAA.getValue()) {
             GL11.glDisable(2848);
             GL11.glDisable(32925);
         }

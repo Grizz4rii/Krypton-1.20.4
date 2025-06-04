@@ -7,13 +7,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import skid.krypton.Krypton;
 import skid.krypton.module.Module;
-import skid.krypton.module.modules.Hitbox;
+import skid.krypton.module.modules.combat.Hitbox;
 
 @Mixin({EntityRenderDispatcher.class})
 public class EntityRenderDispatcherMixin {
     @ModifyVariable(method = {"renderHitbox"}, ordinal = 0, at = @At(value = "STORE", ordinal = 0))
     private static Box onRenderHitboxEditBox(final Box box) {
         final Module hitboxes = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(Hitbox.class);
-        return hitboxes.isEnabled() ? box.expand(((Hitbox) hitboxes).j()) : box;
+        return hitboxes.isEnabled() ? box.expand(((Hitbox) hitboxes).getHitboxExpansion()) : box;
     }
 }

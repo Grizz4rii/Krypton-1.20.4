@@ -11,7 +11,7 @@ import skid.krypton.Krypton;
 import skid.krypton.event.events.TargetMarginEvent;
 import skid.krypton.event.events.TargetPoseEvent;
 import skid.krypton.manager.EventManager;
-import skid.krypton.module.modules.Freecam;
+import skid.krypton.module.modules.misc.Freecam;
 
 @Mixin({Entity.class})
 public class EntityMixin {
@@ -31,7 +31,7 @@ public class EntityMixin {
         final Freecam freecam = (Freecam) Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(Freecam.class);
 
         if (freecam.isEnabled()) {
-            freecam.a(cursorDeltaX * 0.15, cursorDeltaY * 0.15);
+            freecam.updateRotation(cursorDeltaX * 0.15, cursorDeltaY * 0.15);
             ci.cancel();
         }
     }

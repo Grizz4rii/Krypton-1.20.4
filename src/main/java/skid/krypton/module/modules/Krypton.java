@@ -2,7 +2,6 @@ package skid.krypton.module.modules;
 
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.network.packet.s2c.play.OpenScreenS2CPacket;
-import skid.krypton.enums.Enum6;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.PacketReceiveEvent;
 import skid.krypton.gui.ClickGUI;
@@ -27,7 +26,7 @@ public final class Krypton extends Module {
     public static final BooleanSetting j;
     private final BooleanSetting n;
     public static final NumberSetting k;
-    public static final ModeSetting<Enum6> l;
+    public static final ModeSetting<AnimationMode> l;
     public static final BooleanSetting m;
     public boolean shouldPreventClose;
 
@@ -81,7 +80,17 @@ public final class Krypton extends Module {
         i = new BooleanSetting(EncryptedString.a("Background"), true).setDescription(EncryptedString.a("Renders the background of the Click Gui"));
         j = new BooleanSetting(EncryptedString.a("Custom Font"), true);
         k = new NumberSetting(EncryptedString.a("Roundness"), 1.0, 10.0, 5.0, 1.0);
-        l = new ModeSetting<>(EncryptedString.a("Animations"), Enum6.a, Enum6.class);
+        l = new ModeSetting<>(EncryptedString.a("Animations"), AnimationMode.NORMAL, AnimationMode.class);
         m = new BooleanSetting(EncryptedString.a("MSAA"), true).setDescription(EncryptedString.a("Anti Aliasing | This can impact performance if you're using tracers but gives them a smoother look |"));
     }
+
+    public enum AnimationMode {
+        NORMAL("Normal", 0),
+        POSITIVE("Positive", 1),
+        OFF("Off", 2);
+
+        AnimationMode(final String name, final int ordinal) {
+        }
+    }
+
 }

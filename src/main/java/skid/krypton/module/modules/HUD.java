@@ -4,7 +4,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.util.math.MathHelper;
 import skid.krypton.Krypton;
-import skid.krypton.enums.ModuleListSorting;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render2DEvent;
 import skid.krypton.module.Category;
@@ -26,7 +25,7 @@ import java.util.List;
 
 public final class HUD
         extends Module {
-    private static final CharSequence c = EncryptedString.a("Krypton+");
+    private static final CharSequence c = EncryptedString.a("Krypton+ Open Sourced by Prestige Edition");
     private static final SimpleDateFormat d = new SimpleDateFormat("HH:mm:ss");
     private final BooleanSetting e = new BooleanSetting(EncryptedString.a("Watermark"), true).setDescription(EncryptedString.a("Shows client name on screen"));
     private final BooleanSetting f = new BooleanSetting(EncryptedString.a("Info"), true).setDescription(EncryptedString.a("Shows system information"));
@@ -155,7 +154,7 @@ public final class HUD
     }
 
     private List<Module> j() {
-        List<Module> list = Krypton.INSTANCE.b().b();
+        List<Module> list = Krypton.INSTANCE.getModuleManager().b();
         int n = this.l.getValue().ordinal() ^ 0x4E35B0BF;
         int n2 = n != 0 ? (n * 31 >>> 4) % n ^ n >>> 16 : 0;
         return switch (n2) {
@@ -181,4 +180,22 @@ public final class HUD
         int n6 = color2.getBlue();
         return new Color(MathHelper.clamp((int)((float)n + (float)(n2 - color.getRed()) * f), 0, 255), MathHelper.clamp((int)((float)n3 + (float)(n4 - color.getGreen()) * f), 0, 255), MathHelper.clamp((int)((float)n5 + (float)(n6 - color.getBlue()) * f), 0, 255), 255);
     }
+
+    enum ModuleListSorting {
+        a("LENGTH", 0, "Length"),
+        b("ALPHABETICAL", 1, "Alphabetical"),
+        c("CATEGORY", 2, "Category");
+
+        private final String d;
+
+        ModuleListSorting(final String name, final int ordinal, final String d) {
+            this.d = d;
+        }
+
+        @Override
+        public String toString() {
+            return this.d;
+        }
+    }
+
 }

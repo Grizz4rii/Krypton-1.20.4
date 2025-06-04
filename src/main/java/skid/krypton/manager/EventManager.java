@@ -70,7 +70,7 @@ public final class EventManager {
     }
 
     public static void b(final Event evt) {
-        if (Krypton.INSTANCE == null || Krypton.INSTANCE.c() == null) return;
-        Krypton.INSTANCE.c().a(evt);
+        if (Krypton.INSTANCE == null || Krypton.INSTANCE.getEventBus() == null) return;
+        Krypton.INSTANCE.getEventBus().a(evt);
     }
 }

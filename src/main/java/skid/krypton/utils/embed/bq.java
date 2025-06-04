@@ -1,4 +1,4 @@
-package skid.krypton.auth;
+package skid.krypton.utils.embed;
 
 public class bq {
     private final String a;

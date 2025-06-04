@@ -3,8 +3,6 @@ package skid.krypton.module;
 import net.minecraft.client.gui.screen.ChatScreen;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.KeyEvent;
-import skid.krypton.module.Category;
-import skid.krypton.module.Module;
 import skid.krypton.module.modules.*;
 import skid.krypton.module.setting.BindSetting;
 import skid.krypton.utils.EncryptedString;
@@ -70,7 +68,7 @@ public final class ModuleManager {
     }
 
     public void d() {
-        skid.krypton.Krypton.INSTANCE.c().register(this);
+        skid.krypton.Krypton.INSTANCE.getEventBus().register(this);
         for (final Module next : this.modules) {
             next.a(new BindSetting(EncryptedString.a("Keybind"), next.getKeybind(), true).setDescription(EncryptedString.a("Key to enabled the module")));
         }
@@ -86,7 +84,7 @@ public final class ModuleManager {
     }
 
     public void a(final Module module) {
-        skid.krypton.Krypton.INSTANCE.c().register(module);
+        skid.krypton.Krypton.INSTANCE.getEventBus().register(module);
         this.modules.add(module);
     }
 

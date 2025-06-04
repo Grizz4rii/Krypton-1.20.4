@@ -1,4 +1,4 @@
-package skid.krypton.auth;
+package skid.krypton.utils.embed;
 
 import java.lang.reflect.Array;
 import java.util.HashMap;

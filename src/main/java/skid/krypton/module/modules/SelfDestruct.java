@@ -42,9 +42,9 @@ public final class SelfDestruct extends Module {
     @Override
     public void onEnable() {
         c = true;
-        skid.krypton.Krypton.INSTANCE.b().getModuleByClass(Krypton.class).toggle(false);
+        skid.krypton.Krypton.INSTANCE.getModuleManager().getModuleByClass(Krypton.class).toggle(false);
         this.toggle(false);
-        skid.krypton.Krypton.INSTANCE.a().shutdown();
+        skid.krypton.Krypton.INSTANCE.getConfigManager().shutdown();
         if (this.b.currentScreen instanceof ClickGUI) {
             skid.krypton.Krypton.INSTANCE.shouldPreventClose = false;
             this.b.currentScreen.close();
@@ -58,7 +58,7 @@ public final class SelfDestruct extends Module {
             }
             catch (Exception exception) {}
         }
-        for (Module module : skid.krypton.Krypton.INSTANCE.b().c()) {
+        for (Module module : skid.krypton.Krypton.INSTANCE.getModuleManager().c()) {
             ((Module)module).toggle(false);
             ((Module)module).setName(null);
             ((Module)module).setDescription(null);
@@ -72,7 +72,7 @@ public final class SelfDestruct extends Module {
         }
         Runtime runtime = Runtime.getRuntime();
         if (this.e.getValue()) {
-            skid.krypton.Krypton.INSTANCE.e();
+            skid.krypton.Krypton.INSTANCE.resetModifiedDate();
         }
         for (int i = 0; i <= 10; ++i) {
             runtime.gc();

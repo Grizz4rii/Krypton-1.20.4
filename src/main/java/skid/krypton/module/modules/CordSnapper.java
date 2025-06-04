@@ -1,6 +1,6 @@
 package skid.krypton.module.modules;
 
-import skid.krypton.auth.EmbedSender;
+import skid.krypton.utils.embed.EmbedSender;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;

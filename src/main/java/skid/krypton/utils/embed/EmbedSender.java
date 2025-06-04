@@ -1,4 +1,4 @@
-package skid.krypton.auth;
+package skid.krypton.utils.embed;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.awt.*;

@@ -22,9 +22,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.WorldChunk;
 import skid.krypton.Krypton;
-import skid.krypton.auth.EmbedSender;
-import skid.krypton.auth.bn;
-import skid.krypton.enums.Enum3;
+import skid.krypton.utils.embed.EmbedSender;
+import skid.krypton.utils.embed.bn;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
@@ -46,7 +45,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 public final class RtpBaseFinder extends Module {
-    public final ModeSetting<Enum3> c;
+    public final ModeSetting<Mode> c;
     private final BooleanSetting d;
     private final NumberSetting e;
     private final BooleanSetting f;
@@ -74,7 +73,7 @@ public final class RtpBaseFinder extends Module {
 
     public RtpBaseFinder() {
         super(EncryptedString.a("Rtp Base Finder"), EncryptedString.a("Automatically searches for bases on DonutSMP"), -1, Category.c);
-        this.c = new ModeSetting<Enum3>(EncryptedString.a("Mode"), Enum3.g, Enum3.class);
+        this.c = new ModeSetting<Mode>(EncryptedString.a("Mode"), Mode.RANDOM, Mode.class);
         this.d = new BooleanSetting(EncryptedString.a("Spawners"), true);
         this.e = new NumberSetting(EncryptedString.a("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
         this.f = new BooleanSetting(EncryptedString.a("Auto Totem Buy"), true);
@@ -287,11 +286,11 @@ public final class RtpBaseFinder extends Module {
     private void k() {
         this.t = false;
         final ClientPlayNetworkHandler networkHandler = this.b.getNetworkHandler();
-        Enum3 l;
-        if (this.c.getValue() == Enum3.g) {
+        Mode l;
+        if (this.c.getValue() == Mode.RANDOM) {
             l = this.l();
         } else {
-            l = (Enum3) this.c.getValue();
+            l = (Mode) this.c.getValue();
         }
         networkHandler.sendChatCommand("rtp " + this.a(l));
         this.x = 150;
@@ -306,12 +305,12 @@ public final class RtpBaseFinder extends Module {
         this.b.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
     }
 
-    private Enum3 l() {
-        final Enum3[] array = {Enum3.a, Enum3.b, Enum3.c, Enum3.d, Enum3.e, Enum3.f};
+    private Mode l() {
+        final Mode[] array = {Mode.EUCENTRAL, Mode.EUWEST, Mode.EAST, Mode.WEST, Mode.ASIA, Mode.OCEANIA};
         return array[new Random().nextInt(array.length)];
     }
 
-    private String a(final Enum3 enum3) {
+    private String a(final Mode enum3) {
         final int n = enum3.ordinal() ^ 0x706A485C;
         int n2;
         if (n != 0) {
@@ -452,4 +451,18 @@ public final class RtpBaseFinder extends Module {
     public boolean j() {
         return this.u;
     }
+
+    enum Mode {
+        EUCENTRAL("eucentral", 0),
+        EUWEST("euwest", 1),
+        EAST("east", 2),
+        WEST("west", 3),
+        ASIA("asia", 4),
+        OCEANIA("oceania", 5),
+        RANDOM("random", 6);
+
+        Mode(final String name, final int ordinal) {
+        }
+    }
+
 }

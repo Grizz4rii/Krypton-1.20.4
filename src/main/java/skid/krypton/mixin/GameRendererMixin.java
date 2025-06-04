@@ -36,7 +36,7 @@ public abstract class GameRendererMixin {
 
     @Inject(method = {"shouldRenderBlockOutline"}, at = {@At("HEAD")}, cancellable = true)
     private void onShouldRenderBlockOutline(final CallbackInfoReturnable<Boolean> cir) {
-        if (Krypton.INSTANCE.b().getModuleByClass(Freecam.class).isEnabled()) {
+        if (Krypton.INSTANCE.getModuleManager().getModuleByClass(Freecam.class).isEnabled()) {
             cir.setReturnValue(false);
         }
     }

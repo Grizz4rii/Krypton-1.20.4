@@ -12,14 +12,13 @@ import skid.krypton.module.setting.*;
 public final class ConfigManager {
     private JsonObject a;
 
-    public void a() {
+    public void init() {
         try {
-            this.a = Krypton.INSTANCE.auth.c();
             if (this.a == null) {
                 this.a = new JsonObject();
                 return;
             }
-            for (final Module next : Krypton.INSTANCE.b().c()) {
+            for (final Module next : Krypton.INSTANCE.getModuleManager().c()) {
                 final JsonElement value = this.a.get(next.getName().toString());
                 if (value != null) {
                     if (!value.isJsonObject()) {
@@ -95,7 +94,7 @@ public final class ConfigManager {
     public void shutdown() {
         try {
             this.a = new JsonObject();
-            for (final Module module : Krypton.INSTANCE.b().c()) {
+            for (final Module module : Krypton.INSTANCE.getModuleManager().c()) {
                 final JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("enabled", module.isEnabled());
                 for (Setting setting : module.getSettings()) {
@@ -103,7 +102,6 @@ public final class ConfigManager {
                 }
                 this.a.add(module.getName().toString(), jsonObject);
             }
-            Krypton.INSTANCE.auth.a(this.a);
         } catch (final Exception _t) {
             _t.printStackTrace(System.err);
         }

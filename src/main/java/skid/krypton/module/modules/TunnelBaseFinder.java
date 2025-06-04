@@ -20,13 +20,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.WorldChunk;
 import skid.krypton.Krypton;
-import skid.krypton.auth.EmbedSender;
-import skid.krypton.auth.bn;
-import skid.krypton.enums.Enum4;
+import skid.krypton.utils.embed.EmbedSender;
+import skid.krypton.utils.embed.bn;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
@@ -57,7 +55,7 @@ public final class TunnelBaseFinder extends Module {
     private final BooleanSetting k;
     private final NumberSetting l;
     private static final double m = 0.1;
-    private Enum4 n;
+    private Direction n;
     private int o;
     private int p;
     private int q;
@@ -157,7 +155,7 @@ public final class TunnelBaseFinder extends Module {
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
                 if (currentScreenHandler.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
                     this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
@@ -203,7 +201,7 @@ public final class TunnelBaseFinder extends Module {
                     this.o = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, net.minecraft.util.math.Direction.DOWN));
                 if (fishHook.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
                     this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
                     this.o = 10;
@@ -282,7 +280,7 @@ public final class TunnelBaseFinder extends Module {
             this.b.options.forwardKey.setPressed(a2 && b);
             if (this.q > 0 && this.r != null && this.b.player.getPos().distanceTo(this.r) > 1.0) {
                 this.r = this.b.player.getPos();
-                final Direction rotateYCounterclockwise = this.b.player.getHorizontalFacing().rotateYCounterclockwise();
+                final net.minecraft.util.math.Direction rotateYCounterclockwise = this.b.player.getHorizontalFacing().rotateYCounterclockwise();
                 BlockPos blockPos2 = this.b.player.getBlockPos().up().offset(rotateYCounterclockwise);
                 for (int i = 0; i < 5; ++i) {
                     blockPos2 = blockPos2.offset(rotateYCounterclockwise);
@@ -298,23 +296,23 @@ public final class TunnelBaseFinder extends Module {
         }
     }
 
-    private int a(final Enum4 enum4) {
-        if (enum4 == Enum4.a) {
+    private int a(final Direction enum4) {
+        if (enum4 == Direction.NORTH) {
             return 180;
         }
-        if (enum4 == Enum4.b) {
+        if (enum4 == Direction.SOUTH) {
             return 0;
         }
-        if (enum4 == Enum4.c) {
+        if (enum4 == Direction.EAST) {
             return 270;
         }
-        if (enum4 == Enum4.d) {
+        if (enum4 == Direction.WEST) {
             return 90;
         }
         return Math.round(this.b.player.getYaw());
     }
 
-    private boolean a(final Direction direction, final int n) {
+    private boolean a(final net.minecraft.util.math.Direction direction, final int n) {
         final BlockPos down = this.b.player.getBlockPos().down();
         final BlockPos getBlockPos = this.b.player.getBlockPos();
         for (int i = 0; i < n; ++i) {
@@ -330,12 +328,12 @@ public final class TunnelBaseFinder extends Module {
         return true;
     }
 
-    private boolean a(final BlockPos blockPos, final Direction direction) {
+    private boolean a(final BlockPos blockPos, final net.minecraft.util.math.Direction direction) {
         final BlockPos offset = blockPos.offset(direction);
-        final Direction rotateYClockwise = direction.rotateYClockwise();
-        final Direction up = Direction.UP;
-        final BlockPos offset2 = blockPos.offset(Direction.UP, 2);
-        final BlockPos offset3 = blockPos.offset(Direction.DOWN, -2);
+        final net.minecraft.util.math.Direction rotateYClockwise = direction.rotateYClockwise();
+        final net.minecraft.util.math.Direction up = net.minecraft.util.math.Direction.UP;
+        final BlockPos offset2 = blockPos.offset(net.minecraft.util.math.Direction.UP, 2);
+        final BlockPos offset3 = blockPos.offset(net.minecraft.util.math.Direction.DOWN, -2);
         final BlockPos offset4 = offset2.offset(rotateYClockwise, -1);
         if (!this.a(offset4) || this.b.world.getBlockState(offset4).getBlock() == Blocks.GRAVEL) {
             return false;
@@ -368,7 +366,7 @@ public final class TunnelBaseFinder extends Module {
         return this.b.world.getBlockState(blockPos).getBlock() instanceof InfestedBlock;
     }
 
-    private void b(final Enum4 enum4) {
+    private void b(final Direction enum4) {
         final double getX = this.b.player.getX();
         final double getY = this.b.player.getZ();
         final double floor = Math.floor(getY);
@@ -378,28 +376,28 @@ public final class TunnelBaseFinder extends Module {
         this.b.options.rightKey.setPressed(false);
         boolean b = false;
         boolean b2 = false;
-        if (enum4 == Enum4.b) {
+        if (enum4 == Direction.SOUTH) {
             if (n > 0.1) {
                 b2 = true;
             } else if (n < -0.1) {
                 b = true;
             }
         }
-        if (enum4 == Enum4.a) {
+        if (enum4 == Direction.NORTH) {
             if (n > 0.1) {
                 b = true;
             } else if (n < -0.1) {
                 b2 = true;
             }
         }
-        if (enum4 == Enum4.d) {
+        if (enum4 == Direction.WEST) {
             if (n2 > 0.1) {
                 b2 = true;
             } else if (n2 < -0.1) {
                 b = true;
             }
         }
-        if (enum4 == Enum4.c) {
+        if (enum4 == Direction.EAST) {
             if (n2 > 0.1) {
                 b = true;
             } else if (n2 < -0.1) {
@@ -420,7 +418,7 @@ public final class TunnelBaseFinder extends Module {
                 final BlockHitResult blockHitResult = (BlockHitResult) this.b.crosshairTarget;
                 final BlockPos blockPos = ((BlockHitResult) this.b.crosshairTarget).getBlockPos();
                 if (!this.b.world.getBlockState(blockPos).isAir()) {
-                    final Direction side = blockHitResult.getSide();
+                    final net.minecraft.util.math.Direction side = blockHitResult.getSide();
                     if (this.b.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
                         this.b.particleManager.addBlockBreakingParticles(blockPos, side);
                         this.b.player.swingHand(Hand.MAIN_HAND);
@@ -432,21 +430,21 @@ public final class TunnelBaseFinder extends Module {
         }
     }
 
-    private Enum4 k() {
+    private Direction k() {
         float n = this.b.player.getYaw() % 360.0f;
         if (n < 0.0f) {
             n += 360.0f;
         }
         if (n >= 45.0f && n < 135.0f) {
-            return Enum4.d;
+            return Direction.WEST;
         }
         if (n >= 135.0f && n < 225.0f) {
-            return Enum4.a;
+            return Direction.NORTH;
         }
         if (n >= 225.0f && n < 315.0f) {
-            return Enum4.c;
+            return Direction.EAST;
         }
-        return Enum4.b;
+        return Direction.SOUTH;
     }
 
     private void l() {
@@ -544,4 +542,15 @@ public final class TunnelBaseFinder extends Module {
     public boolean j() {
         return this.s;
     }
+
+    enum Direction {
+        NORTH("north", 0),
+        SOUTH("south", 1),
+        EAST("east", 2),
+        WEST("west", 3);
+
+        Direction(final String name, final int ordinal) {
+        }
+    }
+
 }

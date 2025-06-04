@@ -43,7 +43,7 @@ public final class CategoryWindow {
         this.parent = parent;
         this.prevX = n;
         this.prevY = n2;
-        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.b().a(category)).iterator();
+        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.getModuleManager().a(category)).iterator();
         int n3 = height;
         while (iterator.hasNext()) {
             this.moduleButtons.add(new ModuleButton(this, iterator.next(), n3));
@@ -157,7 +157,7 @@ public final class CategoryWindow {
             } else {
                 n2 = this.height;
             }
-            animation.a(0.5 * n, n2);
+            animation.animate(0.5 * n, n2);
             final double animation2 = next.animation.getAnimation();
             next.offset = height;
 

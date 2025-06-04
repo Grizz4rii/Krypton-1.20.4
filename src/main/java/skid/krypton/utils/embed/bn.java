@@ -1,4 +1,4 @@
-package skid.krypton.auth;
+package skid.krypton.utils.embed;
 
 import java.awt.*;
 import java.util.ArrayList;

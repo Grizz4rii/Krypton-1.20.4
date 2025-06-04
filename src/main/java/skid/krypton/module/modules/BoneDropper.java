@@ -6,7 +6,6 @@ import net.minecraft.item.Items;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.SlotActionType;
-import skid.krypton.enums.Enum1;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
@@ -16,7 +15,7 @@ import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class BoneDropper extends Module {
-    private final ModeSetting<Enum1> c;
+    private final ModeSetting<Mode> c;
     private final NumberSetting d;
     private final NumberSetting e;
     private int f;
@@ -24,7 +23,7 @@ public final class BoneDropper extends Module {
 
     public BoneDropper() {
         super(EncryptedString.a("Bone Dropper"), EncryptedString.a("Automatically drops bones from spawner"), -1, Category.c);
-        this.c = new ModeSetting<Enum1>(EncryptedString.a("Mode"), Enum1.a, Enum1.class);
+        this.c = new ModeSetting<Mode>(EncryptedString.a("Mode"), Mode.SPAWNER, Mode.class);
         this.d = new NumberSetting(EncryptedString.a("Drop Delay"), 0.0, 120.0, 30.0, 1.0).getValue(EncryptedString.a("How often it should start dropping bones in minutes"));
         this.e = new NumberSetting(EncryptedString.a("Page Switch Delay"), 0.0, 720.0, 4.0, 1.0).getValue(EncryptedString.a("How often it should switch pages in seconds"));
         this.a(this.c, this.d, this.e);
@@ -51,7 +50,7 @@ public final class BoneDropper extends Module {
         if (this.b.player == null) {
             return;
         }
-        if (this.c.isMode(Enum1.a)) {
+        if (this.c.isMode(Mode.SPAWNER)) {
             if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) {
                 KeyBinding.onKeyPressed(InputUtil.Type.MOUSE.createFromCode(1));
                 this.f = 20;
@@ -152,4 +151,13 @@ public final class BoneDropper extends Module {
             }
         }
     }
+
+     enum Mode {
+        SPAWNER("Spawner", 0),
+        ORDER("Order", 1);
+
+        Mode(final String name, final int ordinal) {
+        }
+    }
+
 }

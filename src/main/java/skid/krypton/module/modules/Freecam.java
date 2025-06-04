@@ -8,8 +8,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.*;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.KeyUtils;
 import skid.krypton.utils.KryptonUtil;
@@ -50,7 +50,7 @@ public final class Freecam extends Module {
         this.e = this.b.player.getYaw();
         this.f = this.b.player.getPitch();
         this.j = this.b.options.getPerspective();
-        this.k = this.i.a();
+        this.k = this.i.getValue();
         KryptonUtil.a(this.c, this.b.gameRenderer.getCamera().getPos());
         KryptonUtil.a(this.d, this.b.gameRenderer.getCamera().getPos());
         if (this.b.options.getPerspective() == Perspective.THIRD_PERSON_FRONT) {

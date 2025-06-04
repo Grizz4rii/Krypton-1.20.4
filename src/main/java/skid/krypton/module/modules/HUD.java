@@ -9,10 +9,10 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render2DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.EnumSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.ModeSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.RenderUtils;
@@ -28,16 +28,16 @@ public final class HUD
         extends Module {
     private static final CharSequence c = EncryptedString.a("Krypton+");
     private static final SimpleDateFormat d = new SimpleDateFormat("HH:mm:ss");
-    private final BooleanSetting e = new BooleanSetting(EncryptedString.a("Watermark"), true).a(EncryptedString.a("Shows client name on screen"));
-    private final BooleanSetting f = new BooleanSetting(EncryptedString.a("Info"), true).a(EncryptedString.a("Shows system information"));
-    private final BooleanSetting g = new BooleanSetting("Modules", true).a(EncryptedString.a("Renders module array list"));
-    private final BooleanSetting h = new BooleanSetting("Time", true).a(EncryptedString.a("Shows current time"));
-    private final BooleanSetting i = new BooleanSetting("Coordinates", true).a(EncryptedString.a("Shows player coordinates"));
-    private final NumberSetting j = new NumberSetting("Opacity", 0.0, 1.0, 0.8f, 0.05f).a(EncryptedString.a("Controls the opacity of HUD elements"));
-    private final NumberSetting k = new NumberSetting("Corner Radius", 0.0, 10.0, 5.0, 0.5).a(EncryptedString.a("Controls the roundness of corners"));
-    private final EnumSetting<ModuleListSorting> l = new EnumSetting("Sort Mode", ModuleListSorting.a, ModuleListSorting.class).a(EncryptedString.a("How to sort the module list"));
-    private final BooleanSetting m = new BooleanSetting("Rainbow", false).a(EncryptedString.a("Enables rainbow coloring effect"));
-    private final NumberSetting n = new NumberSetting("Rainbow Speed", 0.1f, 10.0, 2.0, 0.1f).a(EncryptedString.a("Controls the speed of the rainbow effect"));
+    private final BooleanSetting e = new BooleanSetting(EncryptedString.a("Watermark"), true).setDescription(EncryptedString.a("Shows client name on screen"));
+    private final BooleanSetting f = new BooleanSetting(EncryptedString.a("Info"), true).setDescription(EncryptedString.a("Shows system information"));
+    private final BooleanSetting g = new BooleanSetting("Modules", true).setDescription(EncryptedString.a("Renders module array list"));
+    private final BooleanSetting h = new BooleanSetting("Time", true).setDescription(EncryptedString.a("Shows current time"));
+    private final BooleanSetting i = new BooleanSetting("Coordinates", true).setDescription(EncryptedString.a("Shows player coordinates"));
+    private final NumberSetting j = new NumberSetting("Opacity", 0.0, 1.0, 0.8f, 0.05f).getValue(EncryptedString.a("Controls the opacity of HUD elements"));
+    private final NumberSetting k = new NumberSetting("Corner Radius", 0.0, 10.0, 5.0, 0.5).getValue(EncryptedString.a("Controls the roundness of corners"));
+    private final ModeSetting<ModuleListSorting> l = new ModeSetting("Sort Mode", ModuleListSorting.a, ModuleListSorting.class).setDescription(EncryptedString.a("How to sort the module list"));
+    private final BooleanSetting m = new BooleanSetting("Rainbow", false).setDescription(EncryptedString.a("Enables rainbow coloring effect"));
+    private final NumberSetting n = new NumberSetting("Rainbow Speed", 0.1f, 10.0, 2.0, 0.1f).getValue(EncryptedString.a("Controls the speed of the rainbow effect"));
     private final Color o = new Color(65, 185, 255, 255);
     private final Color p = new Color(255, 110, 230, 255);
 
@@ -64,19 +64,19 @@ public final class HUD
             int n = this.b.getWindow().getWidth();
             int n2 = this.b.getWindow().getHeight();
             RenderUtils.c();
-            if (this.e.c()) {
+            if (this.e.getValue()) {
                 this.a(drawContext, n);
             }
-            if (this.f.c() && this.b.player != null) {
+            if (this.f.getValue() && this.b.player != null) {
                 this.a(drawContext);
             }
-            if (this.h.c()) {
+            if (this.h.getValue()) {
                 this.b(drawContext, n);
             }
-            if (this.i.c() && this.b.player != null) {
+            if (this.i.getValue() && this.b.player != null) {
                 this.c(drawContext, n2);
             }
-            if (this.g.c()) {
+            if (this.g.getValue()) {
                 this.a(drawContext, n, n2);
             }
             RenderUtils.d();
@@ -85,8 +85,8 @@ public final class HUD
 
     private void a(DrawContext drawContext, int n) {
         int n2 = TextRenderer.a(c);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.g() * 255.0f)), 5.0, 5.0, 5.0f + (float)n2 + 7.0f, 25.0, this.k.a(), 15.0);
-        Color color = this.m.c() ? ColorUtil.a(this.n.f(), 1) : this.o;
+        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), 5.0, 5.0, 5.0f + (float)n2 + 7.0f, 25.0, this.k.getValue(), 15.0);
+        Color color = this.m.getValue() ? ColorUtil.a(this.n.getIntValue(), 1) : this.o;
         CharSequence charSequence = c;
         TextRenderer.a(charSequence, drawContext, 8, 8, color.getRGB());
     }
@@ -97,7 +97,7 @@ public final class HUD
         String string3 = this.b.getCurrentServerEntry() == null ? "Single Player" : this.b.getCurrentServerEntry().address;
         int n = TextRenderer.a(string2);
         int n2 = TextRenderer.a(string);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.g() * 255.0f)), 5.0, 30.0, 5.0f + (float)(n + n2 + TextRenderer.a(string3)) + 9.0f, 50.0, this.k.a(), 15.0);
+        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), 5.0, 30.0, 5.0f + (float)(n + n2 + TextRenderer.a(string3)) + 9.0f, 50.0, this.k.getValue(), 15.0);
         TextRenderer.a(string2, drawContext, 10, 33, this.o.getRGB());
         int n3 = 10 + TextRenderer.a(string2);
         TextRenderer.a(string, drawContext, n3, 33, this.p.getRGB());
@@ -109,8 +109,8 @@ public final class HUD
         String string = simpleDateFormat.format(new Date());
         int n2 = TextRenderer.a(string);
         int n3 = n / 2;
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.g() * 255.0f)), (float)n3 - (float)n2 / 2.0f - 3.0f, 5.0, (float)n3 + (float)n2 / 2.0f + 5.0f, 25.0, this.k.a(), 15.0);
-        int n4 = this.m.c() ? ColorUtil.a(this.n.f(), 1).getRGB() : this.o.getRGB();
+        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), (float)n3 - (float)n2 / 2.0f - 3.0f, 5.0, (float)n3 + (float)n2 / 2.0f + 5.0f, 25.0, this.k.getValue(), 15.0);
+        int n4 = this.m.getValue() ? ColorUtil.a(this.n.getIntValue(), 1).getRGB() : this.o.getRGB();
         TextRenderer.a(string, drawContext, (int)((float)n3 - (float)n2 / 2.0f), 8, n4);
     }
 
@@ -135,7 +135,7 @@ public final class HUD
         }
         String string5 = string + " | " + string2 + " | " + string3 + string4;
         int n2 = TextRenderer.a(string5);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.g() * 255.0f)), 5.0, n - 25, 5.0f + (float)n2 + 5.0f, n - 5, this.k.a(), 15.0);
+        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), 5.0, n - 25, 5.0f + (float)n2 + 5.0f, n - 5, this.k.getValue(), 15.0);
         TextRenderer.a(string5, drawContext, 10, n - 22, this.o.getRGB());
     }
 
@@ -146,8 +146,8 @@ public final class HUD
             String string = ((Module)e).getName().toString();
             int n4 = TextRenderer.a(string);
             int n5 = n - 5;
-            RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.g() * 255.0f)), (float)n - (float)n4 - 13.0f, n3, n5, n3 + 20, this.k.a(), 15.0);
-            Color color = this.m.c() ? ColorUtil.a(this.n.f() + list.indexOf(e), 1) : this.a(this.o, this.p, (float)list.indexOf(e) / (float)list.size());
+            RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), (float)n - (float)n4 - 13.0f, n3, n5, n3 + 20, this.k.getValue(), 15.0);
+            Color color = this.m.getValue() ? ColorUtil.a(this.n.getIntValue() + list.indexOf(e), 1) : this.a(this.o, this.p, (float)list.indexOf(e) / (float)list.size());
             drawContext.fill((int)((float)n5) - 2, n3, (int)((float)n5), n3 + 20, color.getRGB());
             TextRenderer.a(string, drawContext, (int)((float)n - (float)n4 - 10.0f), n3 + 3, color.getRGB());
             n3 += 25;
@@ -156,7 +156,7 @@ public final class HUD
 
     private List<Module> j() {
         List<Module> list = Krypton.INSTANCE.b().b();
-        int n = this.l.a().ordinal() ^ 0x4E35B0BF;
+        int n = this.l.getValue().ordinal() ^ 0x4E35B0BF;
         int n2 = n != 0 ? (n * 31 >>> 4) % n ^ n >>> 16 : 0;
         return switch (n2) {
             default -> throw new MatchException(null, null);

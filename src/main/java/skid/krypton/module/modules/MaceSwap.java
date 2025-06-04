@@ -10,8 +10,8 @@ import skid.krypton.event.events.AttackEvent;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EnchantmentUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
@@ -58,7 +58,7 @@ public final class MaceSwap extends Module {
             return;
         }
         if (this.i) {
-            if (this.g.c()) {
+            if (this.g.getValue()) {
                 this.k();
             } else {
                 this.l();
@@ -77,13 +77,13 @@ public final class MaceSwap extends Module {
         if (this.j == -1) {
             this.j = this.b.player.getInventory().selectedSlot;
         }
-        if ((this.c.c() && this.d.c()) || (!this.c.c() && !this.d.c())) {
+        if ((this.c.getValue() && this.d.getValue()) || (!this.c.getValue() && !this.d.getValue())) {
             InventoryUtil.a(Items.MACE);
         } else {
-            if (this.c.c()) {
+            if (this.c.getValue()) {
                 InventoryUtil.a(itemStack -> EnchantmentUtil.a(itemStack, Enchantments.WIND_BURST));
             }
-            if (this.d.c()) {
+            if (this.d.getValue()) {
                 InventoryUtil.a(itemStack2 -> EnchantmentUtil.a(itemStack2, Enchantments.BREACH));
             }
         }
@@ -92,14 +92,14 @@ public final class MaceSwap extends Module {
 
     private boolean j() {
         final Item item = this.b.player.getMainHandStack().getItem();
-        if (this.e.c() && this.f.c()) {
+        if (this.e.getValue() && this.f.getValue()) {
             return item instanceof SwordItem || item instanceof AxeItem;
         }
-        return (!this.e.c() || item instanceof SwordItem) && (!this.f.c() || item instanceof AxeItem);
+        return (!this.e.getValue() || item instanceof SwordItem) && (!this.f.getValue() || item instanceof AxeItem);
     }
 
     private void k() {
-        if (this.k < this.h.f()) {
+        if (this.k < this.h.getIntValue()) {
             ++this.k;
             return;
         }

@@ -1,6 +1,4 @@
-package skid.krypton.setting.settings;
-
-import skid.krypton.setting.Setting;
+package skid.krypton.module.setting;
 
 import java.util.Random;
 

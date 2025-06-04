@@ -11,8 +11,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.RenderUtils;
@@ -35,7 +35,7 @@ public final class StorageESP extends Module {
     public StorageESP() {
         super(EncryptedString.a("Storage ESP"), EncryptedString.a("Renders storage blocks through walls"), -1, Category.d);
         this.c = new NumberSetting(EncryptedString.a("Alpha"), 1.0, 255.0, 125.0, 1.0);
-        this.d = new BooleanSetting(EncryptedString.a("Tracers"), false).a(EncryptedString.a("Draws a line from your player to the storage block"));
+        this.d = new BooleanSetting(EncryptedString.a("Tracers"), false).setDescription(EncryptedString.a("Draws a line from your player to the storage block"));
         this.e = new BooleanSetting(EncryptedString.a("Chests"), true);
         this.f = new BooleanSetting(EncryptedString.a("Ender Chests"), true);
         this.g = new BooleanSetting(EncryptedString.a("Spawners"), true);
@@ -63,31 +63,31 @@ public final class StorageESP extends Module {
     }
 
     private Color a(final BlockEntity blockEntity, final int a) {
-        if (blockEntity instanceof TrappedChestBlockEntity && this.e.c()) {
+        if (blockEntity instanceof TrappedChestBlockEntity && this.e.getValue()) {
             return new Color(200, 91, 0, a);
         }
-        if (blockEntity instanceof ChestBlockEntity && this.e.c()) {
+        if (blockEntity instanceof ChestBlockEntity && this.e.getValue()) {
             return new Color(156, 91, 0, a);
         }
-        if (blockEntity instanceof EnderChestBlockEntity && this.f.c()) {
+        if (blockEntity instanceof EnderChestBlockEntity && this.f.getValue()) {
             return new Color(117, 0, 255, a);
         }
-        if (blockEntity instanceof MobSpawnerBlockEntity && this.g.c()) {
+        if (blockEntity instanceof MobSpawnerBlockEntity && this.g.getValue()) {
             return new Color(138, 126, 166, a);
         }
-        if (blockEntity instanceof ShulkerBoxBlockEntity && this.h.c()) {
+        if (blockEntity instanceof ShulkerBoxBlockEntity && this.h.getValue()) {
             return new Color(134, 0, 158, a);
         }
-        if (blockEntity instanceof FurnaceBlockEntity && this.i.c()) {
+        if (blockEntity instanceof FurnaceBlockEntity && this.i.getValue()) {
             return new Color(125, 125, 125, a);
         }
-        if (blockEntity instanceof BarrelBlockEntity && this.j.c()) {
+        if (blockEntity instanceof BarrelBlockEntity && this.j.getValue()) {
             return new Color(255, 140, 140, a);
         }
-        if (blockEntity instanceof EnchantingTableBlockEntity && this.k.c()) {
+        if (blockEntity instanceof EnchantingTableBlockEntity && this.k.getValue()) {
             return new Color(80, 80, 255, a);
         }
-        if (blockEntity instanceof PistonBlockEntity && this.l.c()) {
+        if (blockEntity instanceof PistonBlockEntity && this.l.getValue()) {
             return new Color(35, 226, 0, a);
         }
         return new Color(255, 255, 255, 0);
@@ -107,8 +107,8 @@ public final class StorageESP extends Module {
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
-                RenderUtils.a(render3DEvent.a, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.a(getBlockEntity, this.c.f()));
-                if (this.d.c()) {
+                RenderUtils.a(render3DEvent.a, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.a(getBlockEntity, this.c.getIntValue()));
+                if (this.d.getValue()) {
                     RenderUtils.a(render3DEvent.a, this.a(getBlockEntity, 255), this.b.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
                 }
             }

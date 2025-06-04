@@ -18,8 +18,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.*;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.*;
 import skid.krypton.utils.EncryptedString;
 
 import java.io.PrintStream;
@@ -38,12 +38,12 @@ public final class AuctionSniper
         extends Module {
     private final ItemSetting c = new ItemSetting(EncryptedString.a("Sniping Item"), Items.AIR);
     private final StringSetting d = new StringSetting(EncryptedString.a("Price"), "1k");
-    private final EnumSetting<Enum7> e = new EnumSetting(EncryptedString.a("Mode"), Enum7.b, Enum7.class).a(EncryptedString.a("Manual is faster but api doesnt require auction gui opened all the time"));
-    private final StringSetting f = new StringSetting(EncryptedString.a("Api Key"), "").a(EncryptedString.a("You can get it by typing /api in chat"));
+    private final ModeSetting<Enum7> e = new ModeSetting(EncryptedString.a("Mode"), Enum7.b, Enum7.class).setDescription(EncryptedString.a("Manual is faster but api doesnt require auction gui opened all the time"));
+    private final StringSetting f = new StringSetting(EncryptedString.a("Api Key"), "").setDescription(EncryptedString.a("You can get it by typing /api in chat"));
     private final NumberSetting g = new NumberSetting(EncryptedString.a("Refresh Delay"), 0.0, 100.0, 2.0, 1.0);
     private final NumberSetting h = new NumberSetting(EncryptedString.a("Buy Delay"), 0.0, 100.0, 2.0, 1.0);
-    private final NumberSetting i = new NumberSetting(EncryptedString.a("API Refresh Rate"), 10.0, 5000.0, 250.0, 10.0).a(EncryptedString.a("How often to query the API (in milliseconds)"));
-    private final BooleanSetting j = new BooleanSetting(EncryptedString.a("Show API Notifications"), true).a(EncryptedString.a("Show chat notifications for API actions"));
+    private final NumberSetting i = new NumberSetting(EncryptedString.a("API Refresh Rate"), 10.0, 5000.0, 250.0, 10.0).getValue(EncryptedString.a("How often to query the API (in milliseconds)"));
+    private final BooleanSetting j = new BooleanSetting(EncryptedString.a("Show API Notifications"), true).setDescription(EncryptedString.a("Show chat notifications for API actions"));
     private int k;
     private boolean l;
     private final HttpClient m;
@@ -102,11 +102,11 @@ public final class AuctionSniper
                     --this.k;
                     return;
                 }
-                if (this.e.b(Enum7.a)) {
+                if (this.e.isMode(Enum7.a)) {
                     this.j();
                     return;
                 }
-                if (!this.e.b(Enum7.b)) break block9;
+                if (!this.e.isMode(Enum7.b)) break block9;
                 ScreenHandler screenHandler = this.b.player.currentScreenHandler;
                 if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler)) break block10;
                 if (((GenericContainerScreenHandler)screenHandler).getRows() == 6) {
@@ -161,10 +161,10 @@ public final class AuctionSniper
                 }
                 long l = System.currentTimeMillis();
                 long l2 = l - this.o;
-                if (l2 > (long)this.i.f()) {
+                if (l2 > (long)this.i.getIntValue()) {
                     this.o = l;
                     if (this.f.getValue().isEmpty()) {
-                        if (this.j.c()) {
+                        if (this.j.getValue()) {
                             ClientPlayerEntity clientPlayerEntity = this.b.player;
                             clientPlayerEntity.sendMessage(Text.of("\u00a7cAPI key is not set. Set it using /api in-game."), false);
                         }
@@ -185,7 +185,7 @@ public final class AuctionSniper
                 String string = "https://api.donutsmp.net/v1/auction/list/" + 1;
                 HttpResponse<String> httpResponse = this.m.send(HttpRequest.newBuilder().uri(URI.create(string)).header("Authorization", "Bearer " + this.f.getValue()).header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString("{\"sort\": \"recently_listed\"}")).build(), HttpResponse.BodyHandlers.ofString());
                 if (httpResponse.statusCode() != 200) {
-                    if (this.j.c() && this.b.player != null) {
+                    if (this.j.getValue() && this.b.player != null) {
                         ClientPlayerEntity clientPlayerEntity = this.b.player;
                         clientPlayerEntity.sendMessage(Text.of("\u00a7cAPI Error: " + httpResponse.statusCode()), false);
                     }
@@ -227,7 +227,7 @@ public final class AuctionSniper
                     string = entry.getKey();
                     d = entry.getValue();
                 } while (!string2.contains(string) || !((double)l <= d));
-                if (this.j.c() && this.b.player != null) {
+                if (this.j.getValue() && this.b.player != null) {
                     ClientPlayerEntity clientPlayerEntity = this.b.player;
                     clientPlayerEntity.sendMessage(Text.of("\u00a7aFound " + string2 + " for " + this.a(l) + " \u00a7r(threshold: " + this.a(d) + ") \u00a7afrom seller: " + string3), false);
                 }
@@ -236,7 +236,7 @@ public final class AuctionSniper
                 return;
             }
             catch (Exception exception) {
-                if (!this.j.c() || this.b.player == null) continue;
+                if (!this.j.getValue() || this.b.player == null) continue;
                 ClientPlayerEntity clientPlayerEntity = this.b.player;
                 clientPlayerEntity.sendMessage(Text.of("\u00a7cError processing auction: " + exception.getMessage()), false);
             }
@@ -265,7 +265,7 @@ public final class AuctionSniper
                 return;
             }
             this.l = true;
-            this.k = this.h.f();
+            this.k = this.h.getIntValue();
             return;
         }
         if (this.r) {
@@ -274,7 +274,7 @@ public final class AuctionSniper
             this.b.player.closeHandledScreen();
         } else {
             this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 49, 1, SlotActionType.QUICK_MOVE, this.b.player);
-            this.k = this.g.f();
+            this.k = this.g.getIntValue();
         }
     }
 

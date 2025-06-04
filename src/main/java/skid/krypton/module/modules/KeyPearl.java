@@ -7,9 +7,9 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BindSetting;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BindSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 import skid.krypton.utils.KeyUtils;
@@ -30,7 +30,7 @@ public final class KeyPearl extends Module {
         this.c = new BindSetting(EncryptedString.a("Activate Key"), -1, false);
         this.d = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
         this.e = new BooleanSetting(EncryptedString.a("Switch Back"), true);
-        this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0).a(EncryptedString.a("Delay after throwing pearl before switching back"));
+        this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.a("Delay after throwing pearl before switching back"));
         this.a(this.c, this.d, this.e, this.f);
     }
 
@@ -50,7 +50,7 @@ public final class KeyPearl extends Module {
         if (this.b.currentScreen != null) {
             return;
         }
-        if (KeyUtils.b(this.c.d())) {
+        if (KeyUtils.b(this.c.getValue())) {
             this.g = true;
         }
         if (this.g) {
@@ -58,7 +58,7 @@ public final class KeyPearl extends Module {
                 this.j = this.b.player.getInventory().selectedSlot;
             }
             InventoryUtil.a(Items.ENDER_PEARL);
-            if (this.i < this.d.f()) {
+            if (this.i < this.d.getIntValue()) {
                 ++this.i;
                 return;
             }
@@ -69,7 +69,7 @@ public final class KeyPearl extends Module {
                 }
                 this.h = true;
             }
-            if (this.e.c()) {
+            if (this.e.getValue()) {
                 this.j();
             } else {
                 this.k();
@@ -78,7 +78,7 @@ public final class KeyPearl extends Module {
     }
 
     private void j() {
-        if (this.k < this.f.f()) {
+        if (this.k < this.f.getIntValue()) {
             ++this.k;
             return;
         }

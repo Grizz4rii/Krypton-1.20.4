@@ -8,9 +8,9 @@ import skid.krypton.event.events.PacketReceiveEvent;
 import skid.krypton.gui.ClickGUI;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.EnumSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.ModeSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 import java.util.Random;
@@ -27,13 +27,13 @@ public final class Krypton extends Module {
     public static final BooleanSetting j;
     private final BooleanSetting n;
     public static final NumberSetting k;
-    public static final EnumSetting<Enum6> l;
+    public static final ModeSetting<Enum6> l;
     public static final BooleanSetting m;
     public boolean shouldPreventClose;
 
     public Krypton() {
         super(EncryptedString.a("Krypton+"), EncryptedString.a("Settings for the client"), 344, Category.e);
-        this.n = new BooleanSetting(EncryptedString.a("Prevent Close"), true).a(EncryptedString.a("For servers with freeze plugins that don't let you open the GUI"));
+        this.n = new BooleanSetting(EncryptedString.a("Prevent Close"), true).setDescription(EncryptedString.a("For servers with freeze plugins that don't let you open the GUI"));
         this.a(Krypton.c, Krypton.d, Krypton.e, Krypton.f, Krypton.i, this.n, Krypton.k, Krypton.l, Krypton.m);
     }
 
@@ -66,7 +66,7 @@ public final class Krypton extends Module {
 
     @EventListener
     public void a(final PacketReceiveEvent packetReceiveEvent) {
-        if (shouldPreventClose && packetReceiveEvent.a instanceof OpenScreenS2CPacket && this.n.c()) {
+        if (shouldPreventClose && packetReceiveEvent.a instanceof OpenScreenS2CPacket && this.n.getValue()) {
             packetReceiveEvent.cancel();
         }
     }
@@ -76,12 +76,12 @@ public final class Krypton extends Module {
         d = new NumberSetting(EncryptedString.a("Green"), 0.0, 255.0, 190.0, 1.0);
         e = new NumberSetting(EncryptedString.a("Blue"), 0.0, 255.0, 255.0, 1.0);
         f = new NumberSetting(EncryptedString.a("Window Alpha"), 0.0, 255.0, 170.0, 1.0);
-        g = new BooleanSetting(EncryptedString.a("Breathing"), false).a(EncryptedString.a("Color breathing effect (only with rainbow off)"));
-        h = new BooleanSetting(EncryptedString.a("Rainbow"), false).a(EncryptedString.a("Enables LGBTQ mode"));
-        i = new BooleanSetting(EncryptedString.a("Background"), true).a(EncryptedString.a("Renders the background of the Click Gui"));
+        g = new BooleanSetting(EncryptedString.a("Breathing"), false).setDescription(EncryptedString.a("Color breathing effect (only with rainbow off)"));
+        h = new BooleanSetting(EncryptedString.a("Rainbow"), false).setDescription(EncryptedString.a("Enables LGBTQ mode"));
+        i = new BooleanSetting(EncryptedString.a("Background"), true).setDescription(EncryptedString.a("Renders the background of the Click Gui"));
         j = new BooleanSetting(EncryptedString.a("Custom Font"), true);
         k = new NumberSetting(EncryptedString.a("Roundness"), 1.0, 10.0, 5.0, 1.0);
-        l = new EnumSetting<>(EncryptedString.a("Animations"), Enum6.a, Enum6.class);
-        m = new BooleanSetting(EncryptedString.a("MSAA"), true).a(EncryptedString.a("Anti Aliasing | This can impact performance if you're using tracers but gives them a smoother look |"));
+        l = new ModeSetting<>(EncryptedString.a("Animations"), Enum6.a, Enum6.class);
+        m = new BooleanSetting(EncryptedString.a("MSAA"), true).setDescription(EncryptedString.a("Anti Aliasing | This can impact performance if you're using tracers but gives them a smoother look |"));
     }
 }

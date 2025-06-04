@@ -11,8 +11,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class ShulkerDropper extends Module {
@@ -66,7 +66,7 @@ public final class ShulkerDropper extends Module {
         }
         if (currentScreenHandler.getSlot(13).getStack().isOf(Items.SHULKER_BOX)) {
             this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
-            this.d = this.c.f();
+            this.d = this.c.getIntValue();
             this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
         }
     }

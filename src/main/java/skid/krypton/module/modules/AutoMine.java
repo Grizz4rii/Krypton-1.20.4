@@ -10,8 +10,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class AutoMine extends Module {
@@ -47,11 +47,11 @@ public final class AutoMine extends Module {
             return;
         }
         this.c(true);
-        if (this.c.c()) {
+        if (this.c.getValue()) {
             final float getYaw = this.b.player.getYaw();
             final float getPitch = this.b.player.getPitch();
-            final float g = this.e.g();
-            final float g2 = this.d.g();
+            final float g = this.e.getFloatValue();
+            final float g2 = this.d.getFloatValue();
             if (getYaw != g || getPitch != g2) {
                 this.b.player.setYaw(g);
                 this.b.player.setPitch(g2);

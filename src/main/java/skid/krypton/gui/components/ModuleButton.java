@@ -7,8 +7,8 @@ import skid.krypton.Krypton;
 import skid.krypton.gui.CategoryWindow;
 import skid.krypton.gui.Component;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.*;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.*;
 import skid.krypton.utils.*;
 import skid.krypton.utils.font.TextRenderer;
 
@@ -58,7 +58,7 @@ public final class ModuleButton {
                 this.settings.add(new Checkbox(this, (Setting) next, this.settingOffset));
             } else if (next instanceof NumberSetting) {
                 this.settings.add(new NumberBox(this, (Setting) next, this.settingOffset));
-            } else if (next instanceof EnumSetting) {
+            } else if (next instanceof ModeSetting) {
                 this.settings.add(new ModeBox(this, (Setting) next, this.settingOffset));
             } else if (next instanceof BindSetting) {
                 this.settings.add(new Keybind(this, (Setting) next, this.settingOffset));

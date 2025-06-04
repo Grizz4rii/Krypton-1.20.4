@@ -29,7 +29,7 @@ public final class AntiTrap extends Module {
 
     @EventListener
     public void a(final EntitySpawnEvent entitySpawnEvent) {
-        if (this.a(entitySpawnEvent.a.getEntityType())) {
+        if (this.a(entitySpawnEvent.packet.getEntityType())) {
             entitySpawnEvent.cancel();
         }
     }

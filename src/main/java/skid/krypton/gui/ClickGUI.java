@@ -70,14 +70,14 @@ public final class ClickGUI extends Screen {
             }
             final int alpha = this.currentColor.getAlpha();
             int n4;
-            if (skid.krypton.module.modules.Krypton.i.c()) {
+            if (skid.krypton.module.modules.Krypton.i.getValue()) {
                 n4 = 200;
             } else {
                 n4 = 0;
             }
             if (alpha != n4) {
                 int n5;
-                if (skid.krypton.module.modules.Krypton.i.c()) {
+                if (skid.krypton.module.modules.Krypton.i.getValue()) {
                     n5 = 200;
                 } else {
                     n5 = 0;

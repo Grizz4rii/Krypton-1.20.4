@@ -5,8 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.ItemSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.ItemSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -59,8 +59,8 @@ public final class ItemBox extends Component {
         }
         final int n4 = this.parentX() + 5;
         final int n5 = this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2;
-        TextRenderer.a(String.valueOf(this.setting.r()), drawContext, n4, n5 - 8, this.TEXT_COLOR.getRGB());
-        final int n6 = n4 + TextRenderer.a(this.setting.r() + ": ") + 5;
+        TextRenderer.a(String.valueOf(this.setting.getName()), drawContext, n4, n5 - 8, this.TEXT_COLOR.getRGB());
+        final int n6 = n4 + TextRenderer.a(this.setting.getName() + ": ") + 5;
         final int n7 = n5 - 11;
         RenderUtils.a(drawContext.getMatrices(), this.ITEM_BORDER, n6, n7, n6 + 22, n7 + 22, 4.0, 4.0, 4.0, 4.0, 50.0);
         RenderUtils.a(drawContext.getMatrices(), this.ITEM_BG, n6 + 1, n7 + 1, n6 + 22 - 1, n7 + 22 - 1, 3.5, 3.5, 3.5, 3.5, 50.0);

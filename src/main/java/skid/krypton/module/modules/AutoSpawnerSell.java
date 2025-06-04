@@ -15,7 +15,7 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 
@@ -32,10 +32,10 @@ public final class AutoSpawnerSell extends Module {
 
     public AutoSpawnerSell() {
         super(EncryptedString.a("Auto Spawner Sell"), EncryptedString.a("Automatically drops bones from spawner and sells them"), -1, Category.c);
-        this.c = new NumberSetting(EncryptedString.a("Drop Delay"), 0.0, 120.0, 30.0, 1.0).a(EncryptedString.a("How often it should start dropping bones in minutes"));
-        this.d = new NumberSetting(EncryptedString.a("Page Amount"), 1.0, 10.0, 2.0, 1.0).a(EncryptedString.a("How many pages should it drop before selling"));
-        this.e = new NumberSetting(EncryptedString.a("Page Switch Delay"), 0.0, 720.0, 4.0, 1.0).a(EncryptedString.a("How often it should switch pages in seconds"));
-        this.f = new NumberSetting(EncryptedString.a("delay"), 0.0, 20.0, 1.0, 1.0).a(EncryptedString.a("What should be delay in ticks"));
+        this.c = new NumberSetting(EncryptedString.a("Drop Delay"), 0.0, 120.0, 30.0, 1.0).getValue(EncryptedString.a("How often it should start dropping bones in minutes"));
+        this.d = new NumberSetting(EncryptedString.a("Page Amount"), 1.0, 10.0, 2.0, 1.0).getValue(EncryptedString.a("How many pages should it drop before selling"));
+        this.e = new NumberSetting(EncryptedString.a("Page Switch Delay"), 0.0, 720.0, 4.0, 1.0).getValue(EncryptedString.a("How often it should switch pages in seconds"));
+        this.f = new NumberSetting(EncryptedString.a("delay"), 0.0, 20.0, 1.0, 1.0).getValue(EncryptedString.a("What should be delay in ticks"));
         this.a(this.c, this.d, this.e, this.f);
     }
 
@@ -60,7 +60,7 @@ public final class AutoSpawnerSell extends Module {
         if (this.b.player == null) {
             return;
         }
-        if (this.h >= this.d.f()) {
+        if (this.h >= this.d.getIntValue()) {
             this.j = true;
             this.h = 0;
             this.keybind = 40;
@@ -115,8 +115,8 @@ public final class AutoSpawnerSell extends Module {
                     final Item item = this.b.player.currentScreenHandler.getStacks().get(n).getItem();
                     if (item != Items.AIR && item == j) {
                         this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.b.player);
-                        this.keybind = this.f.f();
-                        if (this.f.f() != 0) {
+                        this.keybind = this.f.getIntValue();
+                        if (this.f.getIntValue() != 0) {
                             break;
                         }
                         continue;
@@ -164,7 +164,7 @@ public final class AutoSpawnerSell extends Module {
             if (b2) {
                 this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 52, 1, SlotActionType.THROW, this.b.player);
                 this.i = true;
-                this.keybind = this.e.f() * 20;
+                this.keybind = this.e.getIntValue() * 20;
                 ++this.h;
             } else if (this.i) {
                 this.i = false;
@@ -179,7 +179,7 @@ public final class AutoSpawnerSell extends Module {
                     return;
                 }
                 this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 45, 1, SlotActionType.THROW, this.b.player);
-                this.keybind = 1200 * this.c.f();
+                this.keybind = 1200 * this.c.getIntValue();
             }
         }
     }

@@ -9,8 +9,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BindSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BindSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
@@ -26,7 +26,7 @@ public final class DoubleAnchor extends Module {
 
     public DoubleAnchor() {
         super(EncryptedString.a("Double Anchor"), EncryptedString.a("Automatically Places 2 anchors"), -1, Category.a);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), 71, false).a(EncryptedString.a("Key that starts double anchoring"));
+        this.c = new BindSetting(EncryptedString.a("Activate Key"), 71, false).setDescription(EncryptedString.a("Key that starts double anchoring"));
         this.d = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
         this.e = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
         this.f = 0;
@@ -65,7 +65,7 @@ public final class DoubleAnchor extends Module {
             this.m();
             return;
         }
-        if (this.f < this.d.f()) {
+        if (this.f < this.d.getIntValue()) {
             ++this.f;
             return;
         }
@@ -87,7 +87,7 @@ public final class DoubleAnchor extends Module {
         } else if (this.keybind == 7) {
             BlockUtil.a((BlockHitResult) crosshairTarget, true);
         } else if (this.keybind == 8) {
-            InventoryUtil.a(this.e.f() - 1);
+            InventoryUtil.a(this.e.getIntValue() - 1);
         } else if (this.keybind == 9) {
             BlockUtil.a((BlockHitResult) crosshairTarget, true);
         } else if (this.keybind == 10) {
@@ -115,7 +115,7 @@ public final class DoubleAnchor extends Module {
     }
 
     private boolean l() {
-        final int d = this.c.d();
+        final int d = this.c.getValue();
         if (d == -1 || !KeyUtils.b(d)) {
             this.m();
             return false;

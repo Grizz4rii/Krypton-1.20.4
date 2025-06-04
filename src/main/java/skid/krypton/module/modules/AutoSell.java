@@ -15,23 +15,23 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.EnumSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.ModeSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 
 public final class AutoSell extends Module {
-    private final EnumSetting<Enum9> c;
-    private final EnumSetting<Enum8> d;
+    private final ModeSetting<Enum9> c;
+    private final ModeSetting<Enum8> d;
     private final NumberSetting e;
     private int f;
     private boolean g;
 
     public AutoSell() {
         super(EncryptedString.a("Auto Sell"), EncryptedString.a("Automatically sells pickles"), -1, Category.c);
-        this.c = new EnumSetting<Enum9>(EncryptedString.a("Mode"), Enum9.a, Enum9.class);
-        this.d = new EnumSetting<Enum8>(EncryptedString.a("Item"), Enum8.a, Enum8.class);
-        this.e = new NumberSetting(EncryptedString.a("delay"), 0.0, 20.0, 2.0, 1.0).a(EncryptedString.a("What should be delay in ticks"));
+        this.c = new ModeSetting<Enum9>(EncryptedString.a("Mode"), Enum9.a, Enum9.class);
+        this.d = new ModeSetting<Enum8>(EncryptedString.a("Item"), Enum8.a, Enum8.class);
+        this.e = new NumberSetting(EncryptedString.a("delay"), 0.0, 20.0, 2.0, 1.0).getValue(EncryptedString.a("What should be delay in ticks"));
         this.a(this.c, this.d, this.e);
     }
 
@@ -55,7 +55,7 @@ public final class AutoSell extends Module {
             --this.f;
             return;
         }
-        if (this.c.a().equals(Enum9.a)) {
+        if (this.c.getValue().equals(Enum9.a)) {
             final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
             if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 5) {
                 this.b.getNetworkHandler().sendChatCommand("sell");
@@ -68,9 +68,9 @@ public final class AutoSell extends Module {
                 do {
                     n = 45;
                     item = this.b.player.currentScreenHandler.getStacks().get(n).getItem();
-                } while (item == Items.AIR || (!this.d.a().equals(Enum8.f) && !item.equals(this.j())));
+                } while (item == Items.AIR || (!this.d.getValue().equals(Enum8.f) && !item.equals(this.j())));
                 this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n, 1, SlotActionType.QUICK_MOVE, this.b.player);
-                this.f = this.e.f();
+                this.f = this.e.getIntValue();
                 return;
             }
             this.b.player.closeHandledScreen();
@@ -123,8 +123,8 @@ public final class AutoSell extends Module {
                     final Item item2 = this.b.player.currentScreenHandler.getStacks().get(n2).getItem();
                     if (item2 != Items.AIR && item2 == j) {
                         this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, n2, 1, SlotActionType.QUICK_MOVE, this.b.player);
-                        this.f = this.e.f();
-                        if (this.e.f() != 0) {
+                        this.f = this.e.getIntValue();
+                        if (this.e.getIntValue() != 0) {
                             break;
                         }
                         continue;
@@ -141,7 +141,7 @@ public final class AutoSell extends Module {
     }
 
     private Item j() {
-        final Enum a = this.d.a();
+        final Enum a = this.d.getValue();
         if (a == Enum8.f) {
             for (int i = 0; i < 35; ++i) {
                 final ItemStack stack = ((Inventory) this.b.player.getInventory()).getStack(i);

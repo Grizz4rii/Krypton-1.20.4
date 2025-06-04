@@ -3,8 +3,8 @@ package skid.krypton.gui.components;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.util.math.MathHelper;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -56,7 +56,7 @@ public final class NumberBox extends Component {
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
         super.render(drawContext, n, n2, n3);
         this.updateAnimations(n, n2, n3);
-        this.offsetX = (this.setting.a() - this.setting.d()) / (this.setting.e() - this.setting.d()) * this.parentWidth();
+        this.offsetX = (this.setting.getValue() - this.setting.getMin()) / (this.setting.getMax() - this.setting.getMin()) * this.parentWidth();
         this.lerpedOffsetX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetX, this.offsetX);
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
@@ -68,7 +68,7 @@ public final class NumberBox extends Component {
             RenderUtils.a(drawContext.getMatrices(), this.currentColor1, n5, n4, n5 + Math.max(this.lerpedOffsetX - 5.0, 0.0), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         }
         final String displayValue = this.getDisplayValue();
-        TextRenderer.a(this.setting.r(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
+        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
         TextRenderer.a(displayValue, drawContext, this.parentX() + this.parentWidth() - TextRenderer.a(displayValue) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor1.getRGB());
     }
 
@@ -83,8 +83,8 @@ public final class NumberBox extends Component {
     }
 
     private String getDisplayValue() {
-        final double a = this.setting.a();
-        final double c = this.setting.c();
+        final double a = this.setting.getValue();
+        final double c = this.setting.getFormat();
         if (c == 0.1) {
             return String.format("%.1f", a);
         }
@@ -111,13 +111,13 @@ public final class NumberBox extends Component {
     }
 
     private void slide(final double n) {
-        this.setting.a(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.e() - this.setting.d()) + this.setting.d(), this.setting.c()));
+        this.setting.getValue(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMax() - this.setting.getMin()) + this.setting.getMin(), this.setting.getFormat()));
     }
 
     @Override
     public void keyPressed(final int n, final int n2, final int n3) {
         if (this.mouseOver && this.parent.extended && n == 259) {
-            this.setting.a(this.setting.b());
+            this.setting.getValue(this.setting.getDefaultValue());
         }
         super.keyPressed(n, n2, n3);
     }

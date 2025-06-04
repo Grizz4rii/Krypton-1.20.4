@@ -6,8 +6,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.PostItemUseEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public class FastPlace extends Module {
@@ -41,15 +41,15 @@ public class FastPlace extends Module {
         final ItemStack getItemUseTime = this.b.player.getOffHandStack();
         final Item item = getMainHandStack.getItem();
         final Item item2 = this.b.player.getOffHandStack().getItem();
-        if (!getMainHandStack.isOf(Items.EXPERIENCE_BOTTLE) && !getItemUseTime.isOf(Items.EXPERIENCE_BOTTLE) && this.c.c()) {
+        if (!getMainHandStack.isOf(Items.EXPERIENCE_BOTTLE) && !getItemUseTime.isOf(Items.EXPERIENCE_BOTTLE) && this.c.getValue()) {
             return;
         }
-        if (!this.c.c()) {
+        if (!this.c.getValue()) {
             if (item instanceof BlockItem || item2 instanceof BlockItem) {
-                if (!this.d.c()) {
+                if (!this.d.getValue()) {
                     return;
                 }
-            } else if (!this.e.c()) {
+            } else if (!this.e.getValue()) {
                 return;
             }
         }
@@ -65,6 +65,6 @@ public class FastPlace extends Module {
         if (item instanceof RangedWeaponItem || item2 instanceof RangedWeaponItem) {
             return;
         }
-        postItemUseEvent.a = this.f.f();
+        postItemUseEvent.a = this.f.getIntValue();
     }
 }

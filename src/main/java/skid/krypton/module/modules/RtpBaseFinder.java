@@ -30,10 +30,10 @@ import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.EnumSetting;
-import skid.krypton.setting.settings.NumberSetting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.ModeSetting;
+import skid.krypton.module.setting.NumberSetting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EnchantmentUtil;
 import skid.krypton.utils.EncryptedString;
@@ -46,7 +46,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 public final class RtpBaseFinder extends Module {
-    public final EnumSetting<Enum3> c;
+    public final ModeSetting<Enum3> c;
     private final BooleanSetting d;
     private final NumberSetting e;
     private final BooleanSetting f;
@@ -74,12 +74,12 @@ public final class RtpBaseFinder extends Module {
 
     public RtpBaseFinder() {
         super(EncryptedString.a("Rtp Base Finder"), EncryptedString.a("Automatically searches for bases on DonutSMP"), -1, Category.c);
-        this.c = new EnumSetting<Enum3>(EncryptedString.a("Mode"), Enum3.g, Enum3.class);
+        this.c = new ModeSetting<Enum3>(EncryptedString.a("Mode"), Enum3.g, Enum3.class);
         this.d = new BooleanSetting(EncryptedString.a("Spawners"), true);
         this.e = new NumberSetting(EncryptedString.a("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
         this.f = new BooleanSetting(EncryptedString.a("Auto Totem Buy"), true);
         this.g = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
-        this.h = new BooleanSetting(EncryptedString.a("Auto Mend"), true).a(EncryptedString.a("Automatically repairs pickaxe."));
+        this.h = new BooleanSetting(EncryptedString.a("Auto Mend"), true).setDescription(EncryptedString.a("Automatically repairs pickaxe."));
         this.i = new NumberSetting(EncryptedString.a("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
         this.j = new BooleanSetting(EncryptedString.a("Discord Notification"), false);
         this.k = new StringSetting(EncryptedString.a("Webhook"), "");
@@ -119,8 +119,8 @@ public final class RtpBaseFinder extends Module {
             return;
         }
         this.n();
-        if (this.f.c()) {
-            final int n = this.g.f() - 1;
+        if (this.f.getValue()) {
+            final int n = this.g.getIntValue() - 1;
             if (!this.b.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
                 if (this.z < 30 && !this.v) {
                     ++this.z;
@@ -166,7 +166,7 @@ public final class RtpBaseFinder extends Module {
             }
         }
         if (this.u) {
-            final int n2 = this.i.f() - 1;
+            final int n2 = this.i.getIntValue() - 1;
             final ItemStack getStack = this.b.player.getInventory().getStack(n2);
             if (this.b.player.getInventory().selectedSlot != n2) {
                 InventoryUtil.a(n2);
@@ -227,7 +227,7 @@ public final class RtpBaseFinder extends Module {
             if (this.t) {
                 this.m();
             }
-            if (this.l.c()) {
+            if (this.l.getValue()) {
                 final boolean equals = this.b.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
                 final Module moduleByClass = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoTotem.class);
                 if (equals) {
@@ -237,7 +237,7 @@ public final class RtpBaseFinder extends Module {
                 } else {
                     ++this.r;
                 }
-                if (this.r > this.m.a()) {
+                if (this.r > this.m.getValue()) {
                     this.a("Your totem exploded", (int) this.b.player.getX(), (int) this.b.player.getY(), (int) this.b.player.getZ());
                     return;
                 }
@@ -250,7 +250,7 @@ public final class RtpBaseFinder extends Module {
                         return;
                     }
                     this.b.player.setPitch(89.9f);
-                    if (this.h.c()) {
+                    if (this.h.getValue()) {
                         final ItemStack size = this.b.player.getMainHandStack();
                         if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                             this.u = true;
@@ -277,7 +277,7 @@ public final class RtpBaseFinder extends Module {
                 this.q = 0.0;
                 return;
             }
-            if (this.b.player.getY() < this.n.f() && !this.s) {
+            if (this.b.player.getY() < this.n.getIntValue() && !this.s) {
                 this.s = true;
                 this.t = false;
             }
@@ -288,10 +288,10 @@ public final class RtpBaseFinder extends Module {
         this.t = false;
         final ClientPlayNetworkHandler networkHandler = this.b.getNetworkHandler();
         Enum3 l;
-        if (this.c.a() == Enum3.g) {
+        if (this.c.getValue() == Enum3.g) {
             l = this.l();
         } else {
-            l = (Enum3) this.c.a();
+            l = (Enum3) this.c.getValue();
         }
         networkHandler.sendChatCommand("rtp " + this.a(l));
         this.x = 150;
@@ -378,7 +378,7 @@ public final class RtpBaseFinder extends Module {
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
-                if (this.d.c() && getBlockEntity instanceof MobSpawnerBlockEntity) {
+                if (this.d.getValue() && getBlockEntity instanceof MobSpawnerBlockEntity) {
                     final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.b.world, this.b.world.getRandom(), (BlockPos) next).getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
@@ -399,7 +399,7 @@ public final class RtpBaseFinder extends Module {
             this.a("YOU FOUND SPAWNER", blockPos.getX(), blockPos.getY(), blockPos.getZ(), false);
             this.A = 0;
         }
-        if (n > this.e.f()) {
+        if (n > this.e.getIntValue()) {
             this.a("YOU FOUND BASE", (int) this.b.player.getPos().x, (int) this.b.player.getPos().y, (int) this.b.player.getPos().z, true);
         }
     }
@@ -411,8 +411,8 @@ public final class RtpBaseFinder extends Module {
         } else {
             s2 = "Spawner";
         }
-        if (this.j.c()) {
-            final EmbedSender embedSender = new EmbedSender(this.k.a);
+        if (this.j.getValue()) {
+            final EmbedSender embedSender = new EmbedSender(this.k.value);
             final bn bn = new bn();
             bn.a(s2);
             bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
@@ -431,8 +431,8 @@ public final class RtpBaseFinder extends Module {
     }
 
     private void a(final String s, final int n, final int n2, final int n3) {
-        if (this.j.c()) {
-            final EmbedSender embedSender = new EmbedSender(this.k.a);
+        if (this.j.getValue()) {
+            final EmbedSender embedSender = new EmbedSender(this.k.value);
             final bn bn = new bn();
             bn.a("Totem Exploded");
             bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");

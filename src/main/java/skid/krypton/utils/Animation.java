@@ -13,11 +13,11 @@ public final class Animation {
     }
 
     public double a(final double n, final double a) {
-        if (Krypton.l.b(Enum6.a)) {
+        if (Krypton.l.isMode(Enum6.a)) {
             this.a = MathUtil.a((float) n, this.a, a);
-        } else if (Krypton.l.b(Enum6.b)) {
+        } else if (Krypton.l.isMode(Enum6.b)) {
             this.a = MathUtil.a(n, this.a, a);
-        } else if (Krypton.l.b(Enum6.c)) {
+        } else if (Krypton.l.isMode(Enum6.c)) {
             this.a = a;
         }
         return this.a;

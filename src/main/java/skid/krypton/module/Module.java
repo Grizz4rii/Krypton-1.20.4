@@ -3,7 +3,7 @@ package skid.krypton.module;
 import net.minecraft.client.MinecraftClient;
 import skid.krypton.Krypton;
 import skid.krypton.manager.EventManager;
-import skid.krypton.setting.Setting;
+import skid.krypton.module.setting.Setting;
 
 import java.io.Serializable;
 import java.util.ArrayList;

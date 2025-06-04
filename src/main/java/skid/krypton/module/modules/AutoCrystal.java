@@ -16,8 +16,8 @@ import skid.krypton.event.events.PreItemUseEvent;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BindSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BindSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.KeyUtils;
@@ -32,7 +32,7 @@ public final class AutoCrystal extends Module {
 
     public AutoCrystal() {
         super(EncryptedString.a("Auto Crystal"), EncryptedString.a("Automatically crystals fast for you"), -1, Category.a);
-        this.d = new BindSetting(EncryptedString.a("Activate Key"), 1, false).a(EncryptedString.a("Key that does the crystalling"));
+        this.d = new BindSetting(EncryptedString.a("Activate Key"), 1, false).setDescription(EncryptedString.a("Key that does the crystalling"));
         this.e = new NumberSetting(EncryptedString.a("Place Delay"), 0.0, 20.0, 0.0, 1.0);
         this.f = new NumberSetting(EncryptedString.a("Break Delay"), 0.0, 20.0, 0.0, 1.0);
         this.a(this.d, this.e, this.f);
@@ -78,7 +78,7 @@ public final class AutoCrystal extends Module {
     }
 
     private boolean l() {
-        final int d = this.d.d();
+        final int d = this.d.getValue();
         if (d != -1 && !KeyUtils.b(d)) {
             this.j();
             return this.c = false;
@@ -105,7 +105,7 @@ public final class AutoCrystal extends Module {
         final BlockPos blockPos = blockHitResult.getBlockPos();
         if ((BlockUtil.a(blockPos, Blocks.OBSIDIAN) || BlockUtil.a(blockPos, Blocks.BEDROCK)) && this.a(blockPos)) {
             BlockUtil.a(blockHitResult, true);
-            this.keybind = this.e.f();
+            this.keybind = this.e.getIntValue();
         }
     }
 
@@ -119,7 +119,7 @@ public final class AutoCrystal extends Module {
         }
         this.b.interactionManager.attackEntity(this.b.player, entity);
         this.b.player.swingHand(Hand.MAIN_HAND);
-        this.h = this.f.f();
+        this.h = this.f.getIntValue();
     }
 
     @EventListener

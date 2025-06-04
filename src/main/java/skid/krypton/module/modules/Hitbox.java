@@ -5,8 +5,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TargetMarginEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class Hitbox extends Module {
@@ -33,15 +33,15 @@ public final class Hitbox extends Module {
     @EventListener
     public void a(final TargetMarginEvent targetMarginEvent) {
         if (targetMarginEvent.a instanceof PlayerEntity) {
-            targetMarginEvent.b.setReturnValue((float) this.c.a());
+            targetMarginEvent.b.setReturnValue((float) this.c.getValue());
         }
     }
 
     public double j() {
-        if (!this.d.c()) {
+        if (!this.d.getValue()) {
             return 0.0;
         }
-        return this.c.a();
+        return this.c.getValue();
     }
 
     private static byte[] pqiwnsxnnjwdwse() {

@@ -8,8 +8,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class AutoTotem extends Module {
@@ -47,7 +47,7 @@ public final class AutoTotem extends Module {
             return;
         }
         if (this.b.player.getInventory().getStack(40).getItem() == Items.TOTEM_OF_UNDYING) {
-            this.e = this.c.f();
+            this.e = this.c.getIntValue();
             return;
         }
         if (this.e > 0) {
@@ -59,7 +59,7 @@ public final class AutoTotem extends Module {
             return;
         }
         this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, b(a), 40, SlotActionType.SWAP, this.b.player);
-        this.e = this.c.f();
+        this.e = this.c.getIntValue();
     }
 
     public int a(final Item item) {

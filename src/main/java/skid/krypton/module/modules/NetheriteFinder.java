@@ -22,8 +22,8 @@ import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.event.events.SetBlockStateEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.RenderUtils;
@@ -79,7 +79,7 @@ public final class NetheriteFinder extends Module {
 
             int var9 = this.b.player.getChunkPos().x;
             int var10 = this.b.player.getChunkPos().z;
-            int var6 = this.d.f();
+            int var6 = this.d.getIntValue();
             if (0 > var6) {
                 var1.a.pop();
             } else {
@@ -112,7 +112,7 @@ public final class NetheriteFinder extends Module {
                             (float)(((Vec3d)var14).x + 1.0),
                             (float)(((Vec3d)var14).y + 1.0),
                             (float)(((Vec3d)var14).z + 1.0),
-                            this.b(this.c.f())
+                            this.b(this.c.getIntValue())
                     );
                 }
             }

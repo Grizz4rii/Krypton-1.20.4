@@ -9,7 +9,7 @@ import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import skid.krypton.module.modules.Krypton;
-import skid.krypton.setting.settings.ItemSetting;
+import skid.krypton.module.setting.ItemSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.font.TextRenderer;
@@ -64,7 +64,7 @@ class ItemFilter extends Screen {
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
         int a;
-        if (Krypton.i.c()) {
+        if (Krypton.i.getValue()) {
             a = 180;
         } else {
             a = 0;
@@ -75,7 +75,7 @@ class ItemFilter extends Screen {
         RenderUtils.a(drawContext.getMatrices(), new Color(30, 30, 35, 240), n6, n7, n6 + 580, n7 + 450, 8.0, 8.0, 8.0, 8.0, 20.0);
         RenderUtils.a(drawContext.getMatrices(), new Color(40, 40, 45, 255), n6, n7, n6 + 580, n7 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
         drawContext.fill(n6, n7 + 30, n6 + 580, n7 + 31, KryptonUtil.getMainColor(255, 1).getRGB());
-        TextRenderer.b("Select Item: " + this.setting.r(), drawContext, n6 + 290, n7 + 8, new Color(245, 245, 245, 255).getRGB());
+        TextRenderer.b("Select Item: " + this.setting.getName(), drawContext, n6 + 290, n7 + 8, new Color(245, 245, 245, 255).getRGB());
         final int n8 = n6 + 20;
         final int n9 = n7 + 50;
         RenderUtils.a(drawContext.getMatrices(), new Color(20, 20, 25, 255), n8, n9, n8 + 540, n9 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);

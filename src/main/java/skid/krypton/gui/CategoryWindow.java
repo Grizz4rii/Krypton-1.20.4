@@ -52,7 +52,7 @@ public final class CategoryWindow {
     }
 
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        final Color color = new Color(25, 25, 30, skid.krypton.module.modules.Krypton.f.f());
+        final Color color = new Color(25, 25, 30, skid.krypton.module.modules.Krypton.f.getIntValue());
         if (this.currentColor == null) {
             this.currentColor = new Color(25, 25, 30, 0);
         } else {

@@ -6,7 +6,7 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import skid.krypton.module.modules.Krypton;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
@@ -48,7 +48,7 @@ class StringBox extends Screen {
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
         int a;
-        if (Krypton.i.c()) {
+        if (Krypton.i.getValue()) {
             a = 180;
         } else {
             a = 0;
@@ -62,7 +62,7 @@ class StringBox extends Screen {
         RenderUtils.a(drawContext.getMatrices(), new Color(30, 30, 35, 240), n4, n5, n4 + a2, n5 + 120, 8.0, 8.0, 8.0, 8.0, 20.0);
         RenderUtils.a(drawContext.getMatrices(), new Color(40, 40, 45, 255), n4, n5, n4 + a2, n5 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
         drawContext.fill(n4, n5 + 30, n4 + a2, n5 + 31, KryptonUtil.getMainColor(255, 1).getRGB());
-        TextRenderer.b(this.setting.r(), drawContext, n4 + a2 / 2, n5 + 8, new Color(245, 245, 245, 255).getRGB());
+        TextRenderer.b(this.setting.getName(), drawContext, n4 + a2 / 2, n5 + 8, new Color(245, 245, 245, 255).getRGB());
         final int n6 = n4 + 20;
         final int n7 = n5 + 50;
         final int n8 = a2 - 40;
@@ -118,7 +118,7 @@ class StringBox extends Screen {
         final int n6 = (height - 120) / 2 + 120 - 30;
         final int n7 = (width - max) / 2 + max - 80 - 20;
         if (this.isHovered(n4, n5, n7, n6, 80, 25)) {
-            this.setting.a(this.content.trim());
+            this.setting.setValue(this.content.trim());
             this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
@@ -137,12 +137,12 @@ class StringBox extends Screen {
         this.cursorVisible = true;
         this.lastCursorBlink = System.currentTimeMillis();
         if (n == 256) {
-            this.setting.a(this.content.trim());
+            this.setting.setValue(this.content.trim());
             this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }
         if (n == 257) {
-            this.setting.a(this.content.trim());
+            this.setting.setValue(this.content.trim());
             this.this$0.mc.setScreen(skid.krypton.Krypton.INSTANCE.GUI);
             return true;
         }

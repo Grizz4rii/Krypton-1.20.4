@@ -1,7 +1,6 @@
-package skid.krypton.setting.settings;
+package skid.krypton.module.setting;
 
 import net.minecraft.item.Item;
-import skid.krypton.setting.Setting;
 
 public class ItemSetting extends Setting {
     private Item a;

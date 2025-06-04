@@ -13,8 +13,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.Render3DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.KryptonUtil;
@@ -32,7 +32,7 @@ public final class PlayerESP extends Module {
         super(EncryptedString.a("Player ESP"), EncryptedString.a("Renders players through walls"), -1, Category.d);
         this.c = new NumberSetting(EncryptedString.a("Alpha"), 0.0, 255.0, 100.0, 1.0);
         this.d = new NumberSetting(EncryptedString.a("Line width"), 1.0, 10.0, 1.0, 1.0);
-        this.e = new BooleanSetting(EncryptedString.a("Tracers"), false).a(EncryptedString.a("Draws a line from your player to the other"));
+        this.e = new BooleanSetting(EncryptedString.a("Tracers"), false).setDescription(EncryptedString.a("Draws a line from your player to the other"));
         this.a(this.c, this.d, this.e);
     }
 
@@ -62,8 +62,8 @@ public final class PlayerESP extends Module {
                 final double lerp = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevX, ((PlayerEntity) next).getX());
                 final double lerp2 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevY, ((PlayerEntity) next).getY());
                 final double lerp3 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevZ, ((PlayerEntity) next).getZ());
-                RenderUtils.a(render3DEvent.a, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, KryptonUtil.getMainColor(this.c.f(), 1).brighter());
-                if (this.e.c()) {
+                RenderUtils.a(render3DEvent.a, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, KryptonUtil.getMainColor(this.c.getIntValue(), 1).brighter());
+                if (this.e.getValue()) {
                     RenderUtils.a(render3DEvent.a, KryptonUtil.getMainColor(255, 1), this.b.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
                 }
                 render3DEvent.a.pop();
@@ -87,7 +87,7 @@ public final class PlayerESP extends Module {
         matrixStack.push();
         final Matrix4f positionMatrix = matrixStack.peek().getPositionMatrix();
         RenderSystem.setShader((Supplier) GameRenderer::getPositionColorProgram);
-        if (Krypton.m.c()) {
+        if (Krypton.m.getValue()) {
             GL11.glEnable(32925);
             GL11.glEnable(2848);
             GL11.glHint(3154, 4354);
@@ -96,7 +96,7 @@ public final class PlayerESP extends Module {
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableBlend();
-        GL11.glLineWidth((float) this.d.f());
+        GL11.glLineWidth((float) this.d.getIntValue());
         final BufferBuilder begin = Tessellator.getInstance().begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
         begin.vertex(positionMatrix, n5 + (float) n8, n6, n7 + (float) n9).color(n, n2, n3, n4);
         begin.vertex(positionMatrix, n5 - (float) n8, n6, n7 - (float) n9).color(n, n2, n3, n4);
@@ -111,7 +111,7 @@ public final class PlayerESP extends Module {
         GL11.glDepthFunc(515);
         GL11.glLineWidth(1.0f);
         RenderSystem.disableBlend();
-        if (Krypton.m.c()) {
+        if (Krypton.m.getValue()) {
             GL11.glDisable(2848);
             GL11.glDisable(32925);
         }
@@ -119,10 +119,10 @@ public final class PlayerESP extends Module {
     }
 
     private Color b(final int a) {
-        final int f = Krypton.c.f();
-        final int f2 = Krypton.d.f();
-        final int f3 = Krypton.e.f();
-        if (Krypton.h.c()) {
+        final int f = Krypton.c.getIntValue();
+        final int f2 = Krypton.d.getIntValue();
+        final int f3 = Krypton.e.getIntValue();
+        if (Krypton.h.getValue()) {
             return ColorUtil.a(1, a);
         }
         return new Color(f, f2, f3, a);

@@ -3,8 +3,8 @@ package skid.krypton.gui.components;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.BindSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.BindSetting;
 import skid.krypton.utils.*;
 import skid.krypton.utils.font.TextRenderer;
 
@@ -42,12 +42,12 @@ public final class Keybind extends Component {
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(Keybind.HOVER_COLOR.getRed(), Keybind.HOVER_COLOR.getGreen(), Keybind.HOVER_COLOR.getBlue(), (int) (Keybind.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(this.setting.r(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Keybind.TEXT_COLOR.getRGB());
+        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Keybind.TEXT_COLOR.getRGB());
         String string;
-        if (this.keybind.b()) {
+        if (this.keybind.isListening()) {
             string = "Listening...";
         } else {
-            string = KeyUtils.a(this.keybind.d()).toString();
+            string = KeyUtils.a(this.keybind.getValue()).toString();
         }
         final int a = TextRenderer.a(string);
         final int max = Math.max(80, a + 16);
@@ -66,7 +66,7 @@ public final class Keybind extends Component {
             RenderUtils.a(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * max2)), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
         }
         TextRenderer.a(string, drawContext, n4 + (max - a) / 2, n5 + 6 - 3, ColorUtil.a(Keybind.TEXT_COLOR, Keybind.LISTENING_TEXT_COLOR, this.listenAnimation).getRGB());
-        if (this.keybind.b()) {
+        if (this.keybind.isListening()) {
             RenderUtils.a(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * ((float) Math.abs(Math.sin(System.currentTimeMillis() / 500.0)) * 0.3f))), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
         }
     }
@@ -81,7 +81,7 @@ public final class Keybind extends Component {
         }
         this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.25, n4);
         float n6;
-        if (this.keybind.b()) {
+        if (this.keybind.isListening()) {
             n6 = 1.0f;
         } else {
             n6 = 0.0f;
@@ -96,24 +96,24 @@ public final class Keybind extends Component {
     @Override
     public void mouseClicked(final double n, final double n2, final int n3) {
         String string;
-        if (this.keybind.b()) {
+        if (this.keybind.isListening()) {
             string = "Listening...";
         } else {
-            string = KeyUtils.a(this.keybind.d()).toString();
+            string = KeyUtils.a(this.keybind.getValue()).toString();
         }
         final int max = Math.max(80, TextRenderer.a(string) + 16);
         if (this.isButtonHovered(n, n2, this.parentX() + this.parentWidth() - max - 5, this.parentY() + this.parentOffset() + this.offset + (this.parentHeight() - 20) / 2, max, 20)) {
-            if (!this.keybind.b()) {
+            if (!this.keybind.isListening()) {
                 if (n3 == 0) {
-                    this.keybind.e();
-                    this.keybind.a(true);
+                    this.keybind.toggleListening();
+                    this.keybind.setListening(true);
                 }
             } else {
-                if (this.keybind.a()) {
+                if (this.keybind.isModuleKey()) {
                     this.parent.module.a(n3);
                 }
-                this.keybind.a(n3);
-                this.keybind.a(false);
+                this.keybind.setValue(n3);
+                this.keybind.setListening(false);
             }
         }
         super.mouseClicked(n, n2, n3);
@@ -121,21 +121,21 @@ public final class Keybind extends Component {
 
     @Override
     public void keyPressed(final int n, final int n2, final int n3) {
-        if (this.keybind.b()) {
+        if (this.keybind.isListening()) {
             if (n == 256) {
-                this.keybind.a(false);
+                this.keybind.setListening(false);
             } else if (n == 259) {
-                if (this.keybind.a()) {
+                if (this.keybind.isModuleKey()) {
                     this.parent.module.a(-1);
                 }
-                this.keybind.a(-1);
-                this.keybind.a(false);
+                this.keybind.setValue(-1);
+                this.keybind.setListening(false);
             } else {
-                if (this.keybind.a()) {
+                if (this.keybind.isModuleKey()) {
                     this.parent.module.a(n);
                 }
-                this.keybind.a(n);
-                this.keybind.a(false);
+                this.keybind.setValue(n);
+                this.keybind.setListening(false);
             }
         }
         super.keyPressed(n, n2, n3);

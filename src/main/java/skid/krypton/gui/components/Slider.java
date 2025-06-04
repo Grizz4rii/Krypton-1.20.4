@@ -4,8 +4,8 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.MinMaxSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.MinMaxSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -61,7 +61,7 @@ public final class Slider extends Component {
             RenderUtils.a(matrices, this.accentColor1, n5 + this.lerpedOffsetMinX - 5.0, n4, n5 + this.lerpedOffsetMaxX - 5.0, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         }
         final String displayText = this.getDisplayText();
-        TextRenderer.a(this.setting.r(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Slider.TEXT_COLOR.getRGB());
+        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Slider.TEXT_COLOR.getRGB());
         TextRenderer.a(displayText, drawContext, this.parentX() + this.parentWidth() - TextRenderer.a(displayText) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.accentColor1.getRGB());
         final float n6 = n4 + 2.0f - 4.0f;
         RenderUtils.a(matrices, Slider.THUMB_COLOR, (float) (n5 + this.lerpedOffsetMinX - 5.0 - 4.0), n6, (float) (n5 + this.lerpedOffsetMinX - 5.0 + 4.0), n6 + 8.0f, 4.0, 4.0, 4.0, 4.0, 50.0);

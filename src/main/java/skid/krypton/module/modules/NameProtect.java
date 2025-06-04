@@ -2,8 +2,8 @@ package skid.krypton.module.modules;
 
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.EncryptedString;
 
 public class NameProtect extends Module {

@@ -5,8 +5,8 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BindSetting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.BindSetting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.KeyUtils;
 
@@ -44,8 +44,8 @@ public final class CordSnapper extends Module {
             --this.e;
             return;
         }
-        if (KeyUtils.b(this.c.d())) {
-            EmbedSender embedSender = new EmbedSender(this.d.a);
+        if (KeyUtils.b(this.c.getValue())) {
+            EmbedSender embedSender = new EmbedSender(this.d.value);
             embedSender.a("Coordinates: x: " + this.b.player.getX() + " y: " + this.b.player.getY() + " z: " + this.b.player.getZ());
             CompletableFuture.runAsync(() -> {
                 try {

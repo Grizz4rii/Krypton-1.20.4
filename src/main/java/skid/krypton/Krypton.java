@@ -6,7 +6,7 @@ import skid.krypton.auth.Auth;
 import skid.krypton.gui.ClickGUI;
 import skid.krypton.manager.ConfigManager;
 import skid.krypton.manager.EventManager;
-import skid.krypton.manager.ModuleManager;
+import skid.krypton.module.ModuleManager;
 import skid.krypton.utils.EncryptedString;
 
 import java.io.File;

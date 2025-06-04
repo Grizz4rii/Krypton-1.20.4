@@ -2,8 +2,8 @@ package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.BooleanSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.BooleanSetting;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
@@ -34,7 +34,7 @@ public final class Checkbox extends Component {
         this.BOX_BG = new Color(40, 40, 45);
         this.setting = (BooleanSetting) setting;
         float enabledAnimation;
-        if (this.setting.c()) {
+        if (this.setting.getValue()) {
             enabledAnimation = 1.0f;
         } else {
             enabledAnimation = 0.0f;
@@ -49,7 +49,7 @@ public final class Checkbox extends Component {
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(this.setting.r(), drawContext, this.parentX() + 27, this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2 - 6, this.TEXT_COLOR.getRGB());
+        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 27, this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2 - 6, this.TEXT_COLOR.getRGB());
         this.renderModernCheckbox(drawContext);
     }
 
@@ -63,7 +63,7 @@ public final class Checkbox extends Component {
         }
         this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.004999999888241291, n4);
         float n6;
-        if (this.setting.c()) {
+        if (this.setting.getValue()) {
             n6 = 1.0f;
         } else {
             n6 = 0.0f;
@@ -92,7 +92,7 @@ public final class Checkbox extends Component {
     @Override
     public void keyPressed(final int n, final int n2, final int n3) {
         if (this.mouseOver && this.parent.extended && n == 259) {
-            this.setting.a(this.setting.b());
+            this.setting.setValue(this.setting.getDefaultValue());
         }
         super.keyPressed(n, n2, n3);
     }
@@ -100,7 +100,7 @@ public final class Checkbox extends Component {
     @Override
     public void mouseClicked(final double n, final double n2, final int n3) {
         if (this.isHovered(n, n2) && n3 == 0) {
-            this.setting.a();
+            this.setting.toggle();
         }
         super.mouseClicked(n, n2, n3);
     }
@@ -110,7 +110,7 @@ public final class Checkbox extends Component {
         super.onGuiClose();
         this.hoverAnimation = 0.0f;
         float enabledAnimation;
-        if (this.setting.c()) {
+        if (this.setting.getValue()) {
             enabledAnimation = 1.0f;
         } else {
             enabledAnimation = 0.0f;

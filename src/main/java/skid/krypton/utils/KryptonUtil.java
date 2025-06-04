@@ -15,13 +15,13 @@ import java.net.URL;
 
 public final class KryptonUtil {
     public static Color getMainColor(final int n, final int n2) {
-        final int f = Krypton.c.f();
-        final int f2 = Krypton.d.f();
-        final int f3 = Krypton.e.f();
-        if (Krypton.h.c()) {
+        final int f = Krypton.c.getIntValue();
+        final int f2 = Krypton.d.getIntValue();
+        final int f3 = Krypton.e.getIntValue();
+        if (Krypton.h.getValue()) {
             return ColorUtil.a(n2, n);
         }
-        if (Krypton.g.c()) {
+        if (Krypton.g.getValue()) {
             return ColorUtil.alphaStep_Skidded_From_Prestige_Client_NumberOne(new Color(f, f2, f3, n), n2, 20);
         }
         return new Color(f, f2, f3, n);

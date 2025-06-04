@@ -12,8 +12,8 @@ import skid.krypton.event.events.PacketEvent;
 import skid.krypton.event.events.Render2DEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.MathUtil;
@@ -31,7 +31,6 @@ public final class TargetHUD extends Module {
     private final Color i;
     private long j;
     public static float c;
-    private static final long k = 10000L;
     private float l;
     private TargetHUDHandler m;
 
@@ -39,8 +38,8 @@ public final class TargetHUD extends Module {
         super(EncryptedString.a("Target HUD"), EncryptedString.a("Displays detailed information about your target with style"), -1, Category.d);
         this.d = new NumberSetting(EncryptedString.a("X"), 0.0, 1920.0, 500.0, 1.0);
         this.e = new NumberSetting(EncryptedString.a("Y"), 0.0, 1080.0, 500.0, 1.0);
-        this.f = new BooleanSetting(EncryptedString.a("Timeout"), true).a(EncryptedString.a("Target hud will disappear after 10 seconds"));
-        this.g = new NumberSetting(EncryptedString.a("Fade Speed"), 5.0, 30.0, 15.0, 1.0).a(EncryptedString.a("Speed of animations"));
+        this.f = new BooleanSetting(EncryptedString.a("Timeout"), true).setDescription(EncryptedString.a("Target hud will disappear after 10 seconds"));
+        this.g = new NumberSetting(EncryptedString.a("Fade Speed"), 5.0, 30.0, 15.0, 1.0).getValue(EncryptedString.a("Speed of animations"));
         this.h = new Color(255, 50, 100);
         this.i = new Color(0, 0, 0, 175);
         this.j = 0L;
@@ -61,14 +60,14 @@ public final class TargetHUD extends Module {
     @EventListener
     public void a(final Render2DEvent render2DEvent) {
         final DrawContext a = render2DEvent.a;
-        final int f = this.d.f();
-        final int f2 = this.e.f();
-        final float g = this.g.g();
+        final int f = this.d.getIntValue();
+        final int f2 = this.e.getIntValue();
+        final float g = this.g.getFloatValue();
         final Color h = this.h;
         final Color i = this.i;
         RenderUtils.c();
         final boolean b = this.b.player.getAttacking() != null && this.b.player.getAttacking() instanceof PlayerEntity && this.b.player.getAttacking().isAlive();
-        final boolean b2 = !this.f.c() || System.currentTimeMillis() - this.j <= 10000L;
+        final boolean b2 = !this.f.getValue() || System.currentTimeMillis() - this.j <= 10000L;
         float n;
         if (b && b2) {
             n = 0.0f;

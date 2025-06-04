@@ -32,9 +32,9 @@ import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MobSpawnerLogicAccessor;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EnchantmentUtil;
 import skid.krypton.utils.EncryptedString;
@@ -74,7 +74,7 @@ public final class TunnelBaseFinder extends Module {
         this.d = new BooleanSetting(EncryptedString.a("Spawners"), true);
         this.e = new BooleanSetting(EncryptedString.a("Auto Totem Buy"), true);
         this.f = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
-        this.g = new BooleanSetting(EncryptedString.a("Auto Mend"), true).a(EncryptedString.a("Automatically repairs pickaxe."));
+        this.g = new BooleanSetting(EncryptedString.a("Auto Mend"), true).setDescription(EncryptedString.a("Automatically repairs pickaxe."));
         this.h = new NumberSetting(EncryptedString.a("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
         this.i = new BooleanSetting(EncryptedString.a("Discord Notification"), false);
         this.j = new StringSetting(EncryptedString.a("Webhook"), "");
@@ -129,8 +129,8 @@ public final class TunnelBaseFinder extends Module {
             return;
         }
         this.l();
-        if (this.e.c()) {
-            final int n2 = this.f.f() - 1;
+        if (this.e.getValue()) {
+            final int n2 = this.f.getIntValue() - 1;
             if (!this.b.player.getInventory().getStack(n2).isOf(Items.TOTEM_OF_UNDYING)) {
                 if (this.v < 30 && !this.t) {
                     ++this.v;
@@ -176,7 +176,7 @@ public final class TunnelBaseFinder extends Module {
             }
         }
         if (this.s) {
-            final int n3 = this.h.f() - 1;
+            final int n3 = this.h.getIntValue() - 1;
             final ItemStack getStack = this.b.player.getInventory().getStack(n3);
             if (this.b.player.getInventory().selectedSlot != n3) {
                 InventoryUtil.a(n3);
@@ -234,14 +234,14 @@ public final class TunnelBaseFinder extends Module {
                 this.s = false;
             }
         } else {
-            if (this.g.c()) {
+            if (this.g.getValue()) {
                 final ItemStack size = this.b.player.getMainHandStack();
                 if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                     this.s = true;
                     this.u = this.b.player.getInventory().selectedSlot;
                 }
             }
-            if (this.k.c()) {
+            if (this.k.getValue()) {
                 final boolean equals = this.b.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
                 final Module moduleByClass2 = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoTotem.class);
                 if (equals) {
@@ -251,7 +251,7 @@ public final class TunnelBaseFinder extends Module {
                 } else {
                     ++this.w;
                 }
-                if (this.w > this.l.a()) {
+                if (this.w > this.l.getValue()) {
                     this.a("Your totem exploded", (int) this.b.player.getX(), (int) this.b.player.getY(), (int) this.b.player.getZ());
                     return;
                 }
@@ -457,7 +457,7 @@ public final class TunnelBaseFinder extends Module {
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
-                if (this.d.c() && getBlockEntity instanceof MobSpawnerBlockEntity) {
+                if (this.d.getValue() && getBlockEntity instanceof MobSpawnerBlockEntity) {
                     final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.b.world, this.b.world.getRandom(), (BlockPos) next).getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
@@ -484,14 +484,14 @@ public final class TunnelBaseFinder extends Module {
             this.a("YOU FOUND SPAWNER", blockPos.getX(), blockPos.getY(), blockPos.getZ(), false);
             this.p = 0;
         }
-        if (n > this.c.f()) {
+        if (n > this.c.getIntValue()) {
             this.a("YOU FOUND BASE", (int) this.b.player.getPos().x, (int) this.b.player.getPos().y, (int) this.b.player.getPos().z, true);
         }
     }
 
     private void a(final String s, final int n, final int n2, final int n3) {
-        if (this.i.c()) {
-            final EmbedSender embedSender = new EmbedSender(this.j.a);
+        if (this.i.getValue()) {
+            final EmbedSender embedSender = new EmbedSender(this.j.value);
             final bn bn = new bn();
             bn.a("Totem Exploded");
             bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");
@@ -515,8 +515,8 @@ public final class TunnelBaseFinder extends Module {
         } else {
             s2 = "Spawner";
         }
-        if (this.i.c()) {
-            final EmbedSender embedSender = new EmbedSender(this.j.a);
+        if (this.i.getValue()) {
+            final EmbedSender embedSender = new EmbedSender(this.j.value);
             final bn bn = new bn();
             bn.a(s2);
             bn.d("https://render.crafty.gg/3d/bust/" + MinecraftClient.getInstance().getSession().getUuidOrNull() + "?format=webp");

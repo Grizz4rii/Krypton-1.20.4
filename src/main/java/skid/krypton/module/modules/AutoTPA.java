@@ -6,21 +6,21 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.EnumSetting;
-import skid.krypton.setting.settings.MinMaxSetting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.ModeSetting;
+import skid.krypton.module.setting.MinMaxSetting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class AutoTPA extends Module {
     private final MinMaxSetting c;
-    private final EnumSetting<Enum5> d;
+    private final ModeSetting<Enum5> d;
     private final StringSetting e;
     private int f;
 
     public AutoTPA() {
         super(EncryptedString.a("Auto Tpa"), EncryptedString.a("Module that helps you teleport streamers to you"), -1, Category.b);
         this.c = new MinMaxSetting(EncryptedString.a("Delay"), 1.0, 80.0, 1.0, 10.0, 30.0);
-        this.d = new EnumSetting<Enum5>(EncryptedString.a("Mode"), Enum5.b, Enum5.class);
+        this.d = new ModeSetting<Enum5>(EncryptedString.a("Mode"), Enum5.b, Enum5.class);
         this.e = new StringSetting(EncryptedString.a("Player"), "DrDonutt");
         this.a(this.d, this.c, this.e);
     }
@@ -43,7 +43,7 @@ public final class AutoTPA extends Module {
         }
         final ClientPlayNetworkHandler networkHandler = this.b.getNetworkHandler();
         String s;
-        if (this.d.a().equals(Enum5.a)) {
+        if (this.d.getValue().equals(Enum5.a)) {
             s = "tpa ";
         } else {
             s = "tpahere ";

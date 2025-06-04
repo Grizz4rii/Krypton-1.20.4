@@ -10,36 +10,32 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.BlockUtil;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 import skid.krypton.utils.KeyUtils;
 
 public final class AnchorMacro extends Module {
-    private final NumberSetting c;
-    private final NumberSetting d;
-    private final NumberSetting e;
-    private final NumberSetting f;
+    private final NumberSetting switchDelay = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting glowstoneDelay = new NumberSetting(EncryptedString.a("Glowstone Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting explodeDelay = new NumberSetting(EncryptedString.a("Explode Delay"), 0.0, 20.0, 0.0, 1.0);
+    private final NumberSetting totemSlot = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
     private int keybind;
-    private int h;
-    private int i;
+    private int glowstoneDelayCounter;
+    private int explodeDelayCounter;
 
     public AnchorMacro() {
         super(EncryptedString.a("Anchor Macro"), EncryptedString.a("Automatically blows up respawn anchors for you"), -1, Category.a);
-        this.c = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.d = new NumberSetting(EncryptedString.a("Glowstone Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.e = new NumberSetting(EncryptedString.a("Explode Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.f = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 1.0, 1.0);
         this.keybind = 0;
-        this.h = 0;
-        this.i = 0;
-        this.a(this.c, this.d, this.e, this.f);
+        this.glowstoneDelayCounter = 0;
+        this.explodeDelayCounter = 0;
+        this.a(this.switchDelay, this.glowstoneDelay, this.explodeDelay, this.totemSlot);
     }
 
     @Override
     public void onEnable() {
-        this.l();
+        this.resetCounters();
         super.onEnable();
     }
 
@@ -49,43 +45,43 @@ public final class AnchorMacro extends Module {
     }
 
     @EventListener
-    public void a(final TickEvent tickEvent) {
+    public void onTick(final TickEvent tickEvent) {
         if (this.b.currentScreen != null) {
             return;
         }
-        if (this.j()) {
+        if (this.isShieldOrFoodActive()) {
             return;
         }
         if (KeyUtils.b(1)) {
-            this.k();
+            this.handleAnchorInteraction();
         }
     }
 
-    private boolean j() {
-        final boolean b = this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.b.player.getOffHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD);
-        final boolean b2 = this.b.player.getMainHandStack().getItem() instanceof ShieldItem || this.b.player.getOffHandStack().getItem() instanceof ShieldItem;
-        final boolean b3 = GLFW.glfwGetMouseButton(this.b.getWindow().getHandle(), 1) == 1;
-        return (b || b2) && b3;
+    private boolean isShieldOrFoodActive() {
+        final boolean isFood = this.b.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) || this.b.player.getOffHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD);
+        final boolean isShield = this.b.player.getMainHandStack().getItem() instanceof ShieldItem || this.b.player.getOffHandStack().getItem() instanceof ShieldItem;
+        final boolean isRightClickPressed = GLFW.glfwGetMouseButton(this.b.getWindow().getHandle(), 1) == 1;
+        return (isFood || isShield) && isRightClickPressed;
     }
 
-    private void k() {
+    private void handleAnchorInteraction() {
         if (!(this.b.crosshairTarget instanceof BlockHitResult blockHitResult)) {
             return;
         }
-        if (!BlockUtil.a(((BlockHitResult) this.b.crosshairTarget).getBlockPos(), Blocks.RESPAWN_ANCHOR)) {
+        if (!BlockUtil.a(blockHitResult.getBlockPos(), Blocks.RESPAWN_ANCHOR)) {
             return;
         }
         this.b.options.useKey.setPressed(false);
         if (BlockUtil.b(blockHitResult.getBlockPos())) {
-            this.a(blockHitResult);
+            this.placeGlowstone(blockHitResult);
         } else if (BlockUtil.a(blockHitResult.getBlockPos())) {
-            this.b(blockHitResult);
+            this.explodeAnchor(blockHitResult);
         }
     }
 
-    private void a(final BlockHitResult blockHitResult) {
+    private void placeGlowstone(final BlockHitResult blockHitResult) {
         if (!this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
-            if (this.keybind < this.c.f()) {
+            if (this.keybind < this.switchDelay.getIntValue()) {
                 ++this.keybind;
                 return;
             }
@@ -93,19 +89,19 @@ public final class AnchorMacro extends Module {
             InventoryUtil.a(Items.GLOWSTONE);
         }
         if (this.b.player.getMainHandStack().isOf(Items.GLOWSTONE)) {
-            if (this.h < this.d.f()) {
-                ++this.h;
+            if (this.glowstoneDelayCounter < this.glowstoneDelay.getIntValue()) {
+                ++this.glowstoneDelayCounter;
                 return;
             }
-            this.h = 0;
+            this.glowstoneDelayCounter = 0;
             BlockUtil.a(blockHitResult, true);
         }
     }
 
-    private void b(final BlockHitResult blockHitResult) {
-        final int selectedSlot = this.f.f() - 1;
+    private void explodeAnchor(final BlockHitResult blockHitResult) {
+        final int selectedSlot = this.totemSlot.getIntValue() - 1;
         if (this.b.player.getInventory().selectedSlot != selectedSlot) {
-            if (this.keybind < this.c.f()) {
+            if (this.keybind < this.switchDelay.getIntValue()) {
                 ++this.keybind;
                 return;
             }
@@ -113,18 +109,18 @@ public final class AnchorMacro extends Module {
             this.b.player.getInventory().selectedSlot = selectedSlot;
         }
         if (this.b.player.getInventory().selectedSlot == selectedSlot) {
-            if (this.i < this.e.f()) {
-                ++this.i;
+            if (this.explodeDelayCounter < this.explodeDelay.getIntValue()) {
+                ++this.explodeDelayCounter;
                 return;
             }
-            this.i = 0;
+            this.explodeDelayCounter = 0;
             BlockUtil.a(blockHitResult, true);
         }
     }
 
-    private void l() {
+    private void resetCounters() {
         this.keybind = 0;
-        this.h = 0;
-        this.i = 0;
+        this.glowstoneDelayCounter = 0;
+        this.explodeDelayCounter = 0;
     }
 }

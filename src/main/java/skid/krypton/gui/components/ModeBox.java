@@ -2,8 +2,8 @@ package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.EnumSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.ModeSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -13,7 +13,7 @@ import skid.krypton.utils.font.TextRenderer;
 import java.awt.*;
 
 public final class ModeBox extends Component {
-    private final EnumSetting<?> setting;
+    private final ModeSetting<?> setting;
     private float hoverAnimation;
     private float selectAnimation;
     private float previousSelectAnimation;
@@ -36,7 +36,7 @@ public final class ModeBox extends Component {
         this.TEXT_COLOR = new Color(230, 230, 230);
         this.HOVER_COLOR = new Color(255, 255, 255, 20);
         this.SELECTOR_BG = new Color(40, 40, 45);
-        this.setting = (EnumSetting) setting;
+        this.setting = (ModeSetting) setting;
     }
 
     @Override
@@ -57,15 +57,15 @@ public final class ModeBox extends Component {
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
         super.render(drawContext, n, n2, n3);
         this.updateAnimations(n, n2, n3);
-        final int index = this.setting.f().indexOf(this.setting.a());
-        final int size = this.setting.f().size();
+        final int index = this.setting.getPossibleValues().indexOf(this.setting.getValue());
+        final int size = this.setting.getPossibleValues().size();
         this.parentWidth();
         this.parentX();
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(String.valueOf(this.setting.r()), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
-        TextRenderer.a(this.setting.a().name(), drawContext, this.parentX() + TextRenderer.a(this.setting.r() + ": ") + 8, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor.getRGB());
+        TextRenderer.a(String.valueOf(this.setting.getName()), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
+        TextRenderer.a(this.setting.getValue().name(), drawContext, this.parentX() + TextRenderer.a(this.setting.getName() + ": ") + 8, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor.getRGB());
         final int n4 = this.parentY() + this.offset + this.parentOffset() + 25;
         final int n5 = this.parentX() + 5;
         final int n6 = this.parentWidth() - 10;
@@ -127,7 +127,7 @@ public final class ModeBox extends Component {
     public void keyPressed(final int n, final int n2, final int n3) {
         if (this.mouseOver && this.parent.extended) {
             if (n == 259) {
-                this.setting.a(this.setting.c());
+                this.setting.setModeIndex(this.setting.getOriginalValue());
             } else if (n == 262) {
                 this.cycleModeForward();
             } else if (n == 263) {
@@ -138,12 +138,12 @@ public final class ModeBox extends Component {
     }
 
     private void cycleModeForward() {
-        this.setting.d();
+        this.setting.cycleUp();
         this.wasClicked = true;
     }
 
     private void cycleModeBackward() {
-        this.setting.e();
+        this.setting.cycleDown();
         this.wasClicked = true;
     }
 
@@ -155,7 +155,7 @@ public final class ModeBox extends Component {
             } else if (n3 == 1) {
                 this.cycleModeBackward();
             } else if (n3 == 2) {
-                this.setting.a(this.setting.c());
+                this.setting.setModeIndex(this.setting.getOriginalValue());
             }
         }
         super.mouseClicked(n, n2, n3);

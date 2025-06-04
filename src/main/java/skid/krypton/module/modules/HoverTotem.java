@@ -10,8 +10,8 @@ import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.HandledScreenMixin;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 
 public final class HoverTotem extends Module {
@@ -23,10 +23,10 @@ public final class HoverTotem extends Module {
 
     public HoverTotem() {
         super(EncryptedString.a("Hover Totem"), EncryptedString.a("Equips a totem in offhand and optionally hotbar when hovering over one in inventory"), -1, Category.a);
-        this.c = new NumberSetting(EncryptedString.a("Tick Delay"), 0.0, 20.0, 0.0, 1.0).a(EncryptedString.a("Ticks to wait between operations"));
-        this.d = new BooleanSetting(EncryptedString.a("Hotbar Totem"), true).a(EncryptedString.a("Also places a totem in your preferred hotbar slot"));
-        this.e = new NumberSetting(EncryptedString.a("Hotbar Slot"), 1.0, 9.0, 1.0, 1.0).a(EncryptedString.a("Your preferred hotbar slot for totem (1-9)"));
-        this.f = new BooleanSetting(EncryptedString.a("Auto Switch To Totem"), false).a(EncryptedString.a("Automatically switches to totem slot when inventory is opened"));
+        this.c = new NumberSetting(EncryptedString.a("Tick Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.a("Ticks to wait between operations"));
+        this.d = new BooleanSetting(EncryptedString.a("Hotbar Totem"), true).setDescription(EncryptedString.a("Also places a totem in your preferred hotbar slot"));
+        this.e = new NumberSetting(EncryptedString.a("Hotbar Slot"), 1.0, 9.0, 1.0, 1.0).getValue(EncryptedString.a("Your preferred hotbar slot for totem (1-9)"));
+        this.f = new BooleanSetting(EncryptedString.a("Auto Switch To Totem"), false).setDescription(EncryptedString.a("Automatically switches to totem slot when inventory is opened"));
         this.a(this.c, this.d, this.e, this.f);
     }
 
@@ -50,8 +50,8 @@ public final class HoverTotem extends Module {
         if (focusedSlot == null || focusedSlot.getIndex() > 35) {
             return;
         }
-        if (this.f.c()) {
-            this.b.player.getInventory().selectedSlot = this.e.f() - 1;
+        if (this.f.getValue()) {
+            this.b.player.getInventory().selectedSlot = this.e.getIntValue() - 1;
         }
         if (focusedSlot.getStack().getItem() != Items.TOTEM_OF_UNDYING) {
             return;
@@ -66,8 +66,8 @@ public final class HoverTotem extends Module {
             this.a(syncId, index);
             return;
         }
-        if (this.d.c()) {
-            final int n = this.e.f() - 1;
+        if (this.d.getValue()) {
+            final int n = this.e.getIntValue() - 1;
             if (!this.b.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
                 this.a(syncId, index, n);
             }
@@ -85,6 +85,6 @@ public final class HoverTotem extends Module {
     }
 
     private void j() {
-        this.keybind = this.c.f();
+        this.keybind = this.c.getIntValue();
     }
 }

@@ -9,9 +9,9 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BindSetting;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BindSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 import skid.krypton.utils.KeyUtils;
@@ -39,8 +39,8 @@ public final class ElytraSwap extends Module {
         this.d = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
         this.e = new BooleanSetting(EncryptedString.a("Switch Back"), true);
         this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.g = new BooleanSetting(EncryptedString.a("Move to slot"), true).a("If elytra is not in hotbar it will move it from inventory to preferred slot");
-        this.h = new NumberSetting(EncryptedString.a("Elytra Slot"), 1.0, 9.0, 9.0, 1.0).a(EncryptedString.a("Your preferred elytra slot"));
+        this.g = new BooleanSetting(EncryptedString.a("Move to slot"), true).setDescription("If elytra is not in hotbar it will move it from inventory to preferred slot");
+        this.h = new NumberSetting(EncryptedString.a("Elytra Slot"), 1.0, 9.0, 9.0, 1.0).getValue(EncryptedString.a("Your preferred elytra slot"));
         this.a(this.c, this.d, this.e, this.f, this.g, this.h);
     }
 
@@ -65,7 +65,7 @@ public final class ElytraSwap extends Module {
         }
         if (this.n > 0) {
             --this.n;
-        } else if (KeyUtils.b(this.c.d())) {
+        } else if (KeyUtils.b(this.c.getValue())) {
             this.i = true;
             this.n = 4;
         }
@@ -73,7 +73,7 @@ public final class ElytraSwap extends Module {
             if (this.o == -1) {
                 this.o = this.b.player.getInventory().selectedSlot;
             }
-            if (this.l < this.d.f()) {
+            if (this.l < this.d.getIntValue()) {
                 ++this.l;
                 return;
             }
@@ -85,13 +85,13 @@ public final class ElytraSwap extends Module {
             }
             if (!this.k) {
                 if (!InventoryUtil.b(predicate)) {
-                    if (!this.g.c()) {
+                    if (!this.g.getValue()) {
                         this.k();
                         return;
                     }
                     while (!predicate.test(this.b.player.getInventory().getStack(9).getItem())) {
                     }
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 9, this.h.f() - 1, SlotActionType.SWAP, this.b.player);
+                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 9, this.h.getIntValue() - 1, SlotActionType.SWAP, this.b.player);
                     this.l = 0;
                     return;
                 } else {
@@ -103,7 +103,7 @@ public final class ElytraSwap extends Module {
                 this.b.player.swingHand(Hand.MAIN_HAND);
                 this.j = true;
             }
-            if (this.e.c()) {
+            if (this.e.getValue()) {
                 this.j();
             } else {
                 this.k();
@@ -112,7 +112,7 @@ public final class ElytraSwap extends Module {
     }
 
     private void j() {
-        if (this.m < this.f.f()) {
+        if (this.m < this.f.getIntValue()) {
             ++this.m;
             return;
         }

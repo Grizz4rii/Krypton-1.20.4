@@ -7,7 +7,7 @@ import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MinecraftClientAccessor;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 
@@ -60,8 +60,8 @@ public final class AutoEat extends Module {
     }
 
     public boolean j() {
-        final boolean b = this.b.player.getHealth() <= this.d.f();
-        final boolean b2 = this.b.player.getHungerManager().getFoodLevel() <= this.e.f();
+        final boolean b = this.b.player.getHealth() <= this.d.getIntValue();
+        final boolean b2 = this.b.player.getHungerManager().getFoodLevel() <= this.e.getIntValue();
         return this.k() != -1 && (b || b2);
     }
 

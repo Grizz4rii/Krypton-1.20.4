@@ -2,8 +2,8 @@ package skid.krypton.gui.components;
 
 import net.minecraft.client.gui.DrawContext;
 import skid.krypton.gui.Component;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.StringSetting;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.KryptonUtil;
 import skid.krypton.utils.MathUtil;
@@ -59,8 +59,8 @@ public final class TextBox extends Component {
         }
         final int n4 = this.parentX() + 5;
         final int n5 = this.parentY() + this.parentOffset() + this.offset + 9;
-        TextRenderer.a(String.valueOf(this.setting.r()), drawContext, n4, n5, this.TEXT_COLOR.getRGB());
-        final int n6 = n4 + TextRenderer.a(this.setting.r() + ": ") + 5;
+        TextRenderer.a(String.valueOf(this.setting.getName()), drawContext, n4, n5, this.TEXT_COLOR.getRGB());
+        final int n6 = n4 + TextRenderer.a(this.setting.getName() + ": ") + 5;
         final int n7 = this.parentWidth() - n6 + this.parentX() - 5;
         final int n8 = n5 - 2;
         RenderUtils.a(drawContext.getMatrices(), this.INPUT_BORDER, n6, n8, n6 + n7, n8 + 18, 4.0, 4.0, 4.0, 4.0, 50.0);

@@ -11,8 +11,8 @@ import skid.krypton.event.events.AttackBlockEvent;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.setting.settings.BooleanSetting;
-import skid.krypton.setting.settings.NumberSetting;
+import skid.krypton.module.setting.BooleanSetting;
+import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.InventoryUtil;
 
@@ -98,6 +98,6 @@ public final class AutoTool extends Module {
     }
 
     private boolean b(final ItemStack itemStack) {
-        return this.c.c() && itemStack.getMaxDamage() - itemStack.getDamage() < itemStack.getMaxDamage() * this.d.f() / 100;
+        return this.c.getValue() && itemStack.getMaxDamage() - itemStack.getDamage() < itemStack.getMaxDamage() * this.d.getIntValue() / 100;
     }
 }

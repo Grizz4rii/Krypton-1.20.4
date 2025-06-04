@@ -6,8 +6,8 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import skid.krypton.Krypton;
 import skid.krypton.module.Module;
-import skid.krypton.setting.Setting;
-import skid.krypton.setting.settings.*;
+import skid.krypton.module.setting.Setting;
+import skid.krypton.module.setting.*;
 
 public final class ConfigManager {
     private JsonObject a;
@@ -31,7 +31,7 @@ public final class ConfigManager {
                         next.toggle(true);
                     }
                     for (final Object next2 : next.getSettings()) {
-                        final JsonElement value3 = asJsonObject.get(((Setting) next2).r().toString());
+                        final JsonElement value3 = asJsonObject.get(((Setting) next2).getName().toString());
                         if (value3 == null) {
                             continue;
                         }
@@ -48,32 +48,32 @@ public final class ConfigManager {
         try {
             if (setting instanceof final BooleanSetting booleanSetting) {
                 if (jsonElement.isJsonPrimitive()) {
-                    booleanSetting.a(jsonElement.getAsBoolean());
+                    booleanSetting.setValue(jsonElement.getAsBoolean());
                 }
-            } else if (setting instanceof final EnumSetting enumSetting) {
+            } else if (setting instanceof final ModeSetting enumSetting) {
                 if (jsonElement.isJsonPrimitive()) {
                     final int asInt = jsonElement.getAsInt();
                     if (asInt != -1) {
-                        enumSetting.a(asInt);
+                        enumSetting.setModeIndex(asInt);
                     } else {
-                        enumSetting.a(enumSetting.c());
+                        enumSetting.setModeIndex(enumSetting.getOriginalValue());
                     }
                 }
             } else if (setting instanceof final NumberSetting numberSetting) {
                 if (jsonElement.isJsonPrimitive()) {
-                    numberSetting.a(jsonElement.getAsDouble());
+                    numberSetting.getValue(jsonElement.getAsDouble());
                 }
             } else if (setting instanceof final BindSetting bindSetting) {
                 if (jsonElement.isJsonPrimitive()) {
                     final int asInt2 = jsonElement.getAsInt();
-                    bindSetting.a(asInt2);
-                    if (bindSetting.a()) {
+                    bindSetting.setValue(asInt2);
+                    if (bindSetting.isModuleKey()) {
                         module.a(asInt2);
                     }
                 }
             } else if (setting instanceof final StringSetting stringSetting) {
                 if (jsonElement.isJsonPrimitive()) {
-                    stringSetting.a(jsonElement.getAsString());
+                    stringSetting.setValue(jsonElement.getAsString());
                 }
             } else if (setting instanceof final MinMaxSetting minMaxSetting) {
                 if (jsonElement.isJsonObject()) {
@@ -112,25 +112,25 @@ public final class ConfigManager {
     private void a(final Setting setting, final JsonObject jsonObject, final Module module) {
         try {
             if (setting instanceof final BooleanSetting booleanSetting) {
-                jsonObject.addProperty(setting.r().toString(), booleanSetting.c());
-            } else if (setting instanceof final EnumSetting<?> enumSetting) {
-                jsonObject.addProperty(setting.r().toString(), enumSetting.b());
+                jsonObject.addProperty(setting.getName().toString(), booleanSetting.getValue());
+            } else if (setting instanceof final ModeSetting<?> enumSetting) {
+                jsonObject.addProperty(setting.getName().toString(), enumSetting.getModeIndex());
             } else if (setting instanceof final NumberSetting numberSetting) {
-                jsonObject.addProperty(setting.r().toString(), numberSetting.a());
+                jsonObject.addProperty(setting.getName().toString(), numberSetting.getValue());
             } else if (setting instanceof final BindSetting bindSetting) {
-                jsonObject.addProperty(setting.r().toString(), bindSetting.d());
+                jsonObject.addProperty(setting.getName().toString(), bindSetting.getValue());
             } else if (setting instanceof final StringSetting stringSetting) {
-                jsonObject.addProperty(setting.r().toString(), stringSetting.getValue());
+                jsonObject.addProperty(setting.getName().toString(), stringSetting.getValue());
             } else if (setting instanceof MinMaxSetting) {
                 final JsonObject jsonObject2 = new JsonObject();
                 jsonObject2.addProperty("min", ((MinMaxSetting) setting).i());
                 jsonObject2.addProperty("max", ((MinMaxSetting) setting).j());
-                jsonObject.add(setting.r().toString(), jsonObject2);
+                jsonObject.add(setting.getName().toString(), jsonObject2);
             } else if (setting instanceof final ItemSetting itemSetting) {
-                jsonObject.addProperty(setting.r().toString(), Registries.ITEM.getId(itemSetting.a()).toString());
+                jsonObject.addProperty(setting.getName().toString(), Registries.ITEM.getId(itemSetting.a()).toString());
             }
         } catch (final Exception ex) {
-            System.err.println("Error saving setting " + setting.r() + ": " + ex.getMessage());
+            System.err.println("Error saving setting " + setting.getName() + ": " + ex.getMessage());
         }
     }
 }

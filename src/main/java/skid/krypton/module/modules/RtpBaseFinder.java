@@ -73,19 +73,19 @@ public final class RtpBaseFinder extends Module {
     private int A;
 
     public RtpBaseFinder() {
-        super(EncryptedString.a("Rtp Base Finder"), EncryptedString.a("Automatically searches for bases on DonutSMP"), -1, Category.c);
-        this.c = new ModeSetting<Enum3>(EncryptedString.a("Mode"), Enum3.g, Enum3.class);
-        this.d = new BooleanSetting(EncryptedString.a("Spawners"), true);
-        this.e = new NumberSetting(EncryptedString.a("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
-        this.f = new BooleanSetting(EncryptedString.a("Auto Totem Buy"), true);
-        this.g = new NumberSetting(EncryptedString.a("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
-        this.h = new BooleanSetting(EncryptedString.a("Auto Mend"), true).setDescription(EncryptedString.a("Automatically repairs pickaxe."));
-        this.i = new NumberSetting(EncryptedString.a("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
-        this.j = new BooleanSetting(EncryptedString.a("Discord Notification"), false);
-        this.k = new StringSetting(EncryptedString.a("Webhook"), "");
-        this.l = new BooleanSetting(EncryptedString.a("Totem Check"), true);
-        this.m = new NumberSetting(EncryptedString.a("Totem Check Time"), 1.0, 120.0, 20.0, 1.0);
-        this.n = new NumberSetting(EncryptedString.a("Dig To Y"), -59.0, 30.0, -20.0, 1.0);
+        super(EncryptedString.of("Rtp Base Finder"), EncryptedString.of("Automatically searches for bases on DonutSMP"), -1, Category.DONUT);
+        this.c = new ModeSetting<Enum3>(EncryptedString.of("Mode"), Enum3.g, Enum3.class);
+        this.d = new BooleanSetting(EncryptedString.of("Spawners"), true);
+        this.e = new NumberSetting(EncryptedString.of("Minimum Storage"), 1.0, 500.0, 100.0, 1.0);
+        this.f = new BooleanSetting(EncryptedString.of("Auto Totem Buy"), true);
+        this.g = new NumberSetting(EncryptedString.of("Totem Slot"), 1.0, 9.0, 8.0, 1.0);
+        this.h = new BooleanSetting(EncryptedString.of("Auto Mend"), true).setDescription(EncryptedString.of("Automatically repairs pickaxe."));
+        this.i = new NumberSetting(EncryptedString.of("XP Bottle Slot"), 1.0, 9.0, 9.0, 1.0);
+        this.j = new BooleanSetting(EncryptedString.of("Discord Notification"), false);
+        this.k = new StringSetting(EncryptedString.of("Webhook"), "");
+        this.l = new BooleanSetting(EncryptedString.of("Totem Check"), true);
+        this.m = new NumberSetting(EncryptedString.of("Totem Check Time"), 1.0, 120.0, 20.0, 1.0);
+        this.n = new NumberSetting(EncryptedString.of("Dig To Y"), -59.0, 30.0, -20.0, 1.0);
         this.r = 0.0;
         this.s = false;
         this.t = false;
@@ -96,7 +96,7 @@ public final class RtpBaseFinder extends Module {
         this.y = 0;
         this.z = 0;
         this.A = 0;
-        this.a(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l, this.m, this.n);
+        this.addSettings(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l, this.m, this.n);
     }
 
     @Override
@@ -111,7 +111,7 @@ public final class RtpBaseFinder extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.y > 0) {
@@ -121,44 +121,44 @@ public final class RtpBaseFinder extends Module {
         this.n();
         if (this.f.getValue()) {
             final int n = this.g.getIntValue() - 1;
-            if (!this.b.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
+            if (!this.mc.player.getInventory().getStack(n).isOf(Items.TOTEM_OF_UNDYING)) {
                 if (this.z < 30 && !this.v) {
                     ++this.z;
                     return;
                 }
                 this.z = 0;
                 this.v = true;
-                if (this.b.player.getInventory().selectedSlot != n) {
+                if (this.mc.player.getInventory().selectedSlot != n) {
                     InventoryUtil.a(n);
                 }
-                final ScreenHandler currentScreenHandler = this.b.player.currentScreenHandler;
-                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
-                    this.b.getNetworkHandler().sendChatCommand("shop");
+                final ScreenHandler currentScreenHandler = this.mc.player.currentScreenHandler;
+                if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) currentScreenHandler).getRows() != 3) {
+                    this.mc.getNetworkHandler().sendChatCommand("shop");
                     this.y = 10;
                     return;
                 }
                 if (currentScreenHandler.getSlot(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
                 if (currentScreenHandler.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                this.mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
                 if (currentScreenHandler.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
-                this.b.getNetworkHandler().sendChatCommand("shop");
+                this.mc.getNetworkHandler().sendChatCommand("shop");
                 this.y = 10;
                 return;
             } else if (this.v) {
-                if (this.b.currentScreen != null) {
-                    this.b.player.closeHandledScreen();
+                if (this.mc.currentScreen != null) {
+                    this.mc.player.closeHandledScreen();
                     this.y = 20;
                 }
                 this.v = false;
@@ -167,60 +167,60 @@ public final class RtpBaseFinder extends Module {
         }
         if (this.u) {
             final int n2 = this.i.getIntValue() - 1;
-            final ItemStack getStack = this.b.player.getInventory().getStack(n2);
-            if (this.b.player.getInventory().selectedSlot != n2) {
+            final ItemStack getStack = this.mc.player.getInventory().getStack(n2);
+            if (this.mc.player.getInventory().selectedSlot != n2) {
                 InventoryUtil.a(n2);
             }
             if (!getStack.isOf(Items.EXPERIENCE_BOTTLE)) {
-                final ScreenHandler fishHook = this.b.player.currentScreenHandler;
-                if (!(this.b.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) fishHook).getRows() != 3) {
-                    this.b.getNetworkHandler().sendChatCommand("shop");
+                final ScreenHandler fishHook = this.mc.player.currentScreenHandler;
+                if (!(this.mc.player.currentScreenHandler instanceof GenericContainerScreenHandler) || ((GenericContainerScreenHandler) fishHook).getRows() != 3) {
+                    this.mc.getNetworkHandler().sendChatCommand("shop");
                     this.y = 10;
                     return;
                 }
                 if (fishHook.getSlot(11).getStack().isOf(Items.END_STONE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 13, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
                 if (fishHook.getSlot(16).getStack().isOf(Items.EXPERIENCE_BOTTLE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 16, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 16, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
                 if (fishHook.getSlot(17).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 17, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
-                this.b.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
+                this.mc.player.networkHandler.sendPacket(new PlayerActionC2SPacket(PlayerActionC2SPacket.Action.DROP_ALL_ITEMS, BlockPos.ORIGIN, Direction.DOWN));
                 if (fishHook.getSlot(23).getStack().isOf(Items.LIME_STAINED_GLASS_PANE)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 23, 0, SlotActionType.PICKUP, this.mc.player);
                     this.y = 10;
                     return;
                 }
-                this.b.getNetworkHandler().sendChatCommand("shop");
+                this.mc.getNetworkHandler().sendChatCommand("shop");
                 this.y = 10;
             } else {
-                if (this.b.currentScreen != null) {
-                    this.b.player.closeHandledScreen();
+                if (this.mc.currentScreen != null) {
+                    this.mc.player.closeHandledScreen();
                     this.y = 20;
                     return;
                 }
-                if (!EnchantmentUtil.a(this.b.player.getOffHandStack(), Enchantments.MENDING)) {
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.w, 40, SlotActionType.SWAP, this.b.player);
+                if (!EnchantmentUtil.a(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.w, 40, SlotActionType.SWAP, this.mc.player);
                     this.y = 20;
                     return;
                 }
-                if (this.b.player.getOffHandStack().getDamage() > 0) {
-                    final ActionResult interactItem = this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
+                if (this.mc.player.getOffHandStack().getDamage() > 0) {
+                    final ActionResult interactItem = this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
                     if (interactItem.isAccepted() && interactItem.shouldSwingHand()) {
-                        this.b.player.swingHand(Hand.MAIN_HAND);
+                        this.mc.player.swingHand(Hand.MAIN_HAND);
                     }
                     this.y = 1;
                     return;
                 }
-                this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 36 + this.w, 40, SlotActionType.SWAP, this.b.player);
+                this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.w, 40, SlotActionType.SWAP, this.mc.player);
                 this.u = false;
             }
         } else {
@@ -228,7 +228,7 @@ public final class RtpBaseFinder extends Module {
                 this.m();
             }
             if (this.l.getValue()) {
-                final boolean equals = this.b.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
+                final boolean equals = this.mc.player.getOffHandStack().getItem().equals(Items.TOTEM_OF_UNDYING);
                 final Module moduleByClass = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoTotem.class);
                 if (equals) {
                     this.r = 0.0;
@@ -238,33 +238,33 @@ public final class RtpBaseFinder extends Module {
                     ++this.r;
                 }
                 if (this.r > this.m.getValue()) {
-                    this.a("Your totem exploded", (int) this.b.player.getX(), (int) this.b.player.getY(), (int) this.b.player.getZ());
+                    this.a("Your totem exploded", (int) this.mc.player.getX(), (int) this.mc.player.getY(), (int) this.mc.player.getZ());
                     return;
                 }
             }
             if (this.x > 0) {
                 --this.x;
                 if (this.x < 1) {
-                    if (this.p != null && this.p.distanceTo(this.b.player.getPos()) < 100.0) {
+                    if (this.p != null && this.p.distanceTo(this.mc.player.getPos()) < 100.0) {
                         this.k();
                         return;
                     }
-                    this.b.player.setPitch(89.9f);
+                    this.mc.player.setPitch(89.9f);
                     if (this.h.getValue()) {
-                        final ItemStack size = this.b.player.getMainHandStack();
+                        final ItemStack size = this.mc.player.getMainHandStack();
                         if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                             this.u = true;
-                            this.w = this.b.player.getInventory().selectedSlot;
+                            this.w = this.mc.player.getInventory().selectedSlot;
                         }
                     }
                     this.t = true;
                 }
                 return;
             }
-            if (this.o != null && this.o.distanceTo(this.b.player.getPos()) < 2.0) {
+            if (this.o != null && this.o.distanceTo(this.mc.player.getPos()) < 2.0) {
                 ++this.q;
             } else {
-                this.o = this.b.player.getPos();
+                this.o = this.mc.player.getPos();
                 this.q = 0.0;
             }
             if (this.q > 20.0 && this.s) {
@@ -277,7 +277,7 @@ public final class RtpBaseFinder extends Module {
                 this.q = 0.0;
                 return;
             }
-            if (this.b.player.getY() < this.n.getIntValue() && !this.s) {
+            if (this.mc.player.getY() < this.n.getIntValue() && !this.s) {
                 this.s = true;
                 this.t = false;
             }
@@ -286,7 +286,7 @@ public final class RtpBaseFinder extends Module {
 
     private void k() {
         this.t = false;
-        final ClientPlayNetworkHandler networkHandler = this.b.getNetworkHandler();
+        final ClientPlayNetworkHandler networkHandler = this.mc.getNetworkHandler();
         Enum3 l;
         if (this.c.getValue() == Enum3.g) {
             l = this.l();
@@ -296,14 +296,14 @@ public final class RtpBaseFinder extends Module {
         networkHandler.sendChatCommand("rtp " + this.a(l));
         this.x = 150;
         this.q = 0.0;
-        this.p = new Vec3d(this.b.player.getPos().toVector3f());
+        this.p = new Vec3d(this.mc.player.getPos().toVector3f());
     }
 
     private void a(final Text text) {
         final MutableText literal = Text.literal("[RTPBaseFinder] ");
         literal.append(text);
         this.toggle();
-        this.b.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
+        this.mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(literal));
     }
 
     private Enum3 l() {
@@ -350,22 +350,22 @@ public final class RtpBaseFinder extends Module {
     }
 
     private void c(final boolean b) {
-        if (this.b.player.getPitch() != 89.9f) {
-            this.b.player.setPitch(89.9f);
+        if (this.mc.player.getPitch() != 89.9f) {
+            this.mc.player.setPitch(89.9f);
         }
-        if (!this.b.player.isUsingItem()) {
-            if (b && this.b.crosshairTarget != null && this.b.crosshairTarget.getType() == HitResult.Type.BLOCK) {
-                final BlockHitResult blockHitResult = (BlockHitResult) this.b.crosshairTarget;
-                final BlockPos blockPos = ((BlockHitResult) this.b.crosshairTarget).getBlockPos();
-                if (!this.b.world.getBlockState(blockPos).isAir()) {
+        if (!this.mc.player.isUsingItem()) {
+            if (b && this.mc.crosshairTarget != null && this.mc.crosshairTarget.getType() == HitResult.Type.BLOCK) {
+                final BlockHitResult blockHitResult = (BlockHitResult) this.mc.crosshairTarget;
+                final BlockPos blockPos = ((BlockHitResult) this.mc.crosshairTarget).getBlockPos();
+                if (!this.mc.world.getBlockState(blockPos).isAir()) {
                     final Direction side = blockHitResult.getSide();
-                    if (this.b.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
-                        this.b.particleManager.addBlockBreakingParticles(blockPos, side);
-                        this.b.player.swingHand(Hand.MAIN_HAND);
+                    if (this.mc.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
+                        this.mc.particleManager.addBlockBreakingParticles(blockPos, side);
+                        this.mc.player.swingHand(Hand.MAIN_HAND);
                     }
                 }
             } else {
-                this.b.interactionManager.cancelBlockBreaking();
+                this.mc.interactionManager.cancelBlockBreaking();
             }
         }
     }
@@ -377,9 +377,9 @@ public final class RtpBaseFinder extends Module {
         final Iterator iterator = BlockUtil.a().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
-                final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
+                final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
                 if (this.d.getValue() && getBlockEntity instanceof MobSpawnerBlockEntity) {
-                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.b.world, this.b.world.getRandom(), (BlockPos) next).getNbt().getString("id");
+                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.mc.world, this.mc.world.getRandom(), (BlockPos) next).getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
                         blockPos = (BlockPos) next;
@@ -400,7 +400,7 @@ public final class RtpBaseFinder extends Module {
             this.A = 0;
         }
         if (n > this.e.getIntValue()) {
-            this.a("YOU FOUND BASE", (int) this.b.player.getPos().x, (int) this.b.player.getPos().y, (int) this.b.player.getPos().z, true);
+            this.a("YOU FOUND BASE", (int) this.mc.player.getPos().x, (int) this.mc.player.getPos().y, (int) this.mc.player.getPos().z, true);
         }
     }
 

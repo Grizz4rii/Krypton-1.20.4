@@ -18,9 +18,9 @@ public final class AutoTotem extends Module {
     private int e;
 
     public AutoTotem() {
-        super(EncryptedString.a("Auto Totem"), EncryptedString.a("Automatically holds totem in your off hand"), -1, Category.a);
-        this.c = new NumberSetting(EncryptedString.a("Delay"), 0.0, 5.0, 1.0, 1.0);
-        this.a(new Setting[]{this.c});
+        super(EncryptedString.of("Auto Totem"), EncryptedString.of("Automatically holds totem in your off hand"), -1, Category.COMBAT);
+        this.c = new NumberSetting(EncryptedString.of("Delay"), 0.0, 5.0, 1.0, 1.0);
+        this.addSettings(new Setting[]{this.c});
     }
 
     @Override
@@ -35,7 +35,7 @@ public final class AutoTotem extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         final Module moduleByClass = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(RtpBaseFinder.class);
@@ -46,7 +46,7 @@ public final class AutoTotem extends Module {
         if (moduleByClass2.isEnabled() && ((TunnelBaseFinder) moduleByClass2).j()) {
             return;
         }
-        if (this.b.player.getInventory().getStack(40).getItem() == Items.TOTEM_OF_UNDYING) {
+        if (this.mc.player.getInventory().getStack(40).getItem() == Items.TOTEM_OF_UNDYING) {
             this.e = this.c.getIntValue();
             return;
         }
@@ -58,16 +58,16 @@ public final class AutoTotem extends Module {
         if (a == -1) {
             return;
         }
-        this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, b(a), 40, SlotActionType.SWAP, this.b.player);
+        this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, b(a), 40, SlotActionType.SWAP, this.mc.player);
         this.e = this.c.getIntValue();
     }
 
     public int a(final Item item) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return -1;
         }
         for (int i = 0; i < 36; ++i) {
-            if (this.b.player.getInventory().getStack(i).isOf(item)) {
+            if (this.mc.player.getInventory().getStack(i).isOf(item)) {
                 return i;
             }
         }

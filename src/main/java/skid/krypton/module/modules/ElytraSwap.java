@@ -34,14 +34,14 @@ public final class ElytraSwap extends Module {
     private int o;
 
     public ElytraSwap() {
-        super(EncryptedString.a("Elytra Swap"), EncryptedString.a("Seamlessly swap between an Elytra and a Chestplate with a configurable keybinding"), -1, Category.a);
-        this.c = new BindSetting(EncryptedString.a("Activate Key"), 71, false);
-        this.d = new NumberSetting(EncryptedString.a("Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.e = new BooleanSetting(EncryptedString.a("Switch Back"), true);
-        this.f = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.g = new BooleanSetting(EncryptedString.a("Move to slot"), true).setDescription("If elytra is not in hotbar it will move it from inventory to preferred slot");
-        this.h = new NumberSetting(EncryptedString.a("Elytra Slot"), 1.0, 9.0, 9.0, 1.0).getValue(EncryptedString.a("Your preferred elytra slot"));
-        this.a(this.c, this.d, this.e, this.f, this.g, this.h);
+        super(EncryptedString.of("Elytra Swap"), EncryptedString.of("Seamlessly swap between an Elytra and a Chestplate with a configurable keybinding"), -1, Category.COMBAT);
+        this.c = new BindSetting(EncryptedString.of("Activate Key"), 71, false);
+        this.d = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.e = new BooleanSetting(EncryptedString.of("Switch Back"), true);
+        this.f = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.g = new BooleanSetting(EncryptedString.of("Move to slot"), true).setDescription("If elytra is not in hotbar it will move it from inventory to preferred slot");
+        this.h = new NumberSetting(EncryptedString.of("Elytra Slot"), 1.0, 9.0, 9.0, 1.0).getValue(EncryptedString.of("Your preferred elytra slot"));
+        this.addSettings(this.c, this.d, this.e, this.f, this.g, this.h);
     }
 
     @Override
@@ -57,10 +57,10 @@ public final class ElytraSwap extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.n > 0) {
@@ -71,14 +71,14 @@ public final class ElytraSwap extends Module {
         }
         if (this.i) {
             if (this.o == -1) {
-                this.o = this.b.player.getInventory().selectedSlot;
+                this.o = this.mc.player.getInventory().selectedSlot;
             }
             if (this.l < this.d.getIntValue()) {
                 ++this.l;
                 return;
             }
             Predicate predicate;
-            if (this.b.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+            if (this.mc.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
                 predicate = (item -> item instanceof ArmorItem && ((ArmorItem) item).getSlotType() == EquipmentSlot.CHEST);
             } else {
                 predicate = (item2 -> item2.equals(Items.ELYTRA));
@@ -89,9 +89,9 @@ public final class ElytraSwap extends Module {
                         this.k();
                         return;
                     }
-                    while (!predicate.test(this.b.player.getInventory().getStack(9).getItem())) {
+                    while (!predicate.test(this.mc.player.getInventory().getStack(9).getItem())) {
                     }
-                    this.b.interactionManager.clickSlot(this.b.player.currentScreenHandler.syncId, 9, this.h.getIntValue() - 1, SlotActionType.SWAP, this.b.player);
+                    this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 9, this.h.getIntValue() - 1, SlotActionType.SWAP, this.mc.player);
                     this.l = 0;
                     return;
                 } else {
@@ -99,8 +99,8 @@ public final class ElytraSwap extends Module {
                 }
             }
             if (!this.j) {
-                this.b.interactionManager.interactItem(this.b.player, Hand.MAIN_HAND);
-                this.b.player.swingHand(Hand.MAIN_HAND);
+                this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
+                this.mc.player.swingHand(Hand.MAIN_HAND);
                 this.j = true;
             }
             if (this.e.getValue()) {

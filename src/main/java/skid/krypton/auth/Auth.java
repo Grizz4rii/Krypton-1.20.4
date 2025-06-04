@@ -51,7 +51,7 @@ public class Auth {
     }
 
     static {
-        b = EncryptedString.a("127.0.0.1");
+        b = EncryptedString.of("127.0.0.1");
         d = new Gson();
     }
 }

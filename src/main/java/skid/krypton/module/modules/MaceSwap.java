@@ -28,14 +28,14 @@ public final class MaceSwap extends Module {
     private int k;
 
     public MaceSwap() {
-        super(EncryptedString.a("Mace Swap"), EncryptedString.a("Switches to a mace when attacking."), -1, Category.a);
-        this.c = new BooleanSetting(EncryptedString.a("Wind Burst"), true);
-        this.d = new BooleanSetting(EncryptedString.a("Breach"), true);
-        this.e = new BooleanSetting(EncryptedString.a("Only Sword"), false);
-        this.f = new BooleanSetting(EncryptedString.a("Only Axe"), false);
-        this.g = new BooleanSetting(EncryptedString.a("Switch Back"), true);
-        this.h = new NumberSetting(EncryptedString.a("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.a(this.c, this.d, this.e, this.f, this.g, this.h);
+        super(EncryptedString.of("Mace Swap"), EncryptedString.of("Switches to a mace when attacking."), -1, Category.COMBAT);
+        this.c = new BooleanSetting(EncryptedString.of("Wind Burst"), true);
+        this.d = new BooleanSetting(EncryptedString.of("Breach"), true);
+        this.e = new BooleanSetting(EncryptedString.of("Only Sword"), false);
+        this.f = new BooleanSetting(EncryptedString.of("Only Axe"), false);
+        this.g = new BooleanSetting(EncryptedString.of("Switch Back"), true);
+        this.h = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.addSettings(this.c, this.d, this.e, this.f, this.g, this.h);
     }
 
     @Override
@@ -51,10 +51,10 @@ public final class MaceSwap extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (this.i) {
@@ -68,14 +68,14 @@ public final class MaceSwap extends Module {
 
     @EventListener
     public void a(final AttackEvent attackEvent) {
-        if (this.b.player == null) {
+        if (this.mc.player == null) {
             return;
         }
         if (!this.j()) {
             return;
         }
         if (this.j == -1) {
-            this.j = this.b.player.getInventory().selectedSlot;
+            this.j = this.mc.player.getInventory().selectedSlot;
         }
         if ((this.c.getValue() && this.d.getValue()) || (!this.c.getValue() && !this.d.getValue())) {
             InventoryUtil.a(Items.MACE);
@@ -91,7 +91,7 @@ public final class MaceSwap extends Module {
     }
 
     private boolean j() {
-        final Item item = this.b.player.getMainHandStack().getItem();
+        final Item item = this.mc.player.getMainHandStack().getItem();
         if (this.e.getValue() && this.f.getValue()) {
             return item instanceof SwordItem || item instanceof AxeItem;
         }

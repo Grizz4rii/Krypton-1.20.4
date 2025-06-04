@@ -17,12 +17,12 @@ public class FastPlace extends Module {
     private final NumberSetting f;
 
     public FastPlace() {
-        super(EncryptedString.a("Fast Place"), EncryptedString.a("Spams use action."), -1, Category.b);
+        super(EncryptedString.of("Fast Place"), EncryptedString.of("Spams use action."), -1, Category.MISC);
         this.c = new BooleanSetting("Only XP", false);
         this.d = new BooleanSetting("Blocks", true);
         this.e = new BooleanSetting("Items", true);
         this.f = new NumberSetting("Delay", 0.0, 10.0, 0.0, 1.0);
-        this.a(this.c, this.d, this.e, this.f);
+        this.addSettings(this.c, this.d, this.e, this.f);
     }
 
     @Override
@@ -37,10 +37,10 @@ public class FastPlace extends Module {
 
     @EventListener
     public void a(final PostItemUseEvent postItemUseEvent) {
-        final ItemStack getMainHandStack = this.b.player.getMainHandStack();
-        final ItemStack getItemUseTime = this.b.player.getOffHandStack();
+        final ItemStack getMainHandStack = this.mc.player.getMainHandStack();
+        final ItemStack getItemUseTime = this.mc.player.getOffHandStack();
         final Item item = getMainHandStack.getItem();
-        final Item item2 = this.b.player.getOffHandStack().getItem();
+        final Item item2 = this.mc.player.getOffHandStack().getItem();
         if (!getMainHandStack.isOf(Items.EXPERIENCE_BOTTLE) && !getItemUseTime.isOf(Items.EXPERIENCE_BOTTLE) && this.c.getValue()) {
             return;
         }

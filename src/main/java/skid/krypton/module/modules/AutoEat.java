@@ -19,10 +19,10 @@ public final class AutoEat extends Module {
     private int keybind;
 
     public AutoEat() {
-        super(EncryptedString.a("Auto Eat"), EncryptedString.a(" It detects whenever the hungerbar/health falls a certain threshold, selects food in your hotbar, and starts eating."), -1, Category.b);
-        this.d = new NumberSetting(EncryptedString.a("Health Threshold"), 0.0, 19.0, 17.0, 1.0);
-        this.e = new NumberSetting(EncryptedString.a("Hunger Threshold"), 0.0, 19.0, 19.0, 1.0);
-        this.a(this.d, this.e);
+        super(EncryptedString.of("Auto Eat"), EncryptedString.of(" It detects whenever the hungerbar/health falls a certain threshold, selects food in your hotbar, and starts eating."), -1, Category.MISC);
+        this.d = new NumberSetting(EncryptedString.of("Health Threshold"), 0.0, 19.0, 17.0, 1.0);
+        this.e = new NumberSetting(EncryptedString.of("Hunger Threshold"), 0.0, 19.0, 19.0, 1.0);
+        this.addSettings(this.d, this.e);
     }
 
     @Override
@@ -39,7 +39,7 @@ public final class AutoEat extends Module {
     public void a(final TickEvent tickEvent) {
         if (this.c) {
             if (this.j()) {
-                if (this.b.player.getInventory().getStack(this.f).get(DataComponentTypes.FOOD) != null) {
+                if (this.mc.player.getInventory().getStack(this.f).get(DataComponentTypes.FOOD) != null) {
                     final int k = this.k();
                     if (k == -1) {
                         this.n();
@@ -60,8 +60,8 @@ public final class AutoEat extends Module {
     }
 
     public boolean j() {
-        final boolean b = this.b.player.getHealth() <= this.d.getIntValue();
-        final boolean b2 = this.b.player.getHungerManager().getFoodLevel() <= this.e.getIntValue();
+        final boolean b = this.mc.player.getHealth() <= this.d.getIntValue();
+        final boolean b2 = this.mc.player.getHungerManager().getFoodLevel() <= this.e.getIntValue();
         return this.k() != -1 && (b || b2);
     }
 
@@ -69,7 +69,7 @@ public final class AutoEat extends Module {
         int n = -1;
         int n2 = -1;
         for (int i = 0; i < 9; ++i) {
-            final Object value = this.b.player.getInventory().getStack(i).getItem().getComponents().get(DataComponentTypes.FOOD);
+            final Object value = this.mc.player.getInventory().getStack(i).getItem().getComponents().get(DataComponentTypes.FOOD);
             if (value != null) {
                 final int nutrition = ((FoodComponent) value).nutrition();
                 if (nutrition > n2) {
@@ -82,15 +82,15 @@ public final class AutoEat extends Module {
     }
 
     private void l() {
-        this.keybind = this.b.player.getInventory().selectedSlot;
+        this.keybind = this.mc.player.getInventory().selectedSlot;
         this.m();
     }
 
     private void m() {
         this.b(this.f);
         this.c(true);
-        if (!this.b.player.isUsingItem()) {
-            ((MinecraftClientAccessor) this.b).invokeDoItemUse();
+        if (!this.mc.player.isUsingItem()) {
+            ((MinecraftClientAccessor) this.mc).invokeDoItemUse();
         }
         this.c = true;
     }
@@ -102,7 +102,7 @@ public final class AutoEat extends Module {
     }
 
     private void c(final boolean pressed) {
-        this.b.options.useKey.setPressed(pressed);
+        this.mc.options.useKey.setPressed(pressed);
     }
 
     private void b(final int f) {

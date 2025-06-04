@@ -10,7 +10,7 @@ import skid.krypton.utils.EncryptedString;
 
 public final class StaticHitboxes extends Module {
     public StaticHitboxes() {
-        super(EncryptedString.a("Static HitBoxes"), EncryptedString.a("Expands a Player's Hitbox"), -1, Category.a);
+        super(EncryptedString.of("Static HitBoxes"), EncryptedString.of("Expands a Player's Hitbox"), -1, Category.COMBAT);
     }
 
     @Override

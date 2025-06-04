@@ -43,7 +43,7 @@ public final class CategoryWindow {
         this.parent = parent;
         this.prevX = n;
         this.prevY = n2;
-        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.b().a(category)).iterator();
+        final Iterator<Module> iterator = new ArrayList<>(Krypton.INSTANCE.b().getModulesByCategory(category)).iterator();
         int n3 = height;
         while (iterator.hasNext()) {
             this.moduleButtons.add(new ModuleButton(this, iterator.next(), n3));
@@ -80,8 +80,8 @@ public final class CategoryWindow {
         }
         RenderUtils.a(drawContext.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
         final Color mainColor = KryptonUtil.getMainColor(255, this.category.ordinal());
-        final CharSequence f = this.category.f;
-        final int n7 = this.prevX + (this.width - TextRenderer.a(this.category.f)) / 2;
+        final CharSequence f = this.category.name;
+        final int n7 = this.prevX + (this.width - TextRenderer.a(this.category.name)) / 2;
         final int n8 = this.prevY + 8;
         TextRenderer.a(f, drawContext, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
         TextRenderer.a(f, drawContext, n7, n8, mainColor.brighter().getRGB());

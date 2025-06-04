@@ -26,25 +26,25 @@ import java.util.List;
 
 public final class HUD
         extends Module {
-    private static final CharSequence c = EncryptedString.a("Krypton+");
+    private static final CharSequence c = EncryptedString.of("Krypton+");
     private static final SimpleDateFormat d = new SimpleDateFormat("HH:mm:ss");
-    private final BooleanSetting e = new BooleanSetting(EncryptedString.a("Watermark"), true).setDescription(EncryptedString.a("Shows client name on screen"));
-    private final BooleanSetting f = new BooleanSetting(EncryptedString.a("Info"), true).setDescription(EncryptedString.a("Shows system information"));
-    private final BooleanSetting g = new BooleanSetting("Modules", true).setDescription(EncryptedString.a("Renders module array list"));
-    private final BooleanSetting h = new BooleanSetting("Time", true).setDescription(EncryptedString.a("Shows current time"));
-    private final BooleanSetting i = new BooleanSetting("Coordinates", true).setDescription(EncryptedString.a("Shows player coordinates"));
-    private final NumberSetting j = new NumberSetting("Opacity", 0.0, 1.0, 0.8f, 0.05f).getValue(EncryptedString.a("Controls the opacity of HUD elements"));
-    private final NumberSetting k = new NumberSetting("Corner Radius", 0.0, 10.0, 5.0, 0.5).getValue(EncryptedString.a("Controls the roundness of corners"));
-    private final ModeSetting<ModuleListSorting> l = new ModeSetting("Sort Mode", ModuleListSorting.a, ModuleListSorting.class).setDescription(EncryptedString.a("How to sort the module list"));
-    private final BooleanSetting m = new BooleanSetting("Rainbow", false).setDescription(EncryptedString.a("Enables rainbow coloring effect"));
-    private final NumberSetting n = new NumberSetting("Rainbow Speed", 0.1f, 10.0, 2.0, 0.1f).getValue(EncryptedString.a("Controls the speed of the rainbow effect"));
+    private final BooleanSetting e = new BooleanSetting(EncryptedString.of("Watermark"), true).setDescription(EncryptedString.of("Shows client name on screen"));
+    private final BooleanSetting f = new BooleanSetting(EncryptedString.of("Info"), true).setDescription(EncryptedString.of("Shows system information"));
+    private final BooleanSetting g = new BooleanSetting("Modules", true).setDescription(EncryptedString.of("Renders module array list"));
+    private final BooleanSetting h = new BooleanSetting("Time", true).setDescription(EncryptedString.of("Shows current time"));
+    private final BooleanSetting i = new BooleanSetting("Coordinates", true).setDescription(EncryptedString.of("Shows player coordinates"));
+    private final NumberSetting j = new NumberSetting("Opacity", 0.0, 1.0, 0.8f, 0.05f).getValue(EncryptedString.of("Controls the opacity of HUD elements"));
+    private final NumberSetting k = new NumberSetting("Corner Radius", 0.0, 10.0, 5.0, 0.5).getValue(EncryptedString.of("Controls the roundness of corners"));
+    private final ModeSetting<ModuleListSorting> l = new ModeSetting("Sort Mode", ModuleListSorting.a, ModuleListSorting.class).setDescription(EncryptedString.of("How to sort the module list"));
+    private final BooleanSetting m = new BooleanSetting("Rainbow", false).setDescription(EncryptedString.of("Enables rainbow coloring effect"));
+    private final NumberSetting n = new NumberSetting("Rainbow Speed", 0.1f, 10.0, 2.0, 0.1f).getValue(EncryptedString.of("Controls the speed of the rainbow effect"));
     private final Color o = new Color(65, 185, 255, 255);
     private final Color p = new Color(255, 110, 230, 255);
 
     public HUD() {
-        super(EncryptedString.a("HUD"), EncryptedString.a("Customizable Heads-Up Display for client information"), -1, Category.d);
+        super(EncryptedString.of("HUD"), EncryptedString.of("Customizable Heads-Up Display for client information"), -1, Category.RENDER);
         Setting[] settingArray = new Setting[]{this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l, this.m, this.n};
-        this.a(settingArray);
+        this.addSettings(settingArray);
     }
 
     @Override
@@ -59,21 +59,21 @@ public final class HUD
 
     @EventListener
     public void a(Render2DEvent render2DEvent) {
-        if (this.b.currentScreen != Krypton.INSTANCE.GUI) {
+        if (this.mc.currentScreen != Krypton.INSTANCE.GUI) {
             DrawContext drawContext = render2DEvent.a;
-            int n = this.b.getWindow().getWidth();
-            int n2 = this.b.getWindow().getHeight();
+            int n = this.mc.getWindow().getWidth();
+            int n2 = this.mc.getWindow().getHeight();
             RenderUtils.c();
             if (this.e.getValue()) {
                 this.a(drawContext, n);
             }
-            if (this.f.getValue() && this.b.player != null) {
+            if (this.f.getValue() && this.mc.player != null) {
                 this.a(drawContext);
             }
             if (this.h.getValue()) {
                 this.b(drawContext, n);
             }
-            if (this.i.getValue() && this.b.player != null) {
+            if (this.i.getValue() && this.mc.player != null) {
                 this.c(drawContext, n2);
             }
             if (this.g.getValue()) {
@@ -93,8 +93,8 @@ public final class HUD
 
     private void a(DrawContext drawContext) {
         String string = this.k();
-        String string2 = "FPS: " + this.b.getCurrentFps() + " | ";
-        String string3 = this.b.getCurrentServerEntry() == null ? "Single Player" : this.b.getCurrentServerEntry().address;
+        String string2 = "FPS: " + this.mc.getCurrentFps() + " | ";
+        String string3 = this.mc.getCurrentServerEntry() == null ? "Single Player" : this.mc.getCurrentServerEntry().address;
         int n = TextRenderer.a(string2);
         int n2 = TextRenderer.a(string);
         RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.j.getFloatValue() * 255.0f)), 5.0, 30.0, 5.0f + (float)(n + n2 + TextRenderer.a(string3)) + 9.0f, 50.0, this.k.getValue(), 15.0);
@@ -115,21 +115,21 @@ public final class HUD
     }
 
     private void c(DrawContext drawContext, int n) {
-        Object[] objectArray = new Object[]{this.b.player.getX()};
+        Object[] objectArray = new Object[]{this.mc.player.getX()};
         String string = String.format("X: %.1f", objectArray);
-        Object[] objectArray2 = new Object[]{this.b.player.getY()};
+        Object[] objectArray2 = new Object[]{this.mc.player.getY()};
         String string2 = String.format("Y: %.1f", objectArray2);
-        Object[] objectArray3 = new Object[]{this.b.player.getZ()};
+        Object[] objectArray3 = new Object[]{this.mc.player.getZ()};
         String string3 = String.format("Z: %.1f", objectArray3);
         String string4 = "";
-        if (this.b.world != null) {
-            boolean bl = this.b.world.getRegistryKey().getValue().getPath().contains("nether");
-            boolean bl2 = this.b.world.getRegistryKey().getValue().getPath().contains("overworld");
+        if (this.mc.world != null) {
+            boolean bl = this.mc.world.getRegistryKey().getValue().getPath().contains("nether");
+            boolean bl2 = this.mc.world.getRegistryKey().getValue().getPath().contains("overworld");
             if (bl) {
-                Object[] objectArray4 = new Object[]{this.b.player.getX() * 8.0, this.b.player.getZ() * 8.0};
+                Object[] objectArray4 = new Object[]{this.mc.player.getX() * 8.0, this.mc.player.getZ() * 8.0};
                 string4 = String.format(" [%.1f, %.1f]", objectArray4);
             } else if (bl2) {
-                Object[] objectArray5 = new Object[]{this.b.player.getX() / 8.0, this.b.player.getZ() / 8.0};
+                Object[] objectArray5 = new Object[]{this.mc.player.getX() / 8.0, this.mc.player.getZ() / 8.0};
                 string4 = String.format(" [%.1f, %.1f]", objectArray5);
             }
         }
@@ -168,7 +168,7 @@ public final class HUD
 
     private String k() {
         PlayerListEntry playerListEntry;
-        String string = this.b != null && this.b.player != null && this.b.getNetworkHandler() != null ? ((playerListEntry = this.b.getNetworkHandler().getPlayerListEntry(this.b.player.getUuid())) != null ? "Ping: " + playerListEntry.getLatency() + "ms | " : "Ping: " + "N/A | ") : "Ping: " + "N/A | ";
+        String string = this.mc != null && this.mc.player != null && this.mc.getNetworkHandler() != null ? ((playerListEntry = this.mc.getNetworkHandler().getPlayerListEntry(this.mc.player.getUuid())) != null ? "Ping: " + playerListEntry.getLatency() + "ms | " : "Ping: " + "N/A | ") : "Ping: " + "N/A | ";
         return string;
     }
 

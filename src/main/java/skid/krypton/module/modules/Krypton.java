@@ -32,17 +32,17 @@ public final class Krypton extends Module {
     public boolean shouldPreventClose;
 
     public Krypton() {
-        super(EncryptedString.a("Krypton+"), EncryptedString.a("Settings for the client"), 344, Category.e);
-        this.n = new BooleanSetting(EncryptedString.a("Prevent Close"), true).setDescription(EncryptedString.a("For servers with freeze plugins that don't let you open the GUI"));
-        this.a(Krypton.c, Krypton.d, Krypton.e, Krypton.f, Krypton.i, this.n, Krypton.k, Krypton.l, Krypton.m);
+        super(EncryptedString.of("Krypton+"), EncryptedString.of("Settings for the client"), 344, Category.CLIENT);
+        this.n = new BooleanSetting(EncryptedString.of("Prevent Close"), true).setDescription(EncryptedString.of("For servers with freeze plugins that don't let you open the GUI"));
+        this.addSettings(Krypton.c, Krypton.d, Krypton.e, Krypton.f, Krypton.i, this.n, Krypton.k, Krypton.l, Krypton.m);
     }
 
     @Override
     public void onEnable() {
-        skid.krypton.Krypton.INSTANCE.screen = this.b.currentScreen;
+        skid.krypton.Krypton.INSTANCE.screen = this.mc.currentScreen;
         if (skid.krypton.Krypton.INSTANCE.GUI != null) {
-            this.b.setScreenAndRender(skid.krypton.Krypton.INSTANCE.GUI);
-        } else if (this.b.currentScreen instanceof InventoryScreen) {
+            this.mc.setScreenAndRender(skid.krypton.Krypton.INSTANCE.GUI);
+        } else if (this.mc.currentScreen instanceof InventoryScreen) {
             shouldPreventClose = true;
         }
         if (new Random().nextInt(3) == 1) {
@@ -54,11 +54,11 @@ public final class Krypton extends Module {
 
     @Override
     public void onDisable() {
-        if (this.b.currentScreen instanceof ClickGUI) {
+        if (this.mc.currentScreen instanceof ClickGUI) {
             skid.krypton.Krypton.INSTANCE.GUI.close();
-            this.b.setScreenAndRender(skid.krypton.Krypton.INSTANCE.screen);
+            this.mc.setScreenAndRender(skid.krypton.Krypton.INSTANCE.screen);
             skid.krypton.Krypton.INSTANCE.GUI.onGuiClose();
-        } else if (this.b.currentScreen instanceof InventoryScreen) {
+        } else if (this.mc.currentScreen instanceof InventoryScreen) {
             shouldPreventClose = false;
         }
         super.onDisable();
@@ -72,16 +72,16 @@ public final class Krypton extends Module {
     }
 
     static {
-        c = new NumberSetting(EncryptedString.a("Red"), 0.0, 255.0, 120.0, 1.0);
-        d = new NumberSetting(EncryptedString.a("Green"), 0.0, 255.0, 190.0, 1.0);
-        e = new NumberSetting(EncryptedString.a("Blue"), 0.0, 255.0, 255.0, 1.0);
-        f = new NumberSetting(EncryptedString.a("Window Alpha"), 0.0, 255.0, 170.0, 1.0);
-        g = new BooleanSetting(EncryptedString.a("Breathing"), false).setDescription(EncryptedString.a("Color breathing effect (only with rainbow off)"));
-        h = new BooleanSetting(EncryptedString.a("Rainbow"), false).setDescription(EncryptedString.a("Enables LGBTQ mode"));
-        i = new BooleanSetting(EncryptedString.a("Background"), true).setDescription(EncryptedString.a("Renders the background of the Click Gui"));
-        j = new BooleanSetting(EncryptedString.a("Custom Font"), true);
-        k = new NumberSetting(EncryptedString.a("Roundness"), 1.0, 10.0, 5.0, 1.0);
-        l = new ModeSetting<>(EncryptedString.a("Animations"), Enum6.a, Enum6.class);
-        m = new BooleanSetting(EncryptedString.a("MSAA"), true).setDescription(EncryptedString.a("Anti Aliasing | This can impact performance if you're using tracers but gives them a smoother look |"));
+        c = new NumberSetting(EncryptedString.of("Red"), 0.0, 255.0, 120.0, 1.0);
+        d = new NumberSetting(EncryptedString.of("Green"), 0.0, 255.0, 190.0, 1.0);
+        e = new NumberSetting(EncryptedString.of("Blue"), 0.0, 255.0, 255.0, 1.0);
+        f = new NumberSetting(EncryptedString.of("Window Alpha"), 0.0, 255.0, 170.0, 1.0);
+        g = new BooleanSetting(EncryptedString.of("Breathing"), false).setDescription(EncryptedString.of("Color breathing effect (only with rainbow off)"));
+        h = new BooleanSetting(EncryptedString.of("Rainbow"), false).setDescription(EncryptedString.of("Enables LGBTQ mode"));
+        i = new BooleanSetting(EncryptedString.of("Background"), true).setDescription(EncryptedString.of("Renders the background of the Click Gui"));
+        j = new BooleanSetting(EncryptedString.of("Custom Font"), true);
+        k = new NumberSetting(EncryptedString.of("Roundness"), 1.0, 10.0, 5.0, 1.0);
+        l = new ModeSetting<>(EncryptedString.of("Animations"), Enum6.a, Enum6.class);
+        m = new BooleanSetting(EncryptedString.of("MSAA"), true).setDescription(EncryptedString.of("Anti Aliasing | This can impact performance if you're using tracers but gives them a smoother look |"));
     }
 }

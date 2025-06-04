@@ -1,6 +1,8 @@
 package skid.krypton.module;
 
 import net.minecraft.client.MinecraftClient;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import skid.krypton.Krypton;
 import skid.krypton.manager.EventManager;
 import skid.krypton.module.setting.Setting;
@@ -11,21 +13,19 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class Module implements Serializable {
-    private final List<Setting> settings;
-    protected final EventManager EVENT_BUS;
-    protected MinecraftClient b;
-    private CharSequence name;
-    private CharSequence description;
+    @NotNull protected final MinecraftClient mc;
+    @NotNull protected final EventManager EVENT_BUS;
+    @NotNull private final List<Setting> settings;
+    @Nullable private CharSequence name;
+    @Nullable private CharSequence description;
+    @NotNull private Category category;
     private boolean enabled;
     private int keybind;
-    private Category category;
-    private final boolean i;
 
-    public Module(final CharSequence name, final CharSequence description, final int keybind, final Category category) {
-        this.settings = new ArrayList<Setting>();
+    public Module(final @Nullable CharSequence name, final @Nullable CharSequence description, final int keybind, final @NotNull Category category) {
+        this.settings = new ArrayList<>();
         this.EVENT_BUS = Krypton.INSTANCE.c();
-        this.b = MinecraftClient.getInstance();
-        this.i = false;
+        this.mc = MinecraftClient.getInstance();
         this.name = name;
         this.description = description;
         this.enabled = false;
@@ -35,14 +35,11 @@ public abstract class Module implements Serializable {
 
     public void toggle() {
         this.enabled = !this.enabled;
-        if (this.enabled) {
-            this.onEnable();
-        } else {
-            this.onDisable();
-        }
+        if (this.enabled) this.onEnable();
+        else this.onDisable();
     }
 
-    public CharSequence getName() {
+    public @Nullable CharSequence getName() {
         return this.name;
     }
 
@@ -50,7 +47,7 @@ public abstract class Module implements Serializable {
         return this.enabled;
     }
 
-    public CharSequence getDescription() {
+    public @Nullable CharSequence getDescription() {
         return this.description;
     }
 
@@ -58,19 +55,19 @@ public abstract class Module implements Serializable {
         return this.keybind;
     }
 
-    public Category getCategory() {
+    public @NotNull Category getCategory() {
         return this.category;
     }
 
-    public void setCategory(final Category category) {
+    public void setCategory(final @NotNull Category category) {
         this.category = category;
     }
 
-    public void setName(final CharSequence name) {
+    public void setName(final @Nullable CharSequence name) {
         this.name = name;
     }
 
-    public void setDescription(final CharSequence description) {
+    public void setDescription(final @Nullable CharSequence description) {
         this.description = description;
     }
 
@@ -78,32 +75,26 @@ public abstract class Module implements Serializable {
         this.keybind = keybind;
     }
 
-    public List<Setting> getSettings() {
+    public @NotNull List<Setting> getSettings() {
         return this.settings;
     }
 
-    public void onEnable() {
-    }
+    public void onEnable() {}
+    public void onDisable() {}
 
-    public void onDisable() {
-    }
-
-    public void a(final Setting setting) {
+    public void addSetting(final Setting setting) {
         this.settings.add(setting);
     }
 
-    public void a(final Setting... a) {
+    public void addSettings(final Setting... a) {
         this.settings.addAll(Arrays.asList(a));
     }
 
     public void toggle(final boolean enabled) {
         if (this.enabled != enabled) {
             this.enabled = enabled;
-            if (enabled) {
-                this.onEnable();
-            } else {
-                this.onDisable();
-            }
+            if (enabled) this.onEnable();
+            else this.onDisable();
         }
     }
 

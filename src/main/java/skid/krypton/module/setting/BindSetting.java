@@ -1,16 +1,16 @@
 package skid.krypton.module.setting;
 
 public final class BindSetting extends Setting {
-    private int value;
-    private boolean listening;
     private final boolean moduleKey;
     private final int defaultValue;
+    private boolean listening;
+    private int value;
 
-    public BindSetting(final CharSequence charSequence, final int n, final boolean d) {
-        super(charSequence);
-        this.value = n;
-        this.defaultValue = n;
-        this.moduleKey = d;
+    public BindSetting(final CharSequence name, final int value, final boolean isModule) {
+        super(name);
+        this.value = value;
+        this.defaultValue = value;
+        this.moduleKey = isModule;
     }
 
     public boolean isModuleKey() {

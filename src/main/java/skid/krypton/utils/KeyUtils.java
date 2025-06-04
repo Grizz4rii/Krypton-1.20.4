@@ -15,218 +15,218 @@ public final class KeyUtils {
         }
         switch (n3) {
             case 164425491: {
-                return EncryptedString.a("F19");
+                return EncryptedString.of("F19");
             }
             case 164425507: {
-                return EncryptedString.a("F12");
+                return EncryptedString.of("F12");
             }
             case 164425520: {
-                return EncryptedString.a("F6");
+                return EncryptedString.of("F6");
             }
             case 164425508: {
-                return EncryptedString.a("F8");
+                return EncryptedString.of("F8");
             }
             case 164425493: {
-                return EncryptedString.a("F16");
+                return EncryptedString.of("F16");
             }
             case 164425547: {
-                return EncryptedString.a("Print Screen");
+                return EncryptedString.of("Print Screen");
             }
             case 164425574: {
-                return EncryptedString.a("Arrow Up");
+                return EncryptedString.of("Arrow Up");
             }
             case 164425419: {
-                return EncryptedString.a("Left Control");
+                return EncryptedString.of("Left Control");
             }
             case 164425495: {
-                return EncryptedString.a("F21");
+                return EncryptedString.of("F21");
             }
             case 164424924: {
-                return EncryptedString.a("World 1");
+                return EncryptedString.of("World 1");
             }
             case 164425534: {
-                return EncryptedString.a("F1");
+                return EncryptedString.of("F1");
             }
             case 164425017: {
-                return EncryptedString.a("Semicolon");
+                return EncryptedString.of("Semicolon");
             }
             case 164425487: {
-                return EncryptedString.a("F25");
+                return EncryptedString.of("F25");
             }
             case 164425510: {
-                return EncryptedString.a("F13");
+                return EncryptedString.of("F13");
             }
             case 164425421: {
-                return EncryptedString.a("Left Alt");
+                return EncryptedString.of("Left Alt");
             }
             case 164425500: {
-                return EncryptedString.a("Home");
+                return EncryptedString.of("Home");
             }
             case 164425465: {
-                return EncryptedString.a("Menu");
+                return EncryptedString.of("Menu");
             }
             case 164425541: {
-                return EncryptedString.a("Caps Lock");
+                return EncryptedString.of("Caps Lock");
             }
             case 164425411: {
-                return EncryptedString.a("Right Control");
+                return EncryptedString.of("Right Control");
             }
             case 164425576: {
-                return EncryptedString.a("Page Up");
+                return EncryptedString.of("Page Up");
             }
             case 164425597: {
-                return EncryptedString.a("Pause");
+                return EncryptedString.of("Pause");
             }
             default: {
                 final String glfwGetKeyName = GLFW.glfwGetKeyName(n, 0);
                 if (glfwGetKeyName == null) {
-                    return EncryptedString.a("None");
+                    return EncryptedString.of("None");
                 }
                 return StringUtils.capitalize(glfwGetKeyName);
             }
             case 164424992: {
-                return EncryptedString.a("Apostrophe");
+                return EncryptedString.of("Apostrophe");
             }
             case 164425002: {
-                return EncryptedString.a("Space");
+                return EncryptedString.of("Space");
             }
             case 164425415: {
-                return EncryptedString.a("Right Super");
+                return EncryptedString.of("Right Super");
             }
             case 164425522: {
-                return EncryptedString.a("F3");
+                return EncryptedString.of("F3");
             }
             case 164425582: {
-                return EncryptedString.a("Delete");
+                return EncryptedString.of("Delete");
             }
             case 164425004: {
-                return EncryptedString.a("Equals");
+                return EncryptedString.of("Equals");
             }
             case 164425489: {
-                return EncryptedString.a("F22");
+                return EncryptedString.of("F22");
             }
             case 164425506: {
-                return EncryptedString.a("F11");
+                return EncryptedString.of("F11");
             }
             case 164425590: {
-                return EncryptedString.a("Enter");
+                return EncryptedString.of("Enter");
             }
             case 164425503: {
-                return EncryptedString.a("F17");
+                return EncryptedString.of("F17");
             }
             case 164425572: {
-                return EncryptedString.a("Arrow Down");
+                return EncryptedString.of("Arrow Down");
             }
             case 164425413: {
-                return EncryptedString.a("Right Alt");
+                return EncryptedString.of("Right Alt");
             }
             case 164425526: {
-                return EncryptedString.a("F5");
+                return EncryptedString.of("F5");
             }
             case 164425417: {
-                return EncryptedString.a("Left Shift");
+                return EncryptedString.of("Left Shift");
             }
             case 164425409: {
-                return EncryptedString.a("Right Shift");
+                return EncryptedString.of("Right Shift");
             }
             case 104066410: {
-                return EncryptedString.a("Unknown");
+                return EncryptedString.of("Unknown");
             }
             case 164425060: {
-                return EncryptedString.a("LMB");
+                return EncryptedString.of("LMB");
             }
             case 164425516: {
-                return EncryptedString.a("F4");
+                return EncryptedString.of("F4");
             }
             case 164425514: {
-                return EncryptedString.a("F7");
+                return EncryptedString.of("F7");
             }
             case 164425588: {
-                return EncryptedString.a("Esc");
+                return EncryptedString.of("Esc");
             }
             case 164425594: {
-                return EncryptedString.a("Backspace");
+                return EncryptedString.of("Backspace");
             }
             case 164425545: {
-                return EncryptedString.a("Num Lock");
+                return EncryptedString.of("Num Lock");
             }
             case 164424937: {
-                return EncryptedString.a("Backslash");
+                return EncryptedString.of("Backslash");
             }
             case 164425578: {
-                return EncryptedString.a("Page Down");
+                return EncryptedString.of("Page Down");
             }
             case 164425518: {
-                return EncryptedString.a("F9");
+                return EncryptedString.of("F9");
             }
             case 164425064: {
-                return EncryptedString.a("MMB");
+                return EncryptedString.of("MMB");
             }
             case 164425477: {
-                return EncryptedString.a("F24");
+                return EncryptedString.of("F24");
             }
             case 164425483: {
-                return EncryptedString.a("F23");
+                return EncryptedString.of("F23");
             }
             case 164425170: {
-                return EncryptedString.a("Comma");
+                return EncryptedString.of("Comma");
             }
             case 164425580: {
-                return EncryptedString.a("Insert");
+                return EncryptedString.of("Insert");
             }
             case 164425528: {
-                return EncryptedString.a("F2");
+                return EncryptedString.of("F2");
             }
             case 164425497: {
-                return EncryptedString.a("F18");
+                return EncryptedString.of("F18");
             }
             case 164425584: {
-                return EncryptedString.a("Arrow Right");
+                return EncryptedString.of("Arrow Right");
             }
             case 164425512: {
-                return EncryptedString.a("F10");
+                return EncryptedString.of("F10");
             }
             case 164425504: {
-                return EncryptedString.a("F14");
+                return EncryptedString.of("F14");
             }
             case 164425501: {
-                return EncryptedString.a("End");
+                return EncryptedString.of("End");
             }
             case 164425374: {
-                return EncryptedString.a("Numpad Enter");
+                return EncryptedString.of("Numpad Enter");
             }
             case 164424938: {
-                return EncryptedString.a("Right Bracket");
+                return EncryptedString.of("Right Bracket");
             }
             case 164425543: {
-                return EncryptedString.a("Scroll Lock");
+                return EncryptedString.of("Scroll Lock");
             }
             case 164425586: {
-                return EncryptedString.a("Arrow Left");
+                return EncryptedString.of("Arrow Left");
             }
             case 164424870: {
-                return EncryptedString.a("Grave Accent");
+                return EncryptedString.of("Grave Accent");
             }
             case 164424951: {
-                return EncryptedString.a("Left Bracket");
+                return EncryptedString.of("Left Bracket");
             }
             case 164425062: {
-                return EncryptedString.a("RMB");
+                return EncryptedString.of("RMB");
             }
             case 164425499: {
-                return EncryptedString.a("F15");
+                return EncryptedString.of("F15");
             }
             case 164425592: {
-                return EncryptedString.a("Tab");
+                return EncryptedString.of("Tab");
             }
             case 164425485: {
-                return EncryptedString.a("F20");
+                return EncryptedString.of("F20");
             }
             case 164425423: {
-                return EncryptedString.a("Left Super");
+                return EncryptedString.of("Left Super");
             }
             case 164424742: {
-                return EncryptedString.a("World 2");
+                return EncryptedString.of("World 2");
             }
         }
     }

@@ -33,18 +33,18 @@ public final class StorageESP extends Module {
     private final BooleanSetting l;
 
     public StorageESP() {
-        super(EncryptedString.a("Storage ESP"), EncryptedString.a("Renders storage blocks through walls"), -1, Category.d);
-        this.c = new NumberSetting(EncryptedString.a("Alpha"), 1.0, 255.0, 125.0, 1.0);
-        this.d = new BooleanSetting(EncryptedString.a("Tracers"), false).setDescription(EncryptedString.a("Draws a line from your player to the storage block"));
-        this.e = new BooleanSetting(EncryptedString.a("Chests"), true);
-        this.f = new BooleanSetting(EncryptedString.a("Ender Chests"), true);
-        this.g = new BooleanSetting(EncryptedString.a("Spawners"), true);
-        this.h = new BooleanSetting(EncryptedString.a("Shulker Boxes"), true);
-        this.i = new BooleanSetting(EncryptedString.a("Furnaces"), true);
-        this.j = new BooleanSetting(EncryptedString.a("Barrels"), true);
-        this.k = new BooleanSetting(EncryptedString.a("Enchanting Tables"), true);
-        this.l = new BooleanSetting(EncryptedString.a("Pistons"), true);
-        this.a(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l);
+        super(EncryptedString.of("Storage ESP"), EncryptedString.of("Renders storage blocks through walls"), -1, Category.RENDER);
+        this.c = new NumberSetting(EncryptedString.of("Alpha"), 1.0, 255.0, 125.0, 1.0);
+        this.d = new BooleanSetting(EncryptedString.of("Tracers"), false).setDescription(EncryptedString.of("Draws a line from your player to the storage block"));
+        this.e = new BooleanSetting(EncryptedString.of("Chests"), true);
+        this.f = new BooleanSetting(EncryptedString.of("Ender Chests"), true);
+        this.g = new BooleanSetting(EncryptedString.of("Spawners"), true);
+        this.h = new BooleanSetting(EncryptedString.of("Shulker Boxes"), true);
+        this.i = new BooleanSetting(EncryptedString.of("Furnaces"), true);
+        this.j = new BooleanSetting(EncryptedString.of("Barrels"), true);
+        this.k = new BooleanSetting(EncryptedString.of("Enchanting Tables"), true);
+        this.l = new BooleanSetting(EncryptedString.of("Pistons"), true);
+        this.addSettings(this.c, this.d, this.e, this.f, this.g, this.h, this.i, this.j, this.k, this.l);
     }
 
     @Override
@@ -94,7 +94,7 @@ public final class StorageESP extends Module {
     }
 
     private void b(final Render3DEvent render3DEvent) {
-        final Camera camera = this.b.gameRenderer.getCamera();
+        final Camera camera = this.mc.gameRenderer.getCamera();
         if (camera != null) {
             final MatrixStack a = render3DEvent.a;
             render3DEvent.a.push();
@@ -106,10 +106,10 @@ public final class StorageESP extends Module {
         final Iterator iterator = BlockUtil.a().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
-                final BlockEntity getBlockEntity = this.b.world.getBlockEntity((BlockPos) next);
+                final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
                 RenderUtils.a(render3DEvent.a, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.a(getBlockEntity, this.c.getIntValue()));
                 if (this.d.getValue()) {
-                    RenderUtils.a(render3DEvent.a, this.a(getBlockEntity, 255), this.b.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
+                    RenderUtils.a(render3DEvent.a, this.a(getBlockEntity, 255), this.mc.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
                 }
             }
         }

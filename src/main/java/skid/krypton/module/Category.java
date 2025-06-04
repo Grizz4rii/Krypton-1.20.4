@@ -3,15 +3,15 @@ package skid.krypton.module;
 import skid.krypton.utils.EncryptedString;
 
 public enum Category {
-    a("COMBAT", 0, EncryptedString.a("Combat")),
-    b("MISC", 1, EncryptedString.a("Misc")),
-    c("DONUT", 2, EncryptedString.a("Donut")),
-    d("RENDER", 3, EncryptedString.a("Render")),
-    e("CLIENT", 4, EncryptedString.a("Client"));
+    COMBAT(EncryptedString.of("Combat")),
+    MISC(EncryptedString.of("Misc")),
+    DONUT(EncryptedString.of("Donut")),
+    RENDER(EncryptedString.of("Render")),
+    CLIENT(EncryptedString.of("Client"));
 
-    public final CharSequence f;
+    public final CharSequence name;
 
-    Category(final String name, final int ordinal, final CharSequence f) {
-        this.f = f;
+    Category(final CharSequence name) {
+        this.name = name;
     }
 }

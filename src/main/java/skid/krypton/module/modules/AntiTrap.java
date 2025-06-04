@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public final class AntiTrap extends Module {
     public AntiTrap() {
-        super(EncryptedString.a("Anti Trap"), EncryptedString.a("Module that helps you escape Polish traps"), -1, Category.c);
-        this.a();
+        super(EncryptedString.of("Anti Trap"), EncryptedString.of("Module that helps you escape Polish traps"), -1, Category.DONUT);
+        this.addSettings();
     }
 
     @Override
@@ -35,11 +35,11 @@ public final class AntiTrap extends Module {
     }
 
     private void j() {
-        if (this.b.world == null) {
+        if (this.mc.world == null) {
             return;
         }
         final ArrayList<Entity> list = new ArrayList<>();
-        this.b.world.getEntities().forEach(entity -> {
+        this.mc.world.getEntities().forEach(entity -> {
             if (entity != null && this.a(entity.getType())) {
                 list.add(entity);
             }

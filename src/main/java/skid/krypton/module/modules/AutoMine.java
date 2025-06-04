@@ -20,11 +20,11 @@ public final class AutoMine extends Module {
     private final NumberSetting e;
 
     public AutoMine() {
-        super(EncryptedString.a("Auto Mine"), EncryptedString.a("Module that allows players to automatically mine"), -1, Category.b);
-        this.c = new BooleanSetting(EncryptedString.a("Lock View"), true);
-        this.d = new NumberSetting(EncryptedString.a("Pitch"), -180.0, 180.0, 0.0, 0.1);
-        this.e = new NumberSetting(EncryptedString.a("Yaw"), -180.0, 180.0, 0.0, 0.1);
-        this.a(this.c, this.d, this.e);
+        super(EncryptedString.of("Auto Mine"), EncryptedString.of("Module that allows players to automatically mine"), -1, Category.MISC);
+        this.c = new BooleanSetting(EncryptedString.of("Lock View"), true);
+        this.d = new NumberSetting(EncryptedString.of("Pitch"), -180.0, 180.0, 0.0, 0.1);
+        this.e = new NumberSetting(EncryptedString.of("Yaw"), -180.0, 180.0, 0.0, 0.1);
+        this.addSettings(this.c, this.d, this.e);
     }
 
     @Override
@@ -39,7 +39,7 @@ public final class AutoMine extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
         final Module moduleByClass = Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(AutoEat.class);
@@ -48,31 +48,31 @@ public final class AutoMine extends Module {
         }
         this.c(true);
         if (this.c.getValue()) {
-            final float getYaw = this.b.player.getYaw();
-            final float getPitch = this.b.player.getPitch();
+            final float getYaw = this.mc.player.getYaw();
+            final float getPitch = this.mc.player.getPitch();
             final float g = this.e.getFloatValue();
             final float g2 = this.d.getFloatValue();
             if (getYaw != g || getPitch != g2) {
-                this.b.player.setYaw(g);
-                this.b.player.setPitch(g2);
+                this.mc.player.setYaw(g);
+                this.mc.player.setPitch(g2);
             }
         }
     }
 
     private void c(final boolean b) {
-        if (!this.b.player.isUsingItem()) {
-            if (b && this.b.crosshairTarget != null && this.b.crosshairTarget.getType() == HitResult.Type.BLOCK) {
-                final BlockHitResult blockHitResult = (BlockHitResult) this.b.crosshairTarget;
-                final BlockPos blockPos = ((BlockHitResult) this.b.crosshairTarget).getBlockPos();
-                if (!this.b.world.getBlockState(blockPos).isAir()) {
+        if (!this.mc.player.isUsingItem()) {
+            if (b && this.mc.crosshairTarget != null && this.mc.crosshairTarget.getType() == HitResult.Type.BLOCK) {
+                final BlockHitResult blockHitResult = (BlockHitResult) this.mc.crosshairTarget;
+                final BlockPos blockPos = ((BlockHitResult) this.mc.crosshairTarget).getBlockPos();
+                if (!this.mc.world.getBlockState(blockPos).isAir()) {
                     final Direction side = blockHitResult.getSide();
-                    if (this.b.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
-                        this.b.particleManager.addBlockBreakingParticles(blockPos, side);
-                        this.b.player.swingHand(Hand.MAIN_HAND);
+                    if (this.mc.interactionManager.updateBlockBreakingProgress(blockPos, side)) {
+                        this.mc.particleManager.addBlockBreakingParticles(blockPos, side);
+                        this.mc.player.swingHand(Hand.MAIN_HAND);
                     }
                 }
             } else {
-                this.b.interactionManager.cancelBlockBreaking();
+                this.mc.interactionManager.cancelBlockBreaking();
             }
         }
     }

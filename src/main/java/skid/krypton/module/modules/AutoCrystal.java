@@ -31,11 +31,11 @@ public final class AutoCrystal extends Module {
     public boolean c;
 
     public AutoCrystal() {
-        super(EncryptedString.a("Auto Crystal"), EncryptedString.a("Automatically crystals fast for you"), -1, Category.a);
-        this.d = new BindSetting(EncryptedString.a("Activate Key"), 1, false).setDescription(EncryptedString.a("Key that does the crystalling"));
-        this.e = new NumberSetting(EncryptedString.a("Place Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.f = new NumberSetting(EncryptedString.a("Break Delay"), 0.0, 20.0, 0.0, 1.0);
-        this.a(this.d, this.e, this.f);
+        super(EncryptedString.of("Auto Crystal"), EncryptedString.of("Automatically crystals fast for you"), -1, Category.COMBAT);
+        this.d = new BindSetting(EncryptedString.of("Activate Key"), 1, false).setDescription(EncryptedString.of("Key that does the crystalling"));
+        this.e = new NumberSetting(EncryptedString.of("Place Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.f = new NumberSetting(EncryptedString.of("Break Delay"), 0.0, 20.0, 0.0, 1.0);
+        this.addSettings(this.d, this.e, this.f);
     }
 
     @Override
@@ -52,17 +52,17 @@ public final class AutoCrystal extends Module {
 
     @EventListener
     public void a(final TickEvent tickEvent) {
-        if (this.b.currentScreen != null) {
+        if (this.mc.currentScreen != null) {
             return;
         }
         this.k();
-        if (this.b.player.isUsingItem()) {
+        if (this.mc.player.isUsingItem()) {
             return;
         }
         if (!this.l()) {
             return;
         }
-        if (this.b.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
+        if (this.mc.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
             return;
         }
         this.m();
@@ -87,10 +87,10 @@ public final class AutoCrystal extends Module {
     }
 
     private void m() {
-        final HitResult crosshairTarget = this.b.crosshairTarget;
-        if (this.b.crosshairTarget instanceof BlockHitResult) {
+        final HitResult crosshairTarget = this.mc.crosshairTarget;
+        if (this.mc.crosshairTarget instanceof BlockHitResult) {
             this.a((BlockHitResult) crosshairTarget);
-        } else if (this.b.crosshairTarget instanceof final EntityHitResult entityHitResult) {
+        } else if (this.mc.crosshairTarget instanceof final EntityHitResult entityHitResult) {
             this.a(entityHitResult);
         }
     }
@@ -117,20 +117,20 @@ public final class AutoCrystal extends Module {
         if (!(entity instanceof EndCrystalEntity) && !(entity instanceof SlimeEntity)) {
             return;
         }
-        this.b.interactionManager.attackEntity(this.b.player, entity);
-        this.b.player.swingHand(Hand.MAIN_HAND);
+        this.mc.interactionManager.attackEntity(this.mc.player, entity);
+        this.mc.player.swingHand(Hand.MAIN_HAND);
         this.h = this.f.getIntValue();
     }
 
     @EventListener
     public void a(final PreItemUseEvent preItemUseEvent) {
-        if (this.b.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
+        if (this.mc.player.getMainHandStack().getItem() != Items.END_CRYSTAL) {
             return;
         }
-        if (!(this.b.crosshairTarget instanceof BlockHitResult blockHitResult)) {
+        if (!(this.mc.crosshairTarget instanceof BlockHitResult blockHitResult)) {
             return;
         }
-        if (this.b.crosshairTarget.getType() != HitResult.Type.BLOCK) {
+        if (this.mc.crosshairTarget.getType() != HitResult.Type.BLOCK) {
             return;
         }
         final BlockPos blockPos = blockHitResult.getBlockPos();
@@ -141,12 +141,12 @@ public final class AutoCrystal extends Module {
 
     private boolean a(final BlockPos blockPos) {
         final BlockPos up = blockPos.up();
-        if (!this.b.world.isAir(up)) {
+        if (!this.mc.world.isAir(up)) {
             return false;
         }
         final int getX = up.getX();
         final int getY = up.getY();
         final int compareTo = up.getZ();
-        return this.b.world.getOtherEntities(null, new Box(getX, getY, compareTo, getX + 1.0, getY + 2.0, compareTo + 1.0)).isEmpty();
+        return this.mc.world.getOtherEntities(null, new Box(getX, getY, compareTo, getX + 1.0, getY + 2.0, compareTo + 1.0)).isEmpty();
     }
 }

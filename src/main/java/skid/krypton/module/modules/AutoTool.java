@@ -27,10 +27,10 @@ public final class AutoTool extends Module {
     private int h;
 
     public AutoTool() {
-        super(EncryptedString.a("Auto Tool"), EncryptedString.a("Module that automatically switches to best tool"), -1, Category.b);
-        this.c = new BooleanSetting(EncryptedString.a("Anti Break"), true);
-        this.d = new NumberSetting(EncryptedString.a("Anti Break Percentage"), 1.0, 100.0, 5.0, 1.0);
-        this.a(this.c, this.d);
+        super(EncryptedString.of("Auto Tool"), EncryptedString.of("Module that automatically switches to best tool"), -1, Category.MISC);
+        this.c = new BooleanSetting(EncryptedString.of("Anti Break"), true);
+        this.d = new NumberSetting(EncryptedString.of("Anti Break Percentage"), 1.0, 100.0, 5.0, 1.0);
+        this.addSettings(this.c, this.d);
     }
 
     @Override
@@ -51,17 +51,17 @@ public final class AutoTool extends Module {
         } else {
             --this.keybind;
         }
-        this.e = this.b.options.attackKey.isPressed();
+        this.e = this.mc.options.attackKey.isPressed();
     }
 
     @EventListener
     public void a(final AttackBlockEvent attackBlockEvent) {
-        final BlockState getBlockState = this.b.world.getBlockState(attackBlockEvent.a);
-        final ItemStack getBlockEntity = this.b.player.getMainHandStack();
+        final BlockState getBlockState = this.mc.world.getBlockState(attackBlockEvent.a);
+        final ItemStack getBlockEntity = this.mc.player.getMainHandStack();
         double n = -1.0;
         this.h = -1;
         for (int i = 0; i < 9; ++i) {
-            final double a = a(this.b.player.getInventory().getStack(i), getBlockState, itemStack -> !this.b(itemStack));
+            final double a = a(this.mc.player.getInventory().getStack(i), getBlockState, itemStack -> !this.b(itemStack));
             if (a >= 0.0) {
                 if (a > n) {
                     this.h = i;
@@ -72,9 +72,9 @@ public final class AutoTool extends Module {
         if ((this.h != -1 && n > a(getBlockEntity, getBlockState, itemStack2 -> !this.b(itemStack2))) || this.b(getBlockEntity) || !a(getBlockEntity)) {
             InventoryUtil.a(this.h);
         }
-        final ItemStack method_8322 = this.b.player.getMainHandStack();
+        final ItemStack method_8322 = this.mc.player.getMainHandStack();
         if (this.b(method_8322) && a(method_8322)) {
-            this.b.options.attackKey.setPressed(false);
+            this.mc.options.attackKey.setPressed(false);
             attackBlockEvent.cancel();
         }
     }

@@ -6,7 +6,6 @@ import skid.krypton.gui.ClickGUI;
 import skid.krypton.manager.ConfigManager;
 import skid.krypton.manager.EventManager;
 import skid.krypton.module.ModuleManager;
-import skid.krypton.utils.EncryptedString;
 
 import java.io.File;
 
@@ -32,7 +31,7 @@ public final class Krypton {
             this.MODULE_MANAGER = new ModuleManager();
             this.GUI = new ClickGUI();
             this.configManager = new ConfigManager();
-            this.getConfigManager().init();
+            this.getConfigManager().loadProfile();
             this.jar = new File(Krypton.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             this.modified = this.jar.lastModified();
             this.shouldPreventClose = false;

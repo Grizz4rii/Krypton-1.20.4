@@ -10,16 +10,16 @@ import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.*;
 
 public final class ConfigManager {
-    private JsonObject a;
+    private JsonObject jsonObject;
 
-    public void init() {
+    public void loadProfile() {
         try {
-            if (this.a == null) {
-                this.a = new JsonObject();
+            if (this.jsonObject == null) {
+                this.jsonObject = new JsonObject();
                 return;
             }
             for (final Module next : Krypton.INSTANCE.getModuleManager().c()) {
-                final JsonElement value = this.a.get(next.getName().toString());
+                final JsonElement value = this.jsonObject.get(next.getName().toString());
                 if (value != null) {
                     if (!value.isJsonObject()) {
                         continue;
@@ -34,7 +34,7 @@ public final class ConfigManager {
                         if (value3 == null) {
                             continue;
                         }
-                        this.a((Setting) next2, value3, next);
+                        this.setValueFromJson((Setting) next2, value3, next);
                     }
                 }
             }
@@ -43,7 +43,7 @@ public final class ConfigManager {
         }
     }
 
-    private void a(final Setting setting, final JsonElement jsonElement, final Module module) {
+    private void setValueFromJson(final Setting setting, final JsonElement jsonElement, final Module module) {
         try {
             if (setting instanceof final BooleanSetting booleanSetting) {
                 if (jsonElement.isJsonPrimitive()) {
@@ -93,21 +93,21 @@ public final class ConfigManager {
 
     public void shutdown() {
         try {
-            this.a = new JsonObject();
+            this.jsonObject = new JsonObject();
             for (final Module module : Krypton.INSTANCE.getModuleManager().c()) {
                 final JsonObject jsonObject = new JsonObject();
                 jsonObject.addProperty("enabled", module.isEnabled());
                 for (Setting setting : module.getSettings()) {
-                    this.a(setting, jsonObject, module);
+                    this.save(setting, jsonObject, module);
                 }
-                this.a.add(module.getName().toString(), jsonObject);
+                this.jsonObject.add(module.getName().toString(), jsonObject);
             }
         } catch (final Exception _t) {
             _t.printStackTrace(System.err);
         }
     }
 
-    private void a(final Setting setting, final JsonObject jsonObject, final Module module) {
+    private void save(final Setting setting, final JsonObject jsonObject, final Module module) {
         try {
             if (setting instanceof final BooleanSetting booleanSetting) {
                 jsonObject.addProperty(setting.getName().toString(), booleanSetting.getValue());

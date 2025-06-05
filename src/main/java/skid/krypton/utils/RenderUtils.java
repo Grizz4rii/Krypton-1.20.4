@@ -26,7 +26,11 @@ public final class RenderUtils {
     public static boolean rendering3D;
 
     public static Vec3d getCameraPos() {
-        return Krypton.mc.getBlockEntityRenderDispatcher().camera.getPos();
+        return getCamera().getPos();
+    }
+
+    public static Camera getCamera() {
+        return Krypton.mc.getBlockEntityRenderDispatcher().camera;
     }
 
     public static double deltaTime() {

@@ -48,11 +48,11 @@ public final class PlayerESP extends Module {
     public void onRender3D(final Render3DEvent render3DEvent) {
         for (final Object next : this.mc.world.getPlayers()) {
             if (next != this.mc.player) {
-                final Camera camera = this.mc.gameRenderer.getCamera();
+                final Camera camera = RenderUtils.getCamera();
                 if (camera != null) {
                     final MatrixStack a = render3DEvent.matrixStack;
                     render3DEvent.matrixStack.push();
-                    final Vec3d pos = camera.getPos();
+                    final Vec3d pos = RenderUtils.getCameraPos();
                     a.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
                     a.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0f));
                     a.translate(-pos.x, -pos.y, -pos.z);

@@ -49,7 +49,7 @@ public final class StorageESP extends Module {
 
     @EventListener
     public void onRender3D(final Render3DEvent render3DEvent) {
-        this.renderStorageBlocks(render3DEvent);
+        this.renderStorages(render3DEvent);
     }
 
     private Color getBlockEntityColor(final BlockEntity blockEntity, final int a) {
@@ -83,26 +83,29 @@ public final class StorageESP extends Module {
         return new Color(255, 255, 255, 0);
     }
 
-    private void renderStorageBlocks(final Render3DEvent render3DEvent) {
-        final Camera camera = this.mc.gameRenderer.getCamera();
-        if (camera != null) {
-            final MatrixStack a = render3DEvent.matrixStack;
-            render3DEvent.matrixStack.push();
-            final Vec3d pos = camera.getPos();
-            a.multiply(RotationAxis.POSITIVE_X.rotationDegrees(camera.getPitch()));
-            a.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0f));
-            a.translate(-pos.x, -pos.y, -pos.z);
+    private void renderStorages(Render3DEvent event) {
+        Camera cam = RenderUtils.getCamera();
+        if (cam != null) {
+            Vec3d camPos = RenderUtils.getCameraPos();
+            MatrixStack matrices = event.matrixStack;
+            matrices.push();
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(cam.getPitch()));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(cam.getYaw() + 180.0f));
+            matrices.translate(-camPos.x, -camPos.y, -camPos.z);
         }
-        final Iterator iterator = BlockUtil.getLoadedChunks().iterator();
-        while (iterator.hasNext()) {
-            for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
-                final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
-                RenderUtils.renderFilledBox(render3DEvent.matrixStack, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.getBlockEntityColor(getBlockEntity, this.alpha.getIntValue()));
-                if (this.tracers.getValue()) {
-                    RenderUtils.renderLine(render3DEvent.matrixStack, this.getBlockEntityColor(getBlockEntity, 255), this.mc.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
-                }
+
+        for (WorldChunk chunk : BlockUtil.getLoadedChunks().toList()) {
+            for (BlockPos blockPos : chunk.getBlockEntityPositions()) {
+                BlockEntity blockEntity = mc.world.getBlockEntity(blockPos);
+
+                RenderUtils.renderFilledBox(event.matrixStack, blockPos.getX() + 0.1F, blockPos.getY() + 0.05F, blockPos.getZ() + 0.1F, blockPos.getX() + 0.9F, blockPos.getY() + 0.85F, blockPos.getZ() + 0.9F, getBlockEntityColor(blockEntity, alpha.getIntValue()));
+
+                if (tracers.getValue())
+                    RenderUtils.renderLine(event.matrixStack, getBlockEntityColor(blockEntity, 255), mc.crosshairTarget.getPos(), new Vec3d(blockPos.getX() + 0.5, blockPos.getY() + 0.5, blockPos.getZ() + 0.5));
             }
         }
-        render3DEvent.matrixStack.pop();
+
+        MatrixStack matrixStack = event.matrixStack;
+        matrixStack.pop();
     }
 }

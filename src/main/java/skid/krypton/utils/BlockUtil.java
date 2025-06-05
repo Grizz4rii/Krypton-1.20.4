@@ -14,47 +14,56 @@ import skid.krypton.Krypton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
+
+import static skid.krypton.Krypton.mc;
 
 public final class BlockUtil {
-    public static List<?> getLoadedChunks() {
-        final int viewDistance = Math.max(2, Krypton.mc.options.getClampedViewDistance()) + 3;
-        final ArrayList loadedChunks = new ArrayList();
-        final ChunkPos playerChunkPos = Krypton.mc.player.getChunkPos();
-        final int maxX = playerChunkPos.x + viewDistance;
-        int currentZ = playerChunkPos.z - viewDistance;
-        final int maxZ = playerChunkPos.z + viewDistance;
-        for (int currentX = playerChunkPos.x - viewDistance; currentX <= maxX; ++currentX) {
-            while (currentZ <= maxZ) {
-                if (Krypton.mc.world.isChunkLoaded(currentX, currentZ)) {
-                    final WorldChunk chunk = Krypton.mc.world.getChunk(currentX, currentZ);
-                    if (chunk != null) {
-                        loadedChunks.add(chunk);
+    public static Stream<WorldChunk> getLoadedChunks() {
+        int radius = Math.max(2, mc.options.getClampedViewDistance()) + 3;
+        int diameter = radius * 2 + 1;
+
+        ChunkPos center = mc.player.getChunkPos();
+        ChunkPos min = new ChunkPos(center.x - radius, center.z - radius);
+        ChunkPos max = new ChunkPos(center.x + radius, center.z + radius);
+
+        return Stream.iterate(min, pos -> {
+                    int x = pos.x;
+                    int z = pos.z;
+                    x++;
+                    if (x > max.x) {
+                        x = min.x;
+                        z++;
                     }
-                }
-                ++currentZ;
-            }
-        }
-        return loadedChunks;
+                    if (z > max.z)
+                        throw new IllegalStateException("Stream limit didn't work.");
+
+                    return new ChunkPos(x, z);
+
+                }).limit((long) diameter * diameter)
+                .filter(c -> mc.world.isChunkLoaded(c.x, c.z))
+                .map(c -> mc.world.getChunk(c.x, c.z)).filter(Objects::nonNull);
     }
 
     public static boolean isBlockAtPosition(final BlockPos blockPos, final Block block) {
-        return Krypton.mc.world.getBlockState(blockPos).getBlock() == block;
+        return mc.world.getBlockState(blockPos).getBlock() == block;
     }
 
     public static boolean isRespawnAnchorCharged(final BlockPos blockPos) {
         return isBlockAtPosition(blockPos, Blocks.RESPAWN_ANCHOR) &&
-                (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
+                (int) mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
     }
 
     public static boolean isRespawnAnchorUncharged(final BlockPos blockPos) {
         return isBlockAtPosition(blockPos, Blocks.RESPAWN_ANCHOR) &&
-                (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
+                (int) mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
     }
 
     public static void interactWithBlock(final BlockHitResult blockHitResult, final boolean shouldSwingHand) {
-        final ActionResult result = Krypton.mc.interactionManager.interactBlock(Krypton.mc.player, Hand.MAIN_HAND, blockHitResult);
+        final ActionResult result = mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, blockHitResult);
         if (result.isAccepted() && result.shouldSwingHand() && shouldSwingHand) {
-            Krypton.mc.player.swingHand(Hand.MAIN_HAND);
+            mc.player.swingHand(Hand.MAIN_HAND);
         }
     }
 }

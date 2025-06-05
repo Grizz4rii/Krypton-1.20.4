@@ -357,7 +357,7 @@ public final class RtpBaseFinder extends Module {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
                 if (this.spawn.getValue() && getBlockEntity instanceof MobSpawnerBlockEntity) {
-                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry(this.mc.world, this.mc.world.getRandom(), (BlockPos) next).getNbt().getString("id");
+                    final String string = ((MobSpawnerLogicAccessor) ((MobSpawnerBlockEntity) getBlockEntity).getLogic()).getSpawnEntry().getNbt().getString("id");
                     if (string != "minecraft:cave_spider" && string != "minecraft:spider") {
                         ++n2;
                         blockPos = (BlockPos) next;

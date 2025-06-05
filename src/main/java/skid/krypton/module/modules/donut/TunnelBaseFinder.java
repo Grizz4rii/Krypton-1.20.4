@@ -199,7 +199,7 @@ public final class TunnelBaseFinder extends Module {
                     this.blocksMined = 20;
                     return;
                 }
-                if (!EnchantmentUtil.a(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
+                if (!EnchantmentUtil.hasEnchantment(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
                     this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.totemCheckCounter, 40, SlotActionType.SWAP, this.mc.player);
                     this.blocksMined = 20;
                     return;
@@ -218,7 +218,7 @@ public final class TunnelBaseFinder extends Module {
         } else {
             if (this.autoMend.getValue()) {
                 final ItemStack size = this.mc.player.getMainHandStack();
-                if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
+                if (EnchantmentUtil.hasEnchantment(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                     this.isDigging = true;
                     this.totemCheckCounter = this.mc.player.getInventory().selectedSlot;
                 }
@@ -242,7 +242,7 @@ public final class TunnelBaseFinder extends Module {
             final HitResult crosshairTarget = this.mc.crosshairTarget;
             if (this.mc.crosshairTarget instanceof BlockHitResult) {
                 final BlockPos blockPos = ((BlockHitResult) crosshairTarget).getBlockPos();
-                if (!BlockUtil.a(blockPos, Blocks.AIR)) {
+                if (!BlockUtil.isBlockAtPosition(blockPos, Blocks.AIR)) {
                     a = this.isBlockPositionValid(blockPos, this.mc.player.getHorizontalFacing());
                 }
             }
@@ -431,7 +431,7 @@ public final class TunnelBaseFinder extends Module {
         int n = 0;
         int n2 = 0;
         BlockPos blockPos = null;
-        final Iterator iterator = BlockUtil.a().iterator();
+        final Iterator iterator = BlockUtil.getLoadedChunks().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);

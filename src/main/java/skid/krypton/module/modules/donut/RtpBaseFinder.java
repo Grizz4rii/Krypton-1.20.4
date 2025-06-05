@@ -185,7 +185,7 @@ public final class RtpBaseFinder extends Module {
                     this.actionDelay = 20;
                     return;
                 }
-                if (!EnchantmentUtil.a(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
+                if (!EnchantmentUtil.hasEnchantment(this.mc.player.getOffHandStack(), Enchantments.MENDING)) {
                     this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 36 + this.selectedSlot, 40, SlotActionType.SWAP, this.mc.player);
                     this.actionDelay = 20;
                     return;
@@ -230,7 +230,7 @@ public final class RtpBaseFinder extends Module {
                     this.mc.player.setPitch(89.9f);
                     if (this.autoMend.getValue()) {
                         final ItemStack size = this.mc.player.getMainHandStack();
-                        if (EnchantmentUtil.a(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
+                        if (EnchantmentUtil.hasEnchantment(size, Enchantments.MENDING) && size.getMaxDamage() - size.getDamage() < 100) {
                             this.isRepairing = true;
                             this.selectedSlot = this.mc.player.getInventory().selectedSlot;
                         }
@@ -352,7 +352,7 @@ public final class RtpBaseFinder extends Module {
         int n = 0;
         int n2 = 0;
         BlockPos blockPos = null;
-        final Iterator iterator = BlockUtil.a().iterator();
+        final Iterator iterator = BlockUtil.getLoadedChunks().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);

@@ -104,24 +104,24 @@ public final class ModuleButton {
         } else {
             n5 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.05000000074505806, n4);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n5, 0.05000000074505806, n4);
         float n6;
         if (this.module.isEnabled()) {
             n6 = 1.0f;
         } else {
             n6 = 0.0f;
         }
-        this.enabledAnimation = (float) MathUtil.a(this.enabledAnimation, n6, 0.004999999888241291, n4);
-        this.enabledAnimation = (float) MathUtil.c(this.enabledAnimation, 0.0, 1.0);
+        this.enabledAnimation = (float) MathUtil.exponentialInterpolate(this.enabledAnimation, n6, 0.004999999888241291, n4);
+        this.enabledAnimation = (float) MathUtil.clampValue(this.enabledAnimation, 0.0, 1.0);
     }
 
     private void renderButtonBackground(final DrawContext drawContext, final int n, final int n2, final int n3, final int n4) {
         final Color a = ColorUtil.a(new Color(25, 25, 30, 230), this.HOVER_COLOR, this.hoverAnimation);
         final boolean b = this.parent.moduleButtons.get(this.parent.moduleButtons.size() - 1) == this;
         if (b && !this.extended) {
-            RenderUtils.a(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 6.0, 6.0, 50.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 6.0, 6.0, 50.0);
         } else if (b && this.extended) {
-            RenderUtils.a(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 0.0, 0.0, 50.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), a, n, n2, n + n3, n2 + n4, 0.0, 0.0, 0.0, 0.0, 50.0);
         } else {
             drawContext.fill(n, n2, n + n3, n2 + n4, a.getRGB());
         }
@@ -133,25 +133,25 @@ public final class ModuleButton {
     private void renderIndicator(final DrawContext drawContext, final int n, final int n2, final int n3) {
         Color color;
         if (this.module.isEnabled()) {
-            color = KryptonUtil.getMainColor(255, Krypton.INSTANCE.getModuleManager().a(this.module.getCategory()).indexOf(this.module));
+            color = Utils.getMainColor(255, Krypton.INSTANCE.getModuleManager().a(this.module.getCategory()).indexOf(this.module));
         } else {
             color = this.ACCENT_COLOR;
         }
         final float n4 = 5.0f * this.enabledAnimation;
         if (n4 > 0.1f) {
-            RenderUtils.a(drawContext.getMatrices(), ColorUtil.a(this.DISABLED_COLOR, color, this.enabledAnimation), n, n2 + 2, n + n4, n2 + n3 - 2, 1.5, 1.5, 1.5, 1.5, 60.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), ColorUtil.a(this.DISABLED_COLOR, color, this.enabledAnimation), n, n2 + 2, n + n4, n2 + n3 - 2, 1.5, 1.5, 1.5, 1.5, 60.0);
         }
     }
 
     private void renderModuleInfo(final DrawContext drawContext, final int n, final int n2, final int n3, final int n4) {
-        TextRenderer.a(this.module.getName(), drawContext, n + 10, n2 + n4 / 2 - 6, ColorUtil.a(this.DISABLED_COLOR, this.ENABLED_COLOR, this.enabledAnimation).getRGB());
+        TextRenderer.drawString(this.module.getName(), drawContext, n + 10, n2 + n4 / 2 - 6, ColorUtil.a(this.DISABLED_COLOR, this.ENABLED_COLOR, this.enabledAnimation).getRGB());
         final int n5 = n + n3 - 40;
         final int n6 = n2 + n4 / 2 - 6;
-        RenderUtils.a(drawContext.getMatrices(), ColorUtil.a(new Color(60, 60, 65, 200), new Color(65, 105, 225, 100), this.enabledAnimation), n5, n6, n5 + 24.0f, n6 + 12.0f, 6.0, 6.0, 6.0, 6.0, 50.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), ColorUtil.a(new Color(60, 60, 65, 200), new Color(65, 105, 225, 100), this.enabledAnimation), n5, n6, n5 + 24.0f, n6 + 12.0f, 6.0, 6.0, 6.0, 6.0, 50.0);
         final float n7 = n5 + 6.0f + 12.0f * this.enabledAnimation;
-        RenderUtils.a(drawContext.getMatrices(), ColorUtil.a(new Color(180, 180, 180), this.ENABLED_COLOR, this.enabledAnimation), n7, n6 + 6.0f, 5.0, 12);
+        RenderUtils.renderCircle(drawContext.getMatrices(), ColorUtil.a(new Color(180, 180, 180), this.ENABLED_COLOR, this.enabledAnimation), n7, n6 + 6.0f, 5.0, 12);
         if (this.module.isEnabled()) {
-            RenderUtils.a(drawContext.getMatrices(), new Color(this.ENABLED_COLOR.getRed(), this.ENABLED_COLOR.getGreen(), this.ENABLED_COLOR.getBlue(), 30), n7, n6 + 6.0f, 8.0, 16);
+            RenderUtils.renderCircle(drawContext.getMatrices(), new Color(this.ENABLED_COLOR.getRed(), this.ENABLED_COLOR.getGreen(), this.ENABLED_COLOR.getBlue(), 30), n7, n6 + 6.0f, 8.0, 16);
         }
     }
 
@@ -182,9 +182,9 @@ public final class ModuleButton {
     }
 
     private void renderModernSliderKnob(final DrawContext drawContext, final double n, final double n2, final Color color) {
-        RenderUtils.a(drawContext.getMatrices(), new Color(0, 0, 0, 100), n, n2, 7.0, 18);
-        RenderUtils.a(drawContext.getMatrices(), color, n, n2, 5.5, 16);
-        RenderUtils.a(drawContext.getMatrices(), new Color(255, 255, 255, 70), n, n2 - 1.0, 3.0, 12);
+        RenderUtils.renderCircle(drawContext.getMatrices(), new Color(0, 0, 0, 100), n, n2, 7.0, 18);
+        RenderUtils.renderCircle(drawContext.getMatrices(), color, n, n2, 5.5, 16);
+        RenderUtils.renderCircle(drawContext.getMatrices(), new Color(255, 255, 255, 70), n, n2 - 1.0, 3.0, 12);
     }
 
     public void onExtend() {

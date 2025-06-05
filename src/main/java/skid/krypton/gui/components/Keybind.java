@@ -42,18 +42,18 @@ public final class Keybind extends Component {
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(Keybind.HOVER_COLOR.getRed(), Keybind.HOVER_COLOR.getGreen(), Keybind.HOVER_COLOR.getBlue(), (int) (Keybind.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Keybind.TEXT_COLOR.getRGB());
+        TextRenderer.drawString(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Keybind.TEXT_COLOR.getRGB());
         String string;
         if (this.keybind.isListening()) {
             string = "Listening...";
         } else {
-            string = KeyUtils.a(this.keybind.getValue()).toString();
+            string = KeyUtils.getKey(this.keybind.getValue()).toString();
         }
-        final int a = TextRenderer.a(string);
+        final int a = TextRenderer.getWidth(string);
         final int max = Math.max(80, a + 16);
         final int n4 = this.parentX() + this.parentWidth() - max - 5;
         final int n5 = this.parentY() + this.parentOffset() + this.offset + (this.parentHeight() - 20) / 2;
-        RenderUtils.a(matrices, ColorUtil.a(Keybind.BUTTON_BG_COLOR, Keybind.BUTTON_ACTIVE_BG_COLOR, this.listenAnimation), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
+        RenderUtils.renderRoundedQuad(matrices, ColorUtil.a(Keybind.BUTTON_BG_COLOR, Keybind.BUTTON_ACTIVE_BG_COLOR, this.listenAnimation), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
         final float a2 = this.listenAnimation * 0.7f;
         float b;
         if (this.isButtonHovered(n, n2, n4, n5, max, 20)) {
@@ -63,11 +63,11 @@ public final class Keybind extends Component {
         }
         final float max2 = Math.max(a2, b);
         if (max2 > 0.0f) {
-            RenderUtils.a(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * max2)), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
+            RenderUtils.renderRoundedQuad(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * max2)), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
         }
-        TextRenderer.a(string, drawContext, n4 + (max - a) / 2, n5 + 6 - 3, ColorUtil.a(Keybind.TEXT_COLOR, Keybind.LISTENING_TEXT_COLOR, this.listenAnimation).getRGB());
+        TextRenderer.drawString(string, drawContext, n4 + (max - a) / 2, n5 + 6 - 3, ColorUtil.a(Keybind.TEXT_COLOR, Keybind.LISTENING_TEXT_COLOR, this.listenAnimation).getRGB());
         if (this.keybind.isListening()) {
-            RenderUtils.a(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * ((float) Math.abs(Math.sin(System.currentTimeMillis() / 500.0)) * 0.3f))), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
+            RenderUtils.renderRoundedQuad(matrices, new Color(this.accentColor.getRed(), this.accentColor.getGreen(), this.accentColor.getBlue(), (int) (this.accentColor.getAlpha() * ((float) Math.abs(Math.sin(System.currentTimeMillis() / 500.0)) * 0.3f))), n4, n5, n4 + max, n5 + 20, 4.0, 4.0, 4.0, 4.0, 50.0);
         }
     }
 
@@ -79,14 +79,14 @@ public final class Keybind extends Component {
         } else {
             n5 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.25, n4);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n5, 0.25, n4);
         float n6;
         if (this.keybind.isListening()) {
             n6 = 1.0f;
         } else {
             n6 = 0.0f;
         }
-        this.listenAnimation = (float) MathUtil.a(this.listenAnimation, n6, 0.3499999940395355, n4);
+        this.listenAnimation = (float) MathUtil.exponentialInterpolate(this.listenAnimation, n6, 0.3499999940395355, n4);
     }
 
     private boolean isButtonHovered(final double n, final double n2, final int n3, final int n4, final int n5, final int n6) {
@@ -99,9 +99,9 @@ public final class Keybind extends Component {
         if (this.keybind.isListening()) {
             string = "Listening...";
         } else {
-            string = KeyUtils.a(this.keybind.getValue()).toString();
+            string = KeyUtils.getKey(this.keybind.getValue()).toString();
         }
-        final int max = Math.max(80, TextRenderer.a(string) + 16);
+        final int max = Math.max(80, TextRenderer.getWidth(string) + 16);
         if (this.isButtonHovered(n, n2, this.parentX() + this.parentWidth() - max - 5, this.parentY() + this.parentOffset() + this.offset + (this.parentHeight() - 20) / 2, max, 20)) {
             if (!this.keybind.isListening()) {
                 if (n3 == 0) {
@@ -143,7 +143,7 @@ public final class Keybind extends Component {
 
     @Override
     public void onUpdate() {
-        final Color mainColor = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this));
+        final Color mainColor = Utils.getMainColor(255, this.parent.settings.indexOf(this));
         if (this.accentColor == null) {
             this.accentColor = new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), 0);
         } else {

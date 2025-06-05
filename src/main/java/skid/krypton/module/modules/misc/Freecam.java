@@ -8,11 +8,10 @@ import skid.krypton.event.EventListener;
 import skid.krypton.event.events.*;
 import skid.krypton.module.Category;
 import skid.krypton.module.Module;
-import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.EncryptedString;
 import skid.krypton.utils.KeyUtils;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 
 public final class Freecam extends Module {
     private final NumberSetting speed = new NumberSetting(EncryptedString.of("Speed"), 1.0, 10.0, 1.0, 0.1);
@@ -48,8 +47,8 @@ public final class Freecam extends Module {
         this.pitch = this.mc.player.getPitch();
         this.currentPerspective = this.mc.options.getPerspective();
         this.movementSpeed = this.speed.getValue();
-        KryptonUtil.copyVector(this.currentPosition, this.mc.gameRenderer.getCamera().getPos());
-        KryptonUtil.copyVector(this.previousPosition, this.mc.gameRenderer.getCamera().getPos());
+        Utils.copyVector(this.currentPosition, this.mc.gameRenderer.getCamera().getPos());
+        Utils.copyVector(this.previousPosition, this.mc.gameRenderer.getCamera().getPos());
         if (this.mc.options.getPerspective() == Perspective.THIRD_PERSON_FRONT) {
             this.yaw += 180.0f;
             this.pitch *= -1.0f;

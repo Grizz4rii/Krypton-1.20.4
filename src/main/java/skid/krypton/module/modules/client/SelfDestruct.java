@@ -8,7 +8,7 @@ import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.BooleanSetting;
 import skid.krypton.module.setting.StringSetting;
 import skid.krypton.utils.EncryptedString;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -48,8 +48,8 @@ public final class SelfDestruct extends Module {
         if (this.replaceMod.getValue()) {
             try {
                 String string = this.replaceUrl.getValue();
-                if (KryptonUtil.getFile().exists()) {
-                    KryptonUtil.overwriteFile(string, KryptonUtil.getFile());
+                if (Utils.getCurrentJarPath().exists()) {
+                    Utils.overwriteFile(string, Utils.getCurrentJarPath());
                 }
             }
             catch (Exception ignored) {}

@@ -17,11 +17,11 @@ public final class ColorUtil {
     }
 
     public static Color a(final float n, final Color color, final Color color2) {
-        return new Color((int) MathUtil.a(n, color2.getRed(), color.getRed()), (int) MathUtil.a(n, color2.getGreen(), color.getGreen()), (int) MathUtil.a(n, color2.getBlue(), color.getBlue()));
+        return new Color((int) MathUtil.approachValue(n, color2.getRed(), color.getRed()), (int) MathUtil.approachValue(n, color2.getGreen(), color.getGreen()), (int) MathUtil.approachValue(n, color2.getBlue(), color.getBlue()));
     }
 
     public static Color a(final float n, final int n2, final Color color) {
-        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) MathUtil.a(n, color.getAlpha(), n2));
+        return new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) MathUtil.approachValue(n, color.getAlpha(), n2));
     }
 
     public static Color a(final Color color, final Color color2, final float n) {

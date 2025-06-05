@@ -98,7 +98,7 @@ public final class NetheriteFinder extends Module {
                     float var11 = (float)((Vec3d)var14).x;
                     float var12 = (float)((Vec3d)var14).y;
                     float var13 = (float)((Vec3d)var14).z;
-                    RenderUtils.a(
+                    RenderUtils.renderFilledBox(
                             var10,
                             var11,
                             var12,
@@ -154,7 +154,7 @@ public final class NetheriteFinder extends Module {
 
     private void populateOreLocations() {
         if (this.mc.player != null) {
-            Iterator var1 = BlockUtil.a().iterator();
+            Iterator var1 = BlockUtil.getLoadedChunks().iterator();
 
             while (var1.hasNext()) {
                 this.processChunk((WorldChunk)var1.next());

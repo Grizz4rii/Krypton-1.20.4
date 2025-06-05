@@ -4,29 +4,28 @@ import skid.krypton.module.modules.client.Krypton;
 
 public final class Animation {
     private double value;
-    private final double b;
+    private final double end;
 
-    public Animation(final double n) {
-        this.value = n;
-        this.b = n;
+    public Animation(double end) {
+        this.value = end;
+        this.end = end;
     }
 
-    public double animate(final double n, final double a) {
+    public void animate(double speed, double target) {
         if (Krypton.animationMode.isMode(Krypton.AnimationMode.NORMAL)) {
-            this.value = MathUtil.a((float) n, this.value, a);
+            this.value = MathUtil.approachValue((float) speed, this.value, target);
         } else if (Krypton.animationMode.isMode(Krypton.AnimationMode.POSITIVE)) {
-            this.value = MathUtil.a(n, this.value, a);
+            this.value = MathUtil.smoothStep(speed, this.value, target);
         } else if (Krypton.animationMode.isMode(Krypton.AnimationMode.OFF)) {
-            this.value = a;
+            this.value = target;
         }
-        return this.value;
     }
 
     public double getAnimation() {
         return this.value;
     }
 
-    public void a(final double n) {
-        this.value = MathUtil.a(n, this.value, this.b);
+    public void setAnimation(final double factor) {
+        this.value = MathUtil.smoothStep(factor, this.value, this.end);
     }
 }

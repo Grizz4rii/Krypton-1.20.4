@@ -100,8 +100,8 @@ public final class AutoCrystal extends Module {
             return;
         }
         final BlockPos blockPos = blockHitResult.getBlockPos();
-        if ((BlockUtil.a(blockPos, Blocks.OBSIDIAN) || BlockUtil.a(blockPos, Blocks.BEDROCK)) && this.isValidCrystalPlacement(blockPos)) {
-            BlockUtil.a(blockHitResult, true);
+        if ((BlockUtil.isBlockAtPosition(blockPos, Blocks.OBSIDIAN) || BlockUtil.isBlockAtPosition(blockPos, Blocks.BEDROCK)) && this.isValidCrystalPlacement(blockPos)) {
+            BlockUtil.interactWithBlock(blockHitResult, true);
             this.placeDelayCounter = this.placeDelay.getIntValue();
         }
     }
@@ -131,7 +131,7 @@ public final class AutoCrystal extends Module {
             return;
         }
         final BlockPos blockPos = blockHitResult.getBlockPos();
-        if (BlockUtil.a(blockPos, Blocks.OBSIDIAN) || BlockUtil.a(blockPos, Blocks.BEDROCK)) {
+        if (BlockUtil.isBlockAtPosition(blockPos, Blocks.OBSIDIAN) || BlockUtil.isBlockAtPosition(blockPos, Blocks.BEDROCK)) {
             preItemUseEvent.cancel();
         }
     }

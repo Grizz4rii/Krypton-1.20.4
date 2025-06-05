@@ -62,7 +62,7 @@ public final class HUD
             DrawContext drawContext = render2DEvent.context;
             int n = this.mc.getWindow().getWidth();
             int n2 = this.mc.getWindow().getHeight();
-            RenderUtils.c();
+            RenderUtils.unscaledProjection();
             if (this.showWatermark.getValue()) {
                 this.renderWatermark(drawContext, n);
             }
@@ -78,39 +78,39 @@ public final class HUD
             if (this.showModules.getValue()) {
                 this.renderModuleList(drawContext, n, n2);
             }
-            RenderUtils.d();
+            RenderUtils.scaledProjection();
         }
     }
 
     private void renderWatermark(DrawContext drawContext, int n) {
-        int n2 = TextRenderer.a(watermarkText);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, 5.0, 5.0f + (float)n2 + 7.0f, 25.0, this.cornerRadius.getValue(), 15.0);
+        int n2 = TextRenderer.getWidth(watermarkText);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, 5.0, 5.0f + (float)n2 + 7.0f, 25.0, this.cornerRadius.getValue(), 15.0);
         Color color = this.enableRainbowEffect.getValue() ? ColorUtil.a(this.rainbowSpeed.getIntValue(), 1) : this.primaryColor;
         CharSequence charSequence = watermarkText;
-        TextRenderer.a(charSequence, drawContext, 8, 8, color.getRGB());
+        TextRenderer.drawString(charSequence, drawContext, 8, 8, color.getRGB());
     }
 
     private void renderInfo(DrawContext drawContext) {
         String string = this.getPingInfo();
         String string2 = "FPS: " + this.mc.getCurrentFps() + " | ";
         String string3 = this.mc.getCurrentServerEntry() == null ? "Single Player" : this.mc.getCurrentServerEntry().address;
-        int n = TextRenderer.a(string2);
-        int n2 = TextRenderer.a(string);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, 30.0, 5.0f + (float)(n + n2 + TextRenderer.a(string3)) + 9.0f, 50.0, this.cornerRadius.getValue(), 15.0);
-        TextRenderer.a(string2, drawContext, 10, 33, this.primaryColor.getRGB());
-        int n3 = 10 + TextRenderer.a(string2);
-        TextRenderer.a(string, drawContext, n3, 33, this.secondaryColor.getRGB());
-        TextRenderer.a(string3, drawContext, n3 + TextRenderer.a(string), 33, new Color(175, 175, 175, 255).getRGB());
+        int n = TextRenderer.getWidth(string2);
+        int n2 = TextRenderer.getWidth(string);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, 30.0, 5.0f + (float)(n + n2 + TextRenderer.getWidth(string3)) + 9.0f, 50.0, this.cornerRadius.getValue(), 15.0);
+        TextRenderer.drawString(string2, drawContext, 10, 33, this.primaryColor.getRGB());
+        int n3 = 10 + TextRenderer.getWidth(string2);
+        TextRenderer.drawString(string, drawContext, n3, 33, this.secondaryColor.getRGB());
+        TextRenderer.drawString(string3, drawContext, n3 + TextRenderer.getWidth(string), 33, new Color(175, 175, 175, 255).getRGB());
     }
 
     private void renderTime(DrawContext drawContext, int n) {
         SimpleDateFormat simpleDateFormat = timeFormatter;
         String string = simpleDateFormat.format(new Date());
-        int n2 = TextRenderer.a(string);
+        int n2 = TextRenderer.getWidth(string);
         int n3 = n / 2;
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), (float)n3 - (float)n2 / 2.0f - 3.0f, 5.0, (float)n3 + (float)n2 / 2.0f + 5.0f, 25.0, this.cornerRadius.getValue(), 15.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), (float)n3 - (float)n2 / 2.0f - 3.0f, 5.0, (float)n3 + (float)n2 / 2.0f + 5.0f, 25.0, this.cornerRadius.getValue(), 15.0);
         int n4 = this.enableRainbowEffect.getValue() ? ColorUtil.a(this.rainbowSpeed.getIntValue(), 1).getRGB() : this.primaryColor.getRGB();
-        TextRenderer.a(string, drawContext, (int)((float)n3 - (float)n2 / 2.0f), 8, n4);
+        TextRenderer.drawString(string, drawContext, (int)((float)n3 - (float)n2 / 2.0f), 8, n4);
     }
 
     private void renderCoordinates(DrawContext drawContext, int n) {
@@ -133,9 +133,9 @@ public final class HUD
             }
         }
         String string5 = string + " | " + string2 + " | " + string3 + string4;
-        int n2 = TextRenderer.a(string5);
-        RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, n - 25, 5.0f + (float)n2 + 5.0f, n - 5, this.cornerRadius.getValue(), 15.0);
-        TextRenderer.a(string5, drawContext, 10, n - 22, this.primaryColor.getRGB());
+        int n2 = TextRenderer.getWidth(string5);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), 5.0, n - 25, 5.0f + (float)n2 + 5.0f, n - 5, this.cornerRadius.getValue(), 15.0);
+        TextRenderer.drawString(string5, drawContext, 10, n - 22, this.primaryColor.getRGB());
     }
 
     private void renderModuleList(DrawContext drawContext, int n, int n2) {
@@ -143,12 +143,12 @@ public final class HUD
         int n3 = 5;
         for (Object e : list) {
             String string = ((Module)e).getName().toString();
-            int n4 = TextRenderer.a(string);
+            int n4 = TextRenderer.getWidth(string);
             int n5 = n - 5;
-            RenderUtils.a(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), (float)n - (float)n4 - 13.0f, n3, n5, n3 + 20, this.cornerRadius.getValue(), 15.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(35, 35, 35, (int)(this.opacity.getFloatValue() * 255.0f)), (float)n - (float)n4 - 13.0f, n3, n5, n3 + 20, this.cornerRadius.getValue(), 15.0);
             Color color = this.enableRainbowEffect.getValue() ? ColorUtil.a(this.rainbowSpeed.getIntValue() + list.indexOf(e), 1) : this.blendColors(this.primaryColor, this.secondaryColor, (float)list.indexOf(e) / (float)list.size());
             drawContext.fill((int)((float)n5) - 2, n3, (int)((float)n5), n3 + 20, color.getRGB());
-            TextRenderer.a(string, drawContext, (int)((float)n - (float)n4 - 10.0f), n3 + 3, color.getRGB());
+            TextRenderer.drawString(string, drawContext, (int)((float)n - (float)n4 - 10.0f), n3 + 3, color.getRGB());
             n3 += 25;
         }
     }
@@ -158,7 +158,7 @@ public final class HUD
         ModuleListSorting n = (ModuleListSorting) this.moduleSortingMode.getValue();
         return switch (n) {
             case ALPHABETICAL -> list.stream().sorted(Comparator.comparing(module -> module.getName().toString())).toList();
-            case LENGTH -> list.stream().sorted((module, module2) -> Integer.compare(TextRenderer.a(module2.getName()), TextRenderer.a(module.getName()))).toList();
+            case LENGTH -> list.stream().sorted((module, module2) -> Integer.compare(TextRenderer.getWidth(module2.getName()), TextRenderer.getWidth(module.getName()))).toList();
             case CATEGORY -> list.stream().sorted(Comparator.comparing(Module::getCategory).thenComparing(module -> module.getName().toString())).toList();
         };
     }

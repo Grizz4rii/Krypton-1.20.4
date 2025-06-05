@@ -18,7 +18,7 @@ import skid.krypton.module.setting.BooleanSetting;
 import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
 import skid.krypton.utils.EncryptedString;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.RenderUtils;
 
 import java.awt.*;
@@ -60,9 +60,9 @@ public final class PlayerESP extends Module {
                 final double lerp = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevX, ((PlayerEntity) next).getX());
                 final double lerp2 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevY, ((PlayerEntity) next).getY());
                 final double lerp3 = MathHelper.lerp(RenderTickCounter.ONE.getTickDelta(true), ((PlayerEntity) next).prevZ, ((PlayerEntity) next).getZ());
-                RenderUtils.a(render3DEvent.matrixStack, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, KryptonUtil.getMainColor(this.alpha.getIntValue(), 1).brighter());
+                RenderUtils.renderFilledBox(render3DEvent.matrixStack, (float) lerp - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2, (float) lerp3 - ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp + ((PlayerEntity) next).getWidth() / 2.0f, (float) lerp2 + ((PlayerEntity) next).getHeight(), (float) lerp3 + ((PlayerEntity) next).getWidth() / 2.0f, Utils.getMainColor(this.alpha.getIntValue(), 1).brighter());
                 if (this.tracers.getValue()) {
-                    RenderUtils.drawTracer(render3DEvent.matrixStack, KryptonUtil.getMainColor(255, 1), this.mc.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
+                    RenderUtils.renderLine(render3DEvent.matrixStack, Utils.getMainColor(255, 1), this.mc.crosshairTarget.getPos(), ((PlayerEntity) next).getLerpedPos(RenderTickCounter.ONE.getTickDelta(true)));
                 }
                 render3DEvent.matrixStack.pop();
             }

@@ -10,7 +10,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import skid.krypton.module.modules.client.Krypton;
 import skid.krypton.module.setting.ItemSetting;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
 
@@ -57,7 +57,7 @@ class ItemFilter extends Screen {
     }
 
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        RenderUtils.c();
+        RenderUtils.unscaledProjection();
         final int n4 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int n5 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
         super.render(drawContext, n4, n5, n3);
@@ -72,14 +72,14 @@ class ItemFilter extends Screen {
         drawContext.fill(0, 0, width, height, new Color(0, 0, 0, a).getRGB());
         final int n6 = (this.this$0.mc.getWindow().getWidth() - 580) / 2;
         final int n7 = (this.this$0.mc.getWindow().getHeight() - 450) / 2;
-        RenderUtils.a(drawContext.getMatrices(), new Color(30, 30, 35, 240), n6, n7, n6 + 580, n7 + 450, 8.0, 8.0, 8.0, 8.0, 20.0);
-        RenderUtils.a(drawContext.getMatrices(), new Color(40, 40, 45, 255), n6, n7, n6 + 580, n7 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
-        drawContext.fill(n6, n7 + 30, n6 + 580, n7 + 31, KryptonUtil.getMainColor(255, 1).getRGB());
-        TextRenderer.b("Select Item: " + this.setting.getName(), drawContext, n6 + 290, n7 + 8, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(30, 30, 35, 240), n6, n7, n6 + 580, n7 + 450, 8.0, 8.0, 8.0, 8.0, 20.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(40, 40, 45, 255), n6, n7, n6 + 580, n7 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
+        drawContext.fill(n6, n7 + 30, n6 + 580, n7 + 31, Utils.getMainColor(255, 1).getRGB());
+        TextRenderer.drawCenteredString("Select Item: " + this.setting.getName(), drawContext, n6 + 290, n7 + 8, new Color(245, 245, 245, 255).getRGB());
         final int n8 = n6 + 20;
         final int n9 = n7 + 50;
-        RenderUtils.a(drawContext.getMatrices(), new Color(20, 20, 25, 255), n8, n9, n8 + 540, n9 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
-        RenderUtils.a(drawContext, new Color(60, 60, 65, 255), n8, n9, n8 + 540, n9 + 30, 5.0, 5.0, 5.0, 5.0, 1.0, 20.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(20, 20, 25, 255), n8, n9, n8 + 540, n9 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
+        RenderUtils.renderRoundedOutline(drawContext, new Color(60, 60, 65, 255), n8, n9, n8 + 540, n9 + 30, 5.0, 5.0, 5.0, 5.0, 1.0, 20.0);
         final String searchQuery = this.searchQuery;
         String s;
         if (System.currentTimeMillis() % 1000L > 500L) {
@@ -87,11 +87,11 @@ class ItemFilter extends Screen {
         } else {
             s = "";
         }
-        TextRenderer.a("Search: " + searchQuery + s, drawContext, n8 + 10, n9 + 9, new Color(200, 200, 200, 255).getRGB());
+        TextRenderer.drawString("Search: " + searchQuery + s, drawContext, n8 + 10, n9 + 9, new Color(200, 200, 200, 255).getRGB());
         final int n10 = n6 + 20;
         final int n11 = n9 + 30 + 15;
         final int n12 = 450 - (n11 - n7) - 60;
-        RenderUtils.a(drawContext.getMatrices(), new Color(25, 25, 30, 255), n10, n11, n10 + 540, n11 + n12, 5.0, 5.0, 5.0, 5.0, 20.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(25, 25, 30, 255), n10, n11, n10 + 540, n11 + n12, 5.0, 5.0, 5.0, 5.0, 20.0);
         final double ceil = Math.ceil(this.filteredItems.size() / 11.0);
         final int max = Math.max(0, (int) ceil - 6);
         this.scrollOffset = Math.min(this.scrollOffset, max);
@@ -99,11 +99,11 @@ class ItemFilter extends Screen {
             final int n13 = n10 + 540 - 6 - 5;
             final int n14 = n11 + 5;
             final int n15 = n12 - 10;
-            RenderUtils.a(drawContext.getMatrices(), new Color(20, 20, 25, 150), n13, n14, n13 + 6, n14 + n15, 3.0, 3.0, 3.0, 3.0, 20.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(20, 20, 25, 150), n13, n14, n13 + 6, n14 + n15, 3.0, 3.0, 3.0, 3.0, 20.0);
             final float n16 = this.scrollOffset / (float) max;
             final float max2 = Math.max(40.0f, n15 * (6.0f / (int) ceil));
             final int n17 = n14 + (int) ((n15 - max2) * n16);
-            RenderUtils.a(drawContext.getMatrices(), KryptonUtil.getMainColor(255, 1), n13, n17, n13 + 6, n17 + max2, 3.0, 3.0, 3.0, 3.0, 20.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), Utils.getMainColor(255, 1), n13, n17, n13 + 6, n17 + max2, 3.0, 3.0, 3.0, 3.0, 20.0);
         }
         int i;
         for (int n18 = i = this.scrollOffset * 11; i < Math.min(n18 + Math.min(this.filteredItems.size(), 66), this.filteredItems.size()); ++i) {
@@ -111,30 +111,30 @@ class ItemFilter extends Screen {
             final int n20 = n11 + 5 + (i - n18) / 11 * 48;
             Color mainColor;
             if (i == this.selectedIndex) {
-                mainColor = KryptonUtil.getMainColor(100, 1);
+                mainColor = Utils.getMainColor(100, 1);
             } else {
                 mainColor = new Color(35, 35, 40, 255);
             }
-            RenderUtils.a(drawContext.getMatrices(), mainColor, n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 20.0);
-            RenderUtils.a(drawContext, new ItemStack(this.filteredItems.get(i)), n19, n20, 40.0f, 0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), mainColor, n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 20.0);
+            RenderUtils.drawItem(drawContext, new ItemStack(this.filteredItems.get(i)), n19, n20, 40.0f, 0);
             if (n4 >= n19 && n4 <= n19 + 40 && n5 >= n20 && n5 <= n20 + 40) {
-                RenderUtils.a(drawContext, KryptonUtil.getMainColor(200, 1), n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 1.0, 20.0);
+                RenderUtils.renderRoundedOutline(drawContext, Utils.getMainColor(200, 1), n19, n20, n19 + 40, n20 + 40, 4.0, 4.0, 4.0, 4.0, 1.0, 20.0);
             }
         }
         if (this.filteredItems.isEmpty()) {
-            TextRenderer.b("No items found", drawContext, n10 + 270, n11 + n12 / 2 - 10, new Color(150, 150, 150, 200).getRGB());
+            TextRenderer.drawCenteredString("No items found", drawContext, n10 + 270, n11 + n12 / 2 - 10, new Color(150, 150, 150, 200).getRGB());
         }
         final int n21 = n7 + 450 - 45;
         final int n22 = n6 + 580 - 80 - 20;
         final int n23 = n22 - 80 - 10;
         final int n24 = n23 - 80 - 10;
-        RenderUtils.a(drawContext.getMatrices(), KryptonUtil.getMainColor(255, 1), n22, n21, n22 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
-        TextRenderer.b("Save", drawContext, n22 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
-        RenderUtils.a(drawContext.getMatrices(), new Color(60, 60, 65, 255), n23, n21, n23 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
-        TextRenderer.b("Cancel", drawContext, n23 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
-        RenderUtils.a(drawContext.getMatrices(), new Color(70, 40, 40, 255), n24, n21, n24 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
-        TextRenderer.b("Reset", drawContext, n24 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
-        RenderUtils.d();
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), Utils.getMainColor(255, 1), n22, n21, n22 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
+        TextRenderer.drawCenteredString("Save", drawContext, n22 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(60, 60, 65, 255), n23, n21, n23 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
+        TextRenderer.drawCenteredString("Cancel", drawContext, n23 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(70, 40, 40, 255), n24, n21, n24 + 80, n21 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
+        TextRenderer.drawCenteredString("Reset", drawContext, n24 + 40, n21 + 8, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.scaledProjection();
     }
 
     public boolean mouseClicked(final double n, final double n2, final int n3) {

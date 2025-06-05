@@ -68,13 +68,13 @@ public final class AnchorMacro extends Module {
         if (!(this.mc.crosshairTarget instanceof BlockHitResult blockHitResult)) {
             return;
         }
-        if (!BlockUtil.a(blockHitResult.getBlockPos(), Blocks.RESPAWN_ANCHOR)) {
+        if (!BlockUtil.isBlockAtPosition(blockHitResult.getBlockPos(), Blocks.RESPAWN_ANCHOR)) {
             return;
         }
         this.mc.options.useKey.setPressed(false);
-        if (BlockUtil.b(blockHitResult.getBlockPos())) {
+        if (BlockUtil.isRespawnAnchorUncharged(blockHitResult.getBlockPos())) {
             this.placeGlowstone(blockHitResult);
-        } else if (BlockUtil.a(blockHitResult.getBlockPos())) {
+        } else if (BlockUtil.isRespawnAnchorCharged(blockHitResult.getBlockPos())) {
             this.explodeAnchor(blockHitResult);
         }
     }
@@ -94,7 +94,7 @@ public final class AnchorMacro extends Module {
                 return;
             }
             this.glowstoneDelayCounter = 0;
-            BlockUtil.a(blockHitResult, true);
+            BlockUtil.interactWithBlock(blockHitResult, true);
         }
     }
 
@@ -114,7 +114,7 @@ public final class AnchorMacro extends Module {
                 return;
             }
             this.explodeDelayCounter = 0;
-            BlockUtil.a(blockHitResult, true);
+            BlockUtil.interactWithBlock(blockHitResult, true);
         }
     }
 

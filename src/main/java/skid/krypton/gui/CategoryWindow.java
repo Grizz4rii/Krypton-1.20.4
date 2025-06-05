@@ -10,7 +10,6 @@ import skid.krypton.utils.TextRenderer;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public final class CategoryWindow {
@@ -61,17 +60,17 @@ public final class CategoryWindow {
             this.currentColor = ColorUtil.a(0.05f, color, this.currentColor);
         }
         float n4 = this.isHovered(n, n2) && !this.dragging ? 1.0F : 0.0F;
-        this.hoverAnimation = (float) MathUtil.a(n3 * 0.1f, this.hoverAnimation, n4);
+        this.hoverAnimation = (float) MathUtil.approachValue(n3 * 0.1f, this.hoverAnimation, n4);
         final Color a = ColorUtil.a(new Color(25, 25, 30, this.currentColor.getAlpha()), new Color(255, 255, 255, 20), this.hoverAnimation);
         float n5 = this.extended ? 0.0F : 6.0F;
         float n6 = this.extended ? 0.0F : 6.0F;
-        RenderUtils.a(context.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
-        final Color mainColor = KryptonUtil.getMainColor(255, this.category.ordinal());
+        RenderUtils.renderRoundedQuad(context.getMatrices(), a, this.prevX, this.prevY, this.prevX + this.width, this.prevY + this.height, 6.0, 6.0, n5, n6, 50.0);
+        final Color mainColor = Utils.getMainColor(255, this.category.ordinal());
         final CharSequence f = this.category.name;
-        final int n7 = this.prevX + (this.width - TextRenderer.a(this.category.name)) / 2;
+        final int n7 = this.prevX + (this.width - TextRenderer.getWidth(this.category.name)) / 2;
         final int n8 = this.prevY + 8;
-        TextRenderer.a(f, context, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
-        TextRenderer.a(f, context, n7, n8, mainColor.brighter().getRGB());
+        TextRenderer.drawString(f, context, n7 + 1, n8 + 1, new Color(0, 0, 0, 100).getRGB());
+        TextRenderer.drawString(f, context, n7, n8, mainColor.brighter().getRGB());
         this.updateButtons(n3);
         if (this.extended) {
             this.renderModuleButtons(context, n, n2, n3);
@@ -210,14 +209,14 @@ public final class CategoryWindow {
             } else {
                 n4 = this.prevX;
             }
-            this.x = (int) MathUtil.a(0.3f * n3, n4, n - this.dragX);
+            this.x = (int) MathUtil.approachValue(0.3f * n3, n4, n - this.dragX);
             double n5;
             if (this.isHovered(n, n2)) {
                 n5 = this.y;
             } else {
                 n5 = this.prevY;
             }
-            this.y = (int) MathUtil.a(0.3f * n3, n5, n2 - this.dragY);
+            this.y = (int) MathUtil.approachValue(0.3f * n3, n5, n2 - this.dragY);
         }
     }
 

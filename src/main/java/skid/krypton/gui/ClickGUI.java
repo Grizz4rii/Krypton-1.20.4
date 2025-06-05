@@ -87,7 +87,7 @@ public final class ClickGUI extends Screen {
             if (Krypton.mc.currentScreen instanceof ClickGUI) {
                 drawContext.fill(0, 0, Krypton.mc.getWindow().getWidth(), Krypton.mc.getWindow().getHeight(), this.currentColor.getRGB());
             }
-            RenderUtils.c();
+            RenderUtils.unscaledProjection();
             final int n6 = n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
             final int n7 = n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor();
             super.render(drawContext, n6, n7, n3);
@@ -99,7 +99,7 @@ public final class ClickGUI extends Screen {
                 this.renderTooltip(drawContext, this.tooltipText, this.tooltipX, this.tooltipY);
                 this.tooltipText = null;
             }
-            RenderUtils.d();
+            RenderUtils.scaledProjection();
         }
     }
 
@@ -172,13 +172,13 @@ public final class ClickGUI extends Screen {
         if (charSequence == null || charSequence.length() == 0) {
             return;
         }
-        final int a = TextRenderer.a(charSequence);
+        final int a = TextRenderer.getWidth(charSequence);
         final int framebufferWidth = Krypton.mc.getWindow().getFramebufferWidth();
         if (n + a + 10 > framebufferWidth) {
             n = framebufferWidth - a - 10;
         }
-        RenderUtils.a(drawContext.getMatrices(), this.DESCRIPTION_BG, n - 5, n2 - 5, n + a + 5, n2 + 15, 6.0, 6.0, 6.0, 6.0, 50.0);
-        TextRenderer.a(charSequence, drawContext, n, n2, Color.WHITE.getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.DESCRIPTION_BG, n - 5, n2 - 5, n + a + 5, n2 + 15, 6.0, 6.0, 6.0, 6.0, 50.0);
+        TextRenderer.drawString(charSequence, drawContext, n, n2, Color.WHITE.getRGB());
     }
 
     static {

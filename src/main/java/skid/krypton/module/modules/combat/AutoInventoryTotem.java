@@ -12,7 +12,7 @@ import skid.krypton.module.Category;
 import skid.krypton.module.Module;
 import skid.krypton.module.setting.BooleanSetting;
 import skid.krypton.module.setting.NumberSetting;
-import skid.krypton.utils.CustomInventoryScreen;
+import skid.krypton.utils.FakeInvScreen;
 import skid.krypton.utils.EncryptedString;
 
 import java.util.function.Predicate;
@@ -48,9 +48,9 @@ public final class AutoInventoryTotem extends Module {
     @EventListener
     public void onTick(final TickEvent event) {
         if (this.shouldOpenInventory() && this.autoOpen.getValue()) {
-            this.mc.setScreen(new CustomInventoryScreen(this.mc.player));
+            this.mc.setScreen(new FakeInvScreen(this.mc.player));
         }
-        if (!(this.mc.currentScreen instanceof InventoryScreen) && !(this.mc.currentScreen instanceof CustomInventoryScreen)) {
+        if (!(this.mc.currentScreen instanceof InventoryScreen) && !(this.mc.currentScreen instanceof FakeInvScreen)) {
             this.delayCounter = -1;
             this.stayOpenCounter = -1;
             return;
@@ -99,16 +99,16 @@ public final class AutoInventoryTotem extends Module {
 
     public boolean isTotemEquipped() {
         if (this.hotbar.getValue()) {
-            return this.mc.player.getInventory().getStack(this.totemSlot.getIntValue() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof CustomInventoryScreen;
+            return this.mc.player.getInventory().getStack(this.totemSlot.getIntValue() - 1).getItem() == Items.TOTEM_OF_UNDYING && this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof FakeInvScreen;
         }
-        return this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof CustomInventoryScreen;
+        return this.mc.player.getOffHandStack().getItem() == Items.TOTEM_OF_UNDYING && this.mc.currentScreen instanceof FakeInvScreen;
     }
 
     public boolean shouldOpenInventory() {
         if (this.hotbar.getValue()) {
-            return (this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING || this.mc.player.getInventory().getStack(this.totemSlot.getIntValue() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.mc.currentScreen instanceof CustomInventoryScreen) && this.countTotems(item -> item == Items.TOTEM_OF_UNDYING) != 0;
+            return (this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING || this.mc.player.getInventory().getStack(this.totemSlot.getIntValue() - 1).getItem() != Items.TOTEM_OF_UNDYING) && !(this.mc.currentScreen instanceof FakeInvScreen) && this.countTotems(item -> item == Items.TOTEM_OF_UNDYING) != 0;
         }
-        return this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING && !(this.mc.currentScreen instanceof CustomInventoryScreen) && this.countTotems(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
+        return this.mc.player.getOffHandStack().getItem() != Items.TOTEM_OF_UNDYING && !(this.mc.currentScreen instanceof FakeInvScreen) && this.countTotems(item2 -> item2 == Items.TOTEM_OF_UNDYING) != 0;
     }
 
     private int findTotemSlot() {

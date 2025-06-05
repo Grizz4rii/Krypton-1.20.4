@@ -16,42 +16,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class BlockUtil {
-    public static List a() {
-        final int n = Math.max(2, Krypton.mc.options.getClampedViewDistance()) + 3;
-        final ArrayList list = new ArrayList();
-        final ChunkPos getChunkPos = Krypton.mc.player.getChunkPos();
-        final int n2 = getChunkPos.x + n;
-        int i = getChunkPos.z - n;
-        final int n3 = getChunkPos.z + n;
-        for (int j = getChunkPos.x - n; j <= n2; ++j) {
-            while (i <= n3) {
-                if (Krypton.mc.world.isChunkLoaded(j, i)) {
-                    final WorldChunk getBlockX = Krypton.mc.world.getChunk(j, i);
-                    if (getBlockX != null) {
-                        list.add(getBlockX);
+    public static List<?> getLoadedChunks() {
+        final int viewDistance = Math.max(2, Krypton.mc.options.getClampedViewDistance()) + 3;
+        final ArrayList loadedChunks = new ArrayList();
+        final ChunkPos playerChunkPos = Krypton.mc.player.getChunkPos();
+        final int maxX = playerChunkPos.x + viewDistance;
+        int currentZ = playerChunkPos.z - viewDistance;
+        final int maxZ = playerChunkPos.z + viewDistance;
+        for (int currentX = playerChunkPos.x - viewDistance; currentX <= maxX; ++currentX) {
+            while (currentZ <= maxZ) {
+                if (Krypton.mc.world.isChunkLoaded(currentX, currentZ)) {
+                    final WorldChunk chunk = Krypton.mc.world.getChunk(currentX, currentZ);
+                    if (chunk != null) {
+                        loadedChunks.add(chunk);
                     }
                 }
-                ++i;
+                ++currentZ;
             }
         }
-        return list;
+        return loadedChunks;
     }
 
-    public static boolean a(final BlockPos blockPos, final Block block) {
+    public static boolean isBlockAtPosition(final BlockPos blockPos, final Block block) {
         return Krypton.mc.world.getBlockState(blockPos).getBlock() == block;
     }
 
-    public static boolean a(final BlockPos blockPos) {
-        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
+    public static boolean isRespawnAnchorCharged(final BlockPos blockPos) {
+        return isBlockAtPosition(blockPos, Blocks.RESPAWN_ANCHOR) &&
+                (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) != 0;
     }
 
-    public static boolean b(final BlockPos blockPos) {
-        return a(blockPos, Blocks.RESPAWN_ANCHOR) && (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
+    public static boolean isRespawnAnchorUncharged(final BlockPos blockPos) {
+        return isBlockAtPosition(blockPos, Blocks.RESPAWN_ANCHOR) &&
+                (int) Krypton.mc.world.getBlockState(blockPos).get((Property) RespawnAnchorBlock.CHARGES) == 0;
     }
 
-    public static void a(final BlockHitResult blockHitResult, final boolean b) {
-        final ActionResult interactBlock = Krypton.mc.interactionManager.interactBlock(Krypton.mc.player, Hand.MAIN_HAND, blockHitResult);
-        if (interactBlock.isAccepted() && interactBlock.shouldSwingHand() && b) {
+    public static void interactWithBlock(final BlockHitResult blockHitResult, final boolean shouldSwingHand) {
+        final ActionResult result = Krypton.mc.interactionManager.interactBlock(Krypton.mc.player, Hand.MAIN_HAND, blockHitResult);
+        if (result.isAccepted() && result.shouldSwingHand() && shouldSwingHand) {
             Krypton.mc.player.swingHand(Hand.MAIN_HAND);
         }
     }

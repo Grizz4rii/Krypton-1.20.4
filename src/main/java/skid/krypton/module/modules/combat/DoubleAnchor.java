@@ -54,7 +54,7 @@ public final class DoubleAnchor extends Module {
             return;
         }
         final HitResult crosshairTarget = this.mc.crosshairTarget;
-        if (!(this.mc.crosshairTarget instanceof BlockHitResult) || BlockUtil.a(((BlockHitResult) crosshairTarget).getBlockPos(), Blocks.AIR)) {
+        if (!(this.mc.crosshairTarget instanceof BlockHitResult) || BlockUtil.isBlockAtPosition(((BlockHitResult) crosshairTarget).getBlockPos(), Blocks.AIR)) {
             this.isAnchoring = false;
             this.resetState();
             return;
@@ -66,24 +66,24 @@ public final class DoubleAnchor extends Module {
         if (this.step == 0) {
             InventoryUtil.swap(Items.RESPAWN_ANCHOR);
         } else if (this.step == 1) {
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
         } else if (this.step == 2) {
             InventoryUtil.swap(Items.GLOWSTONE);
         } else if (this.step == 3) {
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
         } else if (this.step == 4) {
             InventoryUtil.swap(Items.RESPAWN_ANCHOR);
         } else if (this.step == 5) {
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
         } else if (this.step == 6) {
             InventoryUtil.swap(Items.GLOWSTONE);
         } else if (this.step == 7) {
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
         } else if (this.step == 8) {
             InventoryUtil.swap(this.totemSlot.getIntValue() - 1);
         } else if (this.step == 9) {
-            BlockUtil.a((BlockHitResult) crosshairTarget, true);
+            BlockUtil.interactWithBlock((BlockHitResult) crosshairTarget, true);
         } else if (this.step == 10) {
             this.isAnchoring = false;
             this.step = 0;

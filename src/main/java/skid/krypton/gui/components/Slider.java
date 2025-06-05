@@ -7,7 +7,7 @@ import skid.krypton.gui.Component;
 import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.MinMaxSetting;
 import skid.krypton.utils.ColorUtil;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
@@ -49,23 +49,23 @@ public final class Slider extends Component {
         this.updateAnimations(n, n2, n3);
         this.offsetMinX = (this.setting.getCurrentMin() - this.setting.getMinValue()) / (this.setting.getMaxValue() - this.setting.getMinValue()) * (this.parentWidth() - 10) + 5.0;
         this.offsetMaxX = (this.setting.getCurrentMax() - this.setting.getMinValue()) / (this.setting.getMaxValue() - this.setting.getMinValue()) * (this.parentWidth() - 10) + 5.0;
-        this.lerpedOffsetMinX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetMinX, this.offsetMinX);
-        this.lerpedOffsetMaxX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetMaxX, this.offsetMaxX);
+        this.lerpedOffsetMinX = MathUtil.approachValue((float) (0.5 * n3), this.lerpedOffsetMinX, this.offsetMinX);
+        this.lerpedOffsetMaxX = MathUtil.approachValue((float) (0.5 * n3), this.lerpedOffsetMaxX, this.offsetMaxX);
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(Slider.HOVER_COLOR.getRed(), Slider.HOVER_COLOR.getGreen(), Slider.HOVER_COLOR.getBlue(), (int) (Slider.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
         final int n4 = this.parentY() + this.offset + this.parentOffset() + 25;
         final int n5 = this.parentX() + 5;
-        RenderUtils.a(matrices, Slider.TRACK_BG_COLOR, n5, n4, n5 + (this.parentWidth() - 10), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+        RenderUtils.renderRoundedQuad(matrices, Slider.TRACK_BG_COLOR, n5, n4, n5 + (this.parentWidth() - 10), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         if (this.lerpedOffsetMaxX > this.lerpedOffsetMinX) {
-            RenderUtils.a(matrices, this.accentColor1, n5 + this.lerpedOffsetMinX - 5.0, n4, n5 + this.lerpedOffsetMaxX - 5.0, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+            RenderUtils.renderRoundedQuad(matrices, this.accentColor1, n5 + this.lerpedOffsetMinX - 5.0, n4, n5 + this.lerpedOffsetMaxX - 5.0, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         }
         final String displayText = this.getDisplayText();
-        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Slider.TEXT_COLOR.getRGB());
-        TextRenderer.a(displayText, drawContext, this.parentX() + this.parentWidth() - TextRenderer.a(displayText) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.accentColor1.getRGB());
+        TextRenderer.drawString(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, Slider.TEXT_COLOR.getRGB());
+        TextRenderer.drawString(displayText, drawContext, this.parentX() + this.parentWidth() - TextRenderer.getWidth(displayText) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.accentColor1.getRGB());
         final float n6 = n4 + 2.0f - 4.0f;
-        RenderUtils.a(matrices, Slider.THUMB_COLOR, (float) (n5 + this.lerpedOffsetMinX - 5.0 - 4.0), n6, (float) (n5 + this.lerpedOffsetMinX - 5.0 + 4.0), n6 + 8.0f, 4.0, 4.0, 4.0, 4.0, 50.0);
-        RenderUtils.a(matrices, Slider.THUMB_COLOR, (float) (n5 + this.lerpedOffsetMaxX - 5.0 - 4.0), n6, (float) (n5 + this.lerpedOffsetMaxX - 5.0 + 4.0), n6 + 8.0f, 4.0, 4.0, 4.0, 4.0, 50.0);
+        RenderUtils.renderRoundedQuad(matrices, Slider.THUMB_COLOR, (float) (n5 + this.lerpedOffsetMinX - 5.0 - 4.0), n6, (float) (n5 + this.lerpedOffsetMinX - 5.0 + 4.0), n6 + 8.0f, 4.0, 4.0, 4.0, 4.0, 50.0);
+        RenderUtils.renderRoundedQuad(matrices, Slider.THUMB_COLOR, (float) (n5 + this.lerpedOffsetMaxX - 5.0 - 4.0), n6, (float) (n5 + this.lerpedOffsetMaxX - 5.0 + 4.0), n6 + 8.0f, 4.0, 4.0, 4.0, 4.0, 50.0);
     }
 
     private void updateAnimations(final int n, final int n2, final float n3) {
@@ -75,7 +75,7 @@ public final class Slider extends Component {
         } else {
             n4 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n4, 0.25, n3 * 0.05f);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n4, 0.25, n3 * 0.05f);
     }
 
     private String getDisplayText() {
@@ -174,17 +174,17 @@ public final class Slider extends Component {
     }
 
     private void slideMin(final double n) {
-        this.setting.setCurrentMin(Math.min(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMax()));
+        this.setting.setCurrentMin(Math.min(MathUtil.roundToNearest(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMax()));
     }
 
     private void slideMax(final double n) {
-        this.setting.setCurrentMax(Math.max(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMin()));
+        this.setting.setCurrentMax(Math.max(MathUtil.roundToNearest(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMaxValue() - this.setting.getMinValue()) + this.setting.getMinValue(), this.setting.getStep()), this.setting.getCurrentMin()));
     }
 
     @Override
     public void onUpdate() {
-        final Color mainColor = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this));
-        final Color mainColor2 = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this) + 1);
+        final Color mainColor = Utils.getMainColor(255, this.parent.settings.indexOf(this));
+        final Color mainColor2 = Utils.getMainColor(255, this.parent.settings.indexOf(this) + 1);
         if (this.accentColor1 == null) {
             this.accentColor1 = new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), 0);
         } else {

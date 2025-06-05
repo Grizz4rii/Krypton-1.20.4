@@ -5,7 +5,7 @@ import skid.krypton.gui.Component;
 import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.ModeSetting;
 import skid.krypton.utils.ColorUtil;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
@@ -41,7 +41,7 @@ public final class ModeBox extends Component {
 
     @Override
     public void onUpdate() {
-        final Color mainColor = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this));
+        final Color mainColor = Utils.getMainColor(255, this.parent.settings.indexOf(this));
         if (this.currentColor == null) {
             this.currentColor = new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), 0);
         } else {
@@ -64,12 +64,12 @@ public final class ModeBox extends Component {
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(String.valueOf(this.setting.getName()), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
-        TextRenderer.a(this.setting.getValue().name(), drawContext, this.parentX() + TextRenderer.a(this.setting.getName() + ": ") + 8, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor.getRGB());
+        TextRenderer.drawString(String.valueOf(this.setting.getName()), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
+        TextRenderer.drawString(this.setting.getValue().name(), drawContext, this.parentX() + TextRenderer.getWidth(this.setting.getName() + ": ") + 8, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor.getRGB());
         final int n4 = this.parentY() + this.offset + this.parentOffset() + 25;
         final int n5 = this.parentX() + 5;
         final int n6 = this.parentWidth() - 10;
-        RenderUtils.a(drawContext.getMatrices(), this.SELECTOR_BG, n5, n4, n5 + n6, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.SELECTOR_BG, n5, n4, n5 + n6, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         final int n7 = index - 1;
         float n8 = (float) n7;
         if (n7 < 0.0f) {
@@ -83,19 +83,19 @@ public final class ModeBox extends Component {
         final int n11 = n6 / size;
         float n12;
         if (this.previousSelectAnimation > 0.01f) {
-            n12 = (float) MathUtil.b(n5 + n8 * n11, n5 + index * (float) n11, 1.0f - this.previousSelectAnimation);
+            n12 = (float) MathUtil.linearInterpolate(n5 + n8 * n11, n5 + index * (float) n11, 1.0f - this.previousSelectAnimation);
         } else if (this.selectAnimation > 0.01f) {
-            n12 = (float) MathUtil.b(n5 + index * (float) n11, n5 + n10 * n11, this.selectAnimation);
+            n12 = (float) MathUtil.linearInterpolate(n5 + index * (float) n11, n5 + n10 * n11, this.selectAnimation);
         } else {
             n12 = n5 + index * (float) n11;
         }
-        RenderUtils.a(drawContext.getMatrices(), this.currentColor, n12, n4, n12 + n11, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.currentColor, n12, n4, n12 + n11, n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         final int n13 = this.parentY() + this.parentOffset() + this.offset + 9;
         final int parentX = this.parentX();
         final int parentX2 = this.parentX();
         final int parentWidth = this.parentWidth();
-        TextRenderer.a("\u25c4", drawContext, parentX + this.parentWidth() - 25, n13, this.TEXT_COLOR.getRGB());
-        TextRenderer.a("\u25ba", drawContext, parentX2 + parentWidth - 12, n13, this.TEXT_COLOR.getRGB());
+        TextRenderer.drawString("\u25c4", drawContext, parentX + this.parentWidth() - 25, n13, this.TEXT_COLOR.getRGB());
+        TextRenderer.drawString("\u25ba", drawContext, parentX2 + parentWidth - 12, n13, this.TEXT_COLOR.getRGB());
         if (this.wasClicked) {
             this.wasClicked = false;
             this.previousSelectAnimation = 0.0f;
@@ -111,15 +111,15 @@ public final class ModeBox extends Component {
         } else {
             n5 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.25, n4);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n5, 0.25, n4);
         if (this.selectAnimation > 0.01f) {
-            this.selectAnimation = (float) MathUtil.a(this.selectAnimation, 0.0, 0.15000000596046448, n4);
+            this.selectAnimation = (float) MathUtil.exponentialInterpolate(this.selectAnimation, 0.0, 0.15000000596046448, n4);
             if (this.selectAnimation < 0.01f) {
                 this.previousSelectAnimation = 0.99f;
             }
         }
         if (this.previousSelectAnimation > 0.01f) {
-            this.previousSelectAnimation = (float) MathUtil.a(this.previousSelectAnimation, 0.0, 0.15000000596046448, n4);
+            this.previousSelectAnimation = (float) MathUtil.exponentialInterpolate(this.previousSelectAnimation, 0.0, 0.15000000596046448, n4);
         }
     }
 

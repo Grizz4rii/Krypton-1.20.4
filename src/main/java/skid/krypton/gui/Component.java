@@ -69,10 +69,10 @@ public abstract class Component {
     public void renderDescription(final DrawContext drawContext, final int n, final int n2, final float n3) {
         if (this.isHovered(n, n2) && this.setting.getDescription() != null && !this.parent.parent.dragging) {
             final CharSequence s = this.setting.getDescription();
-            final int a = TextRenderer.a(s);
+            final int a = TextRenderer.getWidth(s);
             final int n4 = this.mc.getWindow().getWidth() / 2 - a / 2;
-            RenderUtils.a(drawContext.getMatrices(), new Color(100, 100, 100, 100), n4 - 5, this.mc.getWindow().getHeight() / 2 + 294, n4 + a + 5, this.mc.getWindow().getHeight() / 2 + 318, 3.0, 10.0);
-            TextRenderer.a(s, drawContext, n4, this.mc.getWindow().getHeight() / 2 + 300, Color.WHITE.getRGB());
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(100, 100, 100, 100), n4 - 5, this.mc.getWindow().getHeight() / 2 + 294, n4 + a + 5, this.mc.getWindow().getHeight() / 2 + 318, 3.0, 10.0);
+            TextRenderer.drawString(s, drawContext, n4, this.mc.getWindow().getHeight() / 2 + 300, Color.WHITE.getRGB());
         }
     }
 

@@ -6,7 +6,7 @@ import skid.krypton.gui.Component;
 import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.NumberSetting;
 import skid.krypton.utils.ColorUtil;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
@@ -40,7 +40,7 @@ public final class NumberBox extends Component {
 
     @Override
     public void onUpdate() {
-        final Color mainColor = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this));
+        final Color mainColor = Utils.getMainColor(255, this.parent.settings.indexOf(this));
         if (this.currentColor1 == null) {
             this.currentColor1 = new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), 0);
         } else {
@@ -57,19 +57,19 @@ public final class NumberBox extends Component {
         super.render(drawContext, n, n2, n3);
         this.updateAnimations(n, n2, n3);
         this.offsetX = (this.setting.getValue() - this.setting.getMin()) / (this.setting.getMax() - this.setting.getMin()) * this.parentWidth();
-        this.lerpedOffsetX = MathUtil.a((float) (0.5 * n3), this.lerpedOffsetX, this.offsetX);
+        this.lerpedOffsetX = MathUtil.approachValue((float) (0.5 * n3), this.lerpedOffsetX, this.offsetX);
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
         final int n4 = this.parentY() + this.offset + this.parentOffset() + 25;
         final int n5 = this.parentX() + 5;
-        RenderUtils.a(drawContext.getMatrices(), this.TRACK_BG_COLOR, n5, n4, n5 + (this.parentWidth() - 10), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.TRACK_BG_COLOR, n5, n4, n5 + (this.parentWidth() - 10), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         if (this.lerpedOffsetX > 2.5) {
-            RenderUtils.a(drawContext.getMatrices(), this.currentColor1, n5, n4, n5 + Math.max(this.lerpedOffsetX - 5.0, 0.0), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.currentColor1, n5, n4, n5 + Math.max(this.lerpedOffsetX - 5.0, 0.0), n4 + 4.0f, 2.0, 2.0, 2.0, 2.0, 50.0);
         }
         final String displayValue = this.getDisplayValue();
-        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
-        TextRenderer.a(displayValue, drawContext, this.parentX() + this.parentWidth() - TextRenderer.a(displayValue) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor1.getRGB());
+        TextRenderer.drawString(this.setting.getName(), drawContext, this.parentX() + 5, this.parentY() + this.parentOffset() + this.offset + 9, this.TEXT_COLOR.getRGB());
+        TextRenderer.drawString(displayValue, drawContext, this.parentX() + this.parentWidth() - TextRenderer.getWidth(displayValue) - 5, this.parentY() + this.parentOffset() + this.offset + 9, this.currentColor1.getRGB());
     }
 
     private void updateAnimations(final int n, final int n2, final float n3) {
@@ -79,7 +79,7 @@ public final class NumberBox extends Component {
         } else {
             n4 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n4, 0.25, n3 * 0.05f);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n4, 0.25, n3 * 0.05f);
     }
 
     private String getDisplayValue() {
@@ -111,7 +111,7 @@ public final class NumberBox extends Component {
     }
 
     private void slide(final double n) {
-        this.setting.getValue(MathUtil.a(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMax() - this.setting.getMin()) + this.setting.getMin(), this.setting.getFormat()));
+        this.setting.getValue(MathUtil.roundToNearest(MathHelper.clamp((n - (this.parentX() + 5)) / (this.parentWidth() - 10), 0.0, 1.0) * (this.setting.getMax() - this.setting.getMin()) + this.setting.getMin(), this.setting.getFormat()));
     }
 
     @Override

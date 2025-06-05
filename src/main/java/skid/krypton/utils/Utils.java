@@ -13,7 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public final class KryptonUtil {
+public final class Utils {
     public static Color getMainColor(final int n, final int n2) {
         final int f = Krypton.redColor.getIntValue();
         final int f2 = Krypton.greenColor.getIntValue();
@@ -27,7 +27,7 @@ public final class KryptonUtil {
         return new Color(f, f2, f3, n);
     }
 
-    public static File getFile() throws URISyntaxException {
+    public static File getCurrentJarPath() throws URISyntaxException {
         return new File(SelfDestruct.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
     }
 

@@ -93,13 +93,13 @@ public final class StorageESP extends Module {
             a.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(camera.getYaw() + 180.0f));
             a.translate(-pos.x, -pos.y, -pos.z);
         }
-        final Iterator iterator = BlockUtil.a().iterator();
+        final Iterator iterator = BlockUtil.getLoadedChunks().iterator();
         while (iterator.hasNext()) {
             for (final Object next : ((WorldChunk) iterator.next()).getBlockEntityPositions()) {
                 final BlockEntity getBlockEntity = this.mc.world.getBlockEntity((BlockPos) next);
-                RenderUtils.a(render3DEvent.matrixStack, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.getBlockEntityColor(getBlockEntity, this.alpha.getIntValue()));
+                RenderUtils.renderFilledBox(render3DEvent.matrixStack, ((BlockPos) next).getX() + 0.1f, ((BlockPos) next).getY() + 0.05f, ((BlockPos) next).getZ() + 0.1f, ((BlockPos) next).getX() + 0.9f, ((BlockPos) next).getY() + 0.85f, ((BlockPos) next).getZ() + 0.9f, this.getBlockEntityColor(getBlockEntity, this.alpha.getIntValue()));
                 if (this.tracers.getValue()) {
-                    RenderUtils.drawTracer(render3DEvent.matrixStack, this.getBlockEntityColor(getBlockEntity, 255), this.mc.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
+                    RenderUtils.renderLine(render3DEvent.matrixStack, this.getBlockEntityColor(getBlockEntity, 255), this.mc.crosshairTarget.getPos(), new Vec3d(((BlockPos) next).getX() + 0.5, ((BlockPos) next).getY() + 0.5, ((BlockPos) next).getZ() + 0.5));
                 }
             }
         }

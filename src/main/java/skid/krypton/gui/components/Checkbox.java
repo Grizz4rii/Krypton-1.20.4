@@ -4,7 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import skid.krypton.gui.Component;
 import skid.krypton.module.setting.Setting;
 import skid.krypton.module.setting.BooleanSetting;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
@@ -49,7 +49,7 @@ public final class Checkbox extends Component {
         if (!this.parent.parent.dragging) {
             drawContext.fill(this.parentX(), this.parentY() + this.parentOffset() + this.offset, this.parentX() + this.parentWidth(), this.parentY() + this.parentOffset() + this.offset + this.parentHeight(), new Color(this.HOVER_COLOR.getRed(), this.HOVER_COLOR.getGreen(), this.HOVER_COLOR.getBlue(), (int) (this.HOVER_COLOR.getAlpha() * this.hoverAnimation)).getRGB());
         }
-        TextRenderer.a(this.setting.getName(), drawContext, this.parentX() + 27, this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2 - 6, this.TEXT_COLOR.getRGB());
+        TextRenderer.drawString(this.setting.getName(), drawContext, this.parentX() + 27, this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2 - 6, this.TEXT_COLOR.getRGB());
         this.renderModernCheckbox(drawContext);
     }
 
@@ -61,30 +61,30 @@ public final class Checkbox extends Component {
         } else {
             n5 = 0.0f;
         }
-        this.hoverAnimation = (float) MathUtil.a(this.hoverAnimation, n5, 0.004999999888241291, n4);
+        this.hoverAnimation = (float) MathUtil.exponentialInterpolate(this.hoverAnimation, n5, 0.004999999888241291, n4);
         float n6;
         if (this.setting.getValue()) {
             n6 = 1.0f;
         } else {
             n6 = 0.0f;
         }
-        this.enabledAnimation = (float) MathUtil.a(this.enabledAnimation, n6, 0.0020000000949949026, n4);
-        this.enabledAnimation = (float) MathUtil.c(this.enabledAnimation, 0.0, 1.0);
+        this.enabledAnimation = (float) MathUtil.exponentialInterpolate(this.enabledAnimation, n6, 0.0020000000949949026, n4);
+        this.enabledAnimation = (float) MathUtil.clampValue(this.enabledAnimation, 0.0, 1.0);
     }
 
     private void renderModernCheckbox(final DrawContext drawContext) {
         final int n = this.parentX() + 8;
         final int n2 = this.parentY() + this.parentOffset() + this.offset + this.parentHeight() / 2 - 6;
-        final Color mainColor = KryptonUtil.getMainColor(255, this.parent.settings.indexOf(this));
-        RenderUtils.a(drawContext.getMatrices(), this.BOX_BORDER, n, n2, n + 13, n2 + 13, 3.0, 3.0, 3.0, 3.0, 50.0);
-        RenderUtils.a(drawContext.getMatrices(), this.BOX_BG, n + 1, n2 + 1, n + 13 - 1, n2 + 13 - 1, 2.5, 2.5, 2.5, 2.5, 50.0);
+        final Color mainColor = Utils.getMainColor(255, this.parent.settings.indexOf(this));
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.BOX_BORDER, n, n2, n + 13, n2 + 13, 3.0, 3.0, 3.0, 3.0, 50.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), this.BOX_BG, n + 1, n2 + 1, n + 13 - 1, n2 + 13 - 1, 2.5, 2.5, 2.5, 2.5, 50.0);
         if (this.enabledAnimation > 0.01f) {
             final Color color = new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), (int) (255.0f * this.enabledAnimation));
             final float n3 = n + 2 + 9.0f * (1.0f - this.enabledAnimation) / 2.0f;
             final float n4 = n2 + 2 + 9.0f * (1.0f - this.enabledAnimation) / 2.0f;
-            RenderUtils.a(drawContext.getMatrices(), color, n3, n4, n3 + 9.0f * this.enabledAnimation, n4 + 9.0f * this.enabledAnimation, 1.5, 1.5, 1.5, 1.5, 50.0);
+            RenderUtils.renderRoundedQuad(drawContext.getMatrices(), color, n3, n4, n3 + 9.0f * this.enabledAnimation, n4 + 9.0f * this.enabledAnimation, 1.5, 1.5, 1.5, 1.5, 50.0);
             if (this.enabledAnimation > 0.7f) {
-                RenderUtils.a(drawContext.getMatrices(), new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), (int) (40.0f * ((this.enabledAnimation - 0.7f) * 3.33f))), n - 1, n2 - 1, n + 13 + 1, n2 + 13 + 1, 3.5, 3.5, 3.5, 3.5, 50.0);
+                RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(mainColor.getRed(), mainColor.getGreen(), mainColor.getBlue(), (int) (40.0f * ((this.enabledAnimation - 0.7f) * 3.33f))), n - 1, n2 - 1, n + 13 + 1, n2 + 13 + 1, 3.5, 3.5, 3.5, 3.5, 50.0);
             }
         }
     }

@@ -75,10 +75,10 @@ public final class MaceSwap extends Module {
             InventoryUtil.swap(Items.MACE);
         } else {
             if (this.enableWindBurst.getValue()) {
-                InventoryUtil.swapStack(itemStack -> EnchantmentUtil.a(itemStack, Enchantments.WIND_BURST));
+                InventoryUtil.swapStack(itemStack -> EnchantmentUtil.hasEnchantment(itemStack, Enchantments.WIND_BURST));
             }
             if (this.enableBreach.getValue()) {
-                InventoryUtil.swapStack(itemStack2 -> EnchantmentUtil.a(itemStack2, Enchantments.BREACH));
+                InventoryUtil.swapStack(itemStack2 -> EnchantmentUtil.hasEnchantment(itemStack2, Enchantments.BREACH));
             }
         }
         this.isSwitching = true;

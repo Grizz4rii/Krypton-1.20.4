@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 import skid.krypton.module.modules.client.Krypton;
 import skid.krypton.module.setting.StringSetting;
-import skid.krypton.utils.KryptonUtil;
+import skid.krypton.utils.Utils;
 import skid.krypton.utils.MathUtil;
 import skid.krypton.utils.RenderUtils;
 import skid.krypton.utils.TextRenderer;
@@ -38,7 +38,7 @@ class StringBox extends Screen {
     }
 
     public void render(final DrawContext drawContext, final int n, final int n2, final float n3) {
-        RenderUtils.c();
+        RenderUtils.unscaledProjection();
         super.render(drawContext, n * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n2 * (int) MinecraftClient.getInstance().getWindow().getScaleFactor(), n3);
         final long currentTimeMillis = System.currentTimeMillis();
         if (currentTimeMillis - this.lastCursorBlink > 530L) {
@@ -56,38 +56,38 @@ class StringBox extends Screen {
         drawContext.fill(0, 0, width, height, new Color(0, 0, 0, a).getRGB());
         final int width2 = this.this$0.mc.getWindow().getWidth();
         final int height2 = this.this$0.mc.getWindow().getHeight();
-        final int a2 = MathUtil.a(TextRenderer.a(this.content) + 80, 600, this.this$0.mc.getWindow().getWidth() - 100);
+        final int a2 = MathUtil.clampInt(TextRenderer.getWidth(this.content) + 80, 600, this.this$0.mc.getWindow().getWidth() - 100);
         final int n4 = (width2 - a2) / 2;
         final int n5 = (height2 - 120) / 2;
-        RenderUtils.a(drawContext.getMatrices(), new Color(30, 30, 35, 240), n4, n5, n4 + a2, n5 + 120, 8.0, 8.0, 8.0, 8.0, 20.0);
-        RenderUtils.a(drawContext.getMatrices(), new Color(40, 40, 45, 255), n4, n5, n4 + a2, n5 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
-        drawContext.fill(n4, n5 + 30, n4 + a2, n5 + 31, KryptonUtil.getMainColor(255, 1).getRGB());
-        TextRenderer.b(this.setting.getName(), drawContext, n4 + a2 / 2, n5 + 8, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(30, 30, 35, 240), n4, n5, n4 + a2, n5 + 120, 8.0, 8.0, 8.0, 8.0, 20.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(40, 40, 45, 255), n4, n5, n4 + a2, n5 + 30, 8.0, 8.0, 0.0, 0.0, 20.0);
+        drawContext.fill(n4, n5 + 30, n4 + a2, n5 + 31, Utils.getMainColor(255, 1).getRGB());
+        TextRenderer.drawCenteredString(this.setting.getName(), drawContext, n4 + a2 / 2, n5 + 8, new Color(245, 245, 245, 255).getRGB());
         final int n6 = n4 + 20;
         final int n7 = n5 + 50;
         final int n8 = a2 - 40;
-        RenderUtils.a(drawContext.getMatrices(), new Color(20, 20, 25, 255), n6, n7, n6 + n8, n7 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
-        RenderUtils.a(drawContext, new Color(60, 60, 65, 255), n6, n7, n6 + n8, n7 + 30, 5.0, 5.0, 5.0, 5.0, 1.0, 20.0);
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(20, 20, 25, 255), n6, n7, n6 + n8, n7 + 30, 5.0, 5.0, 5.0, 5.0, 20.0);
+        RenderUtils.renderRoundedOutline(drawContext, new Color(60, 60, 65, 255), n6, n7, n6 + n8, n7 + 30, 5.0, 5.0, 5.0, 5.0, 1.0, 20.0);
         final String content = this.content;
         final int n9 = n6 + 10;
         final int n10 = n7 + 10;
         final String substring = this.content.substring(0, this.cursorPosition);
         content.substring(this.cursorPosition);
-        final int n11 = n9 + TextRenderer.a(substring);
+        final int n11 = n9 + TextRenderer.getWidth(substring);
         if (this.selectionStart != -1 && this.selectionStart != this.cursorPosition) {
             final int min = Math.min(this.selectionStart, this.cursorPosition);
             final int max = Math.max(this.selectionStart, this.cursorPosition);
             final String substring2 = content.substring(0, min);
             final String substring3 = content.substring(min, max);
             final String substring4 = content.substring(max);
-            final int a3 = TextRenderer.a(substring2);
-            final int a4 = TextRenderer.a(substring3);
-            TextRenderer.a(substring2, drawContext, n9, n10, new Color(245, 245, 245, 255).getRGB());
-            drawContext.fill(n9 + a3, n10 - 2, n9 + a3 + a4, n10 + 14, KryptonUtil.getMainColor(100, 1).getRGB());
-            TextRenderer.a(substring3, drawContext, n9 + a3, n10, new Color(255, 255, 255, 255).getRGB());
-            TextRenderer.a(substring4, drawContext, n9 + a3 + a4, n10, new Color(245, 245, 245, 255).getRGB());
+            final int a3 = TextRenderer.getWidth(substring2);
+            final int a4 = TextRenderer.getWidth(substring3);
+            TextRenderer.drawString(substring2, drawContext, n9, n10, new Color(245, 245, 245, 255).getRGB());
+            drawContext.fill(n9 + a3, n10 - 2, n9 + a3 + a4, n10 + 14, Utils.getMainColor(100, 1).getRGB());
+            TextRenderer.drawString(substring3, drawContext, n9 + a3, n10, new Color(255, 255, 255, 255).getRGB());
+            TextRenderer.drawString(substring4, drawContext, n9 + a3 + a4, n10, new Color(245, 245, 245, 255).getRGB());
         } else {
-            TextRenderer.a(content, drawContext, n9, n10, new Color(245, 245, 245, 255).getRGB());
+            TextRenderer.drawString(content, drawContext, n9, n10, new Color(245, 245, 245, 255).getRGB());
             if (this.cursorVisible) {
                 drawContext.fill(n11, n10 - 2, n11 + 1, n10 + 14, new Color(245, 245, 245, 255).getRGB());
             }
@@ -95,12 +95,12 @@ class StringBox extends Screen {
         final int n12 = n5 + 120 - 30;
         final int n13 = n4 + a2 - 80 - 20;
         final int n14 = n13 - 80 - 10;
-        RenderUtils.a(drawContext.getMatrices(), KryptonUtil.getMainColor(255, 1), n13, n12, n13 + 80, n12 + 25, 5.0, 5.0, 5.0, 5.0, 20.0);
-        TextRenderer.b("Save", drawContext, n13 + 40, n12 + 6, new Color(245, 245, 245, 255).getRGB());
-        RenderUtils.a(drawContext.getMatrices(), new Color(60, 60, 65, 255), n14, n12, n14 + 80, n12 + 25, 5.0, 5.0, 5.0, 5.0, 20.0);
-        TextRenderer.b("Cancel", drawContext, n14 + 40, n12 + 6, new Color(245, 245, 245, 255).getRGB());
-        TextRenderer.a("Press Escape to save and close", drawContext, n4 + 20, n5 + 120 - 20, new Color(150, 150, 150, 200).getRGB());
-        RenderUtils.d();
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), Utils.getMainColor(255, 1), n13, n12, n13 + 80, n12 + 25, 5.0, 5.0, 5.0, 5.0, 20.0);
+        TextRenderer.drawCenteredString("Save", drawContext, n13 + 40, n12 + 6, new Color(245, 245, 245, 255).getRGB());
+        RenderUtils.renderRoundedQuad(drawContext.getMatrices(), new Color(60, 60, 65, 255), n14, n12, n14 + 80, n12 + 25, 5.0, 5.0, 5.0, 5.0, 20.0);
+        TextRenderer.drawCenteredString("Cancel", drawContext, n14 + 40, n12 + 6, new Color(245, 245, 245, 255).getRGB());
+        TextRenderer.drawString("Press Escape to save and close", drawContext, n4 + 20, n5 + 120 - 20, new Color(150, 150, 150, 200).getRGB());
+        RenderUtils.scaledProjection();
     }
 
     public void mouseMoved(final double n, final double n2) {
@@ -114,7 +114,7 @@ class StringBox extends Screen {
         final double n5 = n2 * MinecraftClient.getInstance().getWindow().getScaleFactor();
         final int width = this.this$0.mc.getWindow().getWidth();
         final int height = this.this$0.mc.getWindow().getHeight();
-        final int max = Math.max(600, MathUtil.a(TextRenderer.a(this.content) + 80, 400, this.this$0.mc.getWindow().getWidth() - 100));
+        final int max = Math.max(600, MathUtil.clampInt(TextRenderer.getWidth(this.content) + 80, 400, this.this$0.mc.getWindow().getWidth() - 100));
         final int n6 = (height - 120) / 2 + 120 - 30;
         final int n7 = (width - max) / 2 + max - 80 - 20;
         if (this.isHovered(n4, n5, n7, n6, 80, 25)) {

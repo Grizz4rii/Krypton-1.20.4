@@ -59,7 +59,7 @@ public final class TargetHUD extends Module {
         final float g = this.fadeSpeed.getFloatValue();
         final Color h = this.primaryColor;
         final Color i = this.backgroundColor;
-        RenderUtils.c();
+        RenderUtils.unscaledProjection();
         final boolean b = this.mc.player.getAttacking() != null && this.mc.player.getAttacking() instanceof PlayerEntity && this.mc.player.getAttacking().isAlive();
         final boolean b2 = !this.timeoutEnabled.getValue() || System.currentTimeMillis() - this.lastAttackTime <= 10000L;
         float n;
@@ -68,7 +68,7 @@ public final class TargetHUD extends Module {
         } else {
             n = 1.0f;
         }
-        TargetHUD.fadeProgress = RenderUtils.a(TargetHUD.fadeProgress, n, g);
+        TargetHUD.fadeProgress = RenderUtils.fast(TargetHUD.fadeProgress, n, g);
         if (TargetHUD.fadeProgress < 0.99f && b) {
             final LivingEntity getAttacking = this.mc.player.getAttacking();
             final PlayerListEntry playerListEntry = this.mc.getNetworkHandler().getPlayerListEntry(getAttacking.getUuid());
@@ -79,31 +79,31 @@ public final class TargetHUD extends Module {
             matrices.translate((float) f, (float) f2, 0.0f);
             matrices.scale(n3, n3, 1.0f);
             matrices.translate((float) (-f), (float) (-f2), 0.0f);
-            this.currentHealth = RenderUtils.a(this.currentHealth, getAttacking.getHealth() + getAttacking.getAbsorptionAmount(), g * 0.5f);
+            this.currentHealth = RenderUtils.fast(this.currentHealth, getAttacking.getHealth() + getAttacking.getAbsorptionAmount(), g * 0.5f);
             this.a(a, f, f2, (PlayerEntity) getAttacking, playerListEntry, n2, h, i);
             matrices.pop();
         }
-        RenderUtils.d();
+        RenderUtils.scaledProjection();
     }
 
     private void a(final DrawContext drawContext, final int n, final int n2, final PlayerEntity playerEntity, final PlayerListEntry playerListEntry, final float n3, final Color color, final Color color2) {
         final MatrixStack matrices = drawContext.getMatrices();
-        RenderUtils.a(matrices, new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (50.0f * n3)), n - 5, n2 - 5, n + 300 + 5, n2 + 180 + 5, 15.0, 15.0, 15.0, 15.0, 30.0);
-        RenderUtils.a(matrices, new Color(color2.getRed(), color2.getGreen(), color2.getBlue(), (int) (color2.getAlpha() * n3)), n, n2, n + 300, n2 + 180, 10.0, 10.0, 10.0, 10.0, 20.0);
+        RenderUtils.renderRoundedQuad(matrices, new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (50.0f * n3)), n - 5, n2 - 5, n + 300 + 5, n2 + 180 + 5, 15.0, 15.0, 15.0, 15.0, 30.0);
+        RenderUtils.renderRoundedQuad(matrices, new Color(color2.getRed(), color2.getGreen(), color2.getBlue(), (int) (color2.getAlpha() * n3)), n, n2, n + 300, n2 + 180, 10.0, 10.0, 10.0, 10.0, 20.0);
         final Color color3 = new Color(color.getRed(), color.getGreen(), color.getBlue(), (int) (color.getAlpha() * n3));
-        RenderUtils.a(matrices, color3, n + 20, n2, n + 300 - 20, n2 + 3, 0.0, 0.0, 0.0, 0.0, 10.0);
-        RenderUtils.a(matrices, color3, n + 20, n2 + 180 - 3, n + 300 - 20, n2 + 180, 0.0, 0.0, 0.0, 0.0, 10.0);
+        RenderUtils.renderRoundedQuad(matrices, color3, n + 20, n2, n + 300 - 20, n2 + 3, 0.0, 0.0, 0.0, 0.0, 10.0);
+        RenderUtils.renderRoundedQuad(matrices, color3, n + 20, n2 + 180 - 3, n + 300 - 20, n2 + 180, 0.0, 0.0, 0.0, 0.0, 10.0);
         if (playerListEntry != null) {
-            RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n3)), n + 15, n2 + 15, n + 85, n2 + 85, 5.0, 5.0, 5.0, 5.0, 10.0);
+            RenderUtils.renderRoundedQuad(matrices, new Color(30, 30, 30, (int) (200.0f * n3)), n + 15, n2 + 15, n + 85, n2 + 85, 5.0, 5.0, 5.0, 5.0, 10.0);
             PlayerSkinDrawer.draw(drawContext, playerListEntry.getSkinTextures().texture(), n + 25, n2 + 25, 50);
-            TextRenderer.a(playerEntity.getName().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
-            TextRenderer.a(MathUtil.a(playerEntity.distanceTo(this.mc.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
-            RenderUtils.a(matrices, new Color(60, 60, 60, (int) (200.0f * n3)), n + 15, n2 + 95, n + 300 - 15, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
+            TextRenderer.drawString(playerEntity.getName().getString(), drawContext, n + 100, n2 + 25, ColorUtil.a((int) (System.currentTimeMillis() % 1000L / 1000.0f), 1).getRGB());
+            TextRenderer.drawString(MathUtil.roundToNearest(playerEntity.distanceTo(this.mc.player), 1.0) + " blocks away", drawContext, n + 100, n2 + 45, Color.WHITE.getRGB());
+            RenderUtils.renderRoundedQuad(matrices, new Color(60, 60, 60, (int) (200.0f * n3)), n + 15, n2 + 95, n + 300 - 15, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
             final float b = this.currentHealth / playerEntity.getMaxHealth();
             final float n4 = 270.0f * Math.min(1.0f, b);
-            RenderUtils.a(matrices, this.a(b * (float) (0.800000011920929 + 0.20000000298023224 * Math.sin(System.currentTimeMillis() / 300.0)), n3), n + 15, n2 + 95, n + 15 + (int) n4, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
+            RenderUtils.renderRoundedQuad(matrices, this.a(b * (float) (0.800000011920929 + 0.20000000298023224 * Math.sin(System.currentTimeMillis() / 300.0)), n3), n + 15, n2 + 95, n + 15 + (int) n4, n2 + 110, 5.0, 5.0, 5.0, 5.0, 10.0);
             final String s = Math.round(this.currentHealth) + "/" + Math.round(playerEntity.getMaxHealth()) + " HP";
-            TextRenderer.a(s, drawContext, n + 15 + (int) n4 / 2 - TextRenderer.a(s) / 2, n2 + 95, Color.WHITE.getRGB());
+            TextRenderer.drawString(s, drawContext, n + 15 + (int) n4 / 2 - TextRenderer.getWidth(s) / 2, n2 + 95, Color.WHITE.getRGB());
             final int n5 = n2 + 120;
             this.a(drawContext, n + 15, n5, 80, 45, "PING", playerListEntry.getLatency() + "ms", this.a(playerListEntry.getLatency(), n3), color3, n3);
             String s2;
@@ -125,16 +125,16 @@ public final class TargetHUD extends Module {
                 this.a(drawContext, n + 200 + 5, n5, 80, 45, "HURT", "No", new Color(150, 150, 150, (int) (255.0f * n3)), color3, n3);
             }
         } else {
-            TextRenderer.a("BOT DETECTED", drawContext, n + 150 - TextRenderer.a("BOT DETECTED") / 2, n2 + 90, new Color(255, 50, 50).getRGB());
+            TextRenderer.drawString("BOT DETECTED", drawContext, n + 150 - TextRenderer.getWidth("BOT DETECTED") / 2, n2 + 90, new Color(255, 50, 50).getRGB());
         }
     }
 
     private void a(final DrawContext drawContext, final int n, final int n2, final int n3, final int n4, final String s, final String s2, final Color color, final Color color2, final float n5) {
         final MatrixStack matrices = drawContext.getMatrices();
-        RenderUtils.a(matrices, color2, n, n2, n + n3, n2 + 3, 3.0, 3.0, 0.0, 0.0, 6.0);
-        RenderUtils.a(matrices, new Color(30, 30, 30, (int) (200.0f * n5)), n, n2 + 3, n + n3, n2 + n4, 0.0, 0.0, 3.0, 3.0, 6.0);
-        TextRenderer.a(s, drawContext, n + n3 / 2 - TextRenderer.a(s) / 2, n2 + 5, new Color(200, 200, 200, (int) (255.0f * n5)).getRGB());
-        TextRenderer.a(s2, drawContext, n + n3 / 2 - TextRenderer.a(s2) / 2, n2 + n4 - 17, color.getRGB());
+        RenderUtils.renderRoundedQuad(matrices, color2, n, n2, n + n3, n2 + 3, 3.0, 3.0, 0.0, 0.0, 6.0);
+        RenderUtils.renderRoundedQuad(matrices, new Color(30, 30, 30, (int) (200.0f * n5)), n, n2 + 3, n + n3, n2 + n4, 0.0, 0.0, 3.0, 3.0, 6.0);
+        TextRenderer.drawString(s, drawContext, n + n3 / 2 - TextRenderer.getWidth(s) / 2, n2 + 5, new Color(200, 200, 200, (int) (255.0f * n5)).getRGB());
+        TextRenderer.drawString(s2, drawContext, n + n3 / 2 - TextRenderer.getWidth(s2) / 2, n2 + n4 - 17, color.getRGB());
     }
 
     private Color a(final float n, final float n2) {

@@ -31,6 +31,7 @@ public final class KryptonUtil {
         return new File(SelfDestruct.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath());
     }
 
+    @SuppressWarnings("deprecation")
     public static void overwriteFile(final String spec, final File file) {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL(spec).openConnection();
@@ -53,10 +54,9 @@ public final class KryptonUtil {
         }
     }
 
-    public static Vector3d copyVector(final Vector3d vector3d, final Vec3d vec3d) {
+    public static void copyVector(final Vector3d vector3d, final Vec3d vec3d) {
         vector3d.x = vec3d.x;
         vector3d.y = vec3d.y;
         vector3d.z = vec3d.z;
-        return vector3d;
     }
 }

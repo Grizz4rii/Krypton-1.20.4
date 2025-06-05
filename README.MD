@@ -10,11 +10,10 @@ Horribly **pasted** 1.21 donut smp cheat _(boolean auth level)_. Works with Feat
 - Option 2: Download/clone the source code and run it with your favorite IDE (vim).
 
 # Credits
-- Nick: Deobfuscation (diddy 3000 deobfuscator) & remapping
-- Prestige: Providing da funds & remapping
-- Argon: Alot of code
-- Meteor (+ rejects): Some code/Netherrite finder
-- Krypton Devs: Skidding this mess
-
-# the pov
-![Alt](https://cdn.discordapp.com/attachments/1279547478160707605/1379984193043300403/image.png?ex=684239ee&is=6840e86e&hm=c5bd1db4a2aef0f8cabca27cce07dfc7c56cef11c8b688325d4d30fe6d065607&)
+- Nick: deobf & remap
+- Prestige: account & remapping
+- 3000IQPlay: loser
+- Argon: making this client
+- Meteor (+ rejects): making this client popular
+- Baritone: making this client popular
+- Krypton Devs: masterful use of AI resources and never-before-seen pasting techniques

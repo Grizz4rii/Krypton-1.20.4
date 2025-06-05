@@ -83,8 +83,7 @@ public final class ElytraSwap extends Module {
                         this.resetState();
                         return;
                     }
-                    while (!predicate.test(this.mc.player.getInventory().getStack(9).getItem())) {
-                    }
+
                     this.mc.interactionManager.clickSlot(this.mc.player.currentScreenHandler.syncId, 9, this.elytraSlot.getIntValue() - 1, SlotActionType.SWAP, this.mc.player);
                     this.swapCounter = 0;
                     return;

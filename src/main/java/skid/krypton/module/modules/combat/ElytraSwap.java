@@ -2,6 +2,7 @@ package skid.krypton.module.modules.combat;
 
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.util.Hand;
@@ -71,12 +72,14 @@ public final class ElytraSwap extends Module {
                 ++this.swapCounter;
                 return;
             }
-            Predicate predicate;
-            if (this.mc.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA)) {
+            Predicate<Item> predicate;
+
+            if (this.mc.player.getInventory().getArmorStack(EquipmentSlot.CHEST.getEntitySlotId()).isOf(Items.ELYTRA)) {
                 predicate = (item -> item instanceof ArmorItem && ((ArmorItem) item).getSlotType() == EquipmentSlot.CHEST);
             } else {
                 predicate = (item2 -> item2.equals(Items.ELYTRA));
             }
+
             if (!this.isItemSwapped) {
                 if (!InventoryUtil.swapItem(predicate)) {
                     if (!this.moveToSlot.getValue()) {

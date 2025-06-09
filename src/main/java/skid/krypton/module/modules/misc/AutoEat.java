@@ -1,7 +1,8 @@
 package skid.krypton.module.modules.misc;
 
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.FoodComponent;
+import net.minecraft.item.FoodComponent;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import skid.krypton.event.EventListener;
 import skid.krypton.event.events.TickEvent;
 import skid.krypton.mixin.MinecraftClientAccessor;
@@ -19,7 +20,7 @@ public final class AutoEat extends Module {
     private int previousSelectedSlot;
 
     public AutoEat() {
-        super(EncryptedString.of("Auto Eat"), EncryptedString.of(" It detects whenever the hungerbar/health falls a certain threshold, selects food in your hotbar, and starts eating."), -1, Category.MISC);
+        super(EncryptedString.of("Auto Eat"), EncryptedString.of("It detects whenever the hungerbar/health falls a certain threshold, selects food in your hotbar, and starts eating."), -1, Category.MISC);
         this.addSettings(this.healthThreshold, this.hungerThreshold);
     }
 
@@ -37,7 +38,8 @@ public final class AutoEat extends Module {
     public void onTick(final TickEvent tickEvent) {
         if (this.isEa) {
             if (this.shouldEat()) {
-                if (this.mc.player.getInventory().getStack(this.selectedFoodSlot).get(DataComponentTypes.FOOD) != null) {
+                ItemStack stack = this.mc.player.getInventory().getStack(this.selectedFoodSlot);
+                if (stack.getItem().isFood()) {
                     final int k = this.findBestFoodSlot();
                     if (k == -1) {
                         this.stopEating();
@@ -58,25 +60,29 @@ public final class AutoEat extends Module {
     }
 
     public boolean shouldEat() {
-        final boolean b = this.mc.player.getHealth() <= this.healthThreshold.getIntValue();
-        final boolean b2 = this.mc.player.getHungerManager().getFoodLevel() <= this.hungerThreshold.getIntValue();
-        return this.findBestFoodSlot() != -1 && (b || b2);
+        boolean lowHealth = this.mc.player.getHealth() <= this.healthThreshold.getIntValue();
+        boolean lowHunger = this.mc.player.getHungerManager().getFoodLevel() <= this.hungerThreshold.getIntValue();
+        return this.findBestFoodSlot() != -1 && (lowHealth || lowHunger);
     }
 
     private int findBestFoodSlot() {
-        int n = -1;
-        int n2 = -1;
+        int bestSlot = -1;
+        int highestNutrition = -1;
+
         for (int i = 0; i < 9; ++i) {
-            final Object value = this.mc.player.getInventory().getStack(i).getItem().getComponents().get(DataComponentTypes.FOOD);
-            if (value != null) {
-                final int nutrition = ((FoodComponent) value).nutrition();
-                if (nutrition > n2) {
-                    n = i;
-                    n2 = nutrition;
+            ItemStack stack = this.mc.player.getInventory().getStack(i);
+            Item item = stack.getItem();
+
+            if (item.isFood()) {
+                FoodComponent food = item.getFoodComponent();
+                if (food != null && food.getHunger() > highestNutrition) {
+                    bestSlot = i;
+                    highestNutrition = food.getHunger();
                 }
             }
         }
-        return n;
+
+        return bestSlot;
     }
 
     private void saveCurrentSlot() {
@@ -107,4 +113,4 @@ public final class AutoEat extends Module {
         InventoryUtil.swap(f);
         this.selectedFoodSlot = f;
     }
-}
+                }

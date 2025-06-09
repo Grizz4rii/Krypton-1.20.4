@@ -1,6 +1,5 @@
 package skid.krypton.module.modules.misc;
 
-import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -21,23 +20,30 @@ public final class AutoFirework extends Module {
     private final BindSetting activateKey = new BindSetting(EncryptedString.of("Activate Key"), -1, false);
     private final NumberSetting delay = new NumberSetting(EncryptedString.of("Delay"), 0.0, 20.0, 0.0, 1.0);
     private final BooleanSetting switchBack = new BooleanSetting(EncryptedString.of("Switch Back"), true);
-    private final NumberSetting switchDelay = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0).getValue(EncryptedString.of("Delay after using firework before switching back."));
+    private final NumberSetting switchDelay = new NumberSetting(EncryptedString.of("Switch Delay"), 0.0, 20.0, 0.0, 1.0)
+            .getValue(EncryptedString.of("Delay after using firework before switching back."));
+
     private boolean isFireworkActive;
     private boolean hasUsedFirework;
     private int useDelayCounter;
-    private int previousSelectedSlot;
+    private int previousSelectedSlot = -1;
     private int switchDelayCounter;
     private int cooldownCounter;
 
     public AutoFirework() {
-        super(EncryptedString.of("Auto Firework"), EncryptedString.of("Switches to a firework and uses it when you press a bind."), -1, Category.MISC);
+        super(
+            EncryptedString.of("Auto Firework"),
+            EncryptedString.of("Switches to a firework and uses it when you press a bind."),
+            -1,
+            Category.MISC
+        );
         this.addSettings(this.activateKey, this.delay, this.switchBack, this.switchDelay);
     }
 
     @Override
     public void onEnable() {
-        this.resetState();
         super.onEnable();
+        this.resetState();
     }
 
     @Override
@@ -47,32 +53,42 @@ public final class AutoFirework extends Module {
 
     @EventListener
     public void onTick(final TickEvent event) {
-        if (this.mc.currentScreen != null) {
+        if (this.mc.currentScreen != null || this.mc.player == null) {
             return;
         }
+
         if (this.cooldownCounter > 0) {
             --this.cooldownCounter;
             return;
         }
-        if (this.mc.player != null && KeyUtils.isKeyPressed(this.activateKey.getValue()) && (Krypton.INSTANCE.MODULE_MANAGER.getModuleByClass(ElytraGlide.class).isEnabled() || this.mc.player.isFallFlying()) && this.mc.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA) && !this.mc.player.getInventory().getMainHandStack().isOf(Items.FIREWORK_ROCKET) && !this.mc.player.getMainHandStack().getItem().getComponents().contains(DataComponentTypes.FOOD) && !(this.mc.player.getMainHandStack().getItem() instanceof ArmorItem)) {
+
+        boolean isGliding = this.mc.player.isFallFlying();
+        boolean hasElytra = this.mc.player.getInventory().getArmorStack(2).isOf(Items.ELYTRA);
+
+        if (KeyUtils.isKeyPressed(this.activateKey.getValue()) && (isGliding || hasElytra)) {
             this.isFireworkActive = true;
         }
+
         if (this.isFireworkActive) {
             if (this.previousSelectedSlot == -1) {
                 this.previousSelectedSlot = this.mc.player.getInventory().selectedSlot;
             }
+
             if (!InventoryUtil.swap(Items.FIREWORK_ROCKET)) {
                 this.resetState();
                 return;
             }
+
             if (this.useDelayCounter < this.delay.getIntValue()) {
                 ++this.useDelayCounter;
                 return;
             }
+
             if (!this.hasUsedFirework) {
                 this.mc.interactionManager.interactItem(this.mc.player, Hand.MAIN_HAND);
                 this.hasUsedFirework = true;
             }
+
             if (this.switchBack.getValue()) {
                 this.handleSwitchBack();
             } else {
@@ -86,6 +102,7 @@ public final class AutoFirework extends Module {
             ++this.switchDelayCounter;
             return;
         }
+
         InventoryUtil.swap(this.previousSelectedSlot);
         this.resetState();
     }
@@ -100,12 +117,15 @@ public final class AutoFirework extends Module {
     }
 
     @EventListener
-    public void onPostItemUse(final PostItemUseEvent postItemUseEvent) {
+    public void onPostItemUse(final PostItemUseEvent event) {
+        if (this.mc.player == null) return;
+
         if (this.mc.player.getMainHandStack().isOf(Items.FIREWORK_ROCKET)) {
             this.hasUsedFirework = true;
         }
+
         if (this.cooldownCounter > 0) {
-            postItemUseEvent.cancel();
+            event.cancel();
         }
     }
-}
+                                    }

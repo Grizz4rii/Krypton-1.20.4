@@ -16,8 +16,8 @@ jobs:
           java-version: '17'
       - name: Build with Gradle
         run: ./gradlew build
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
+      - name: Upload build artifact 
+        uses: actions/upload-artifact@v4
         with:
           name: krypton-1.20.4
           path: build/libs/*.jar
